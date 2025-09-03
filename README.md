@@ -76,4 +76,4 @@ To ensure code quality and clear communication, every task must follow this 5-st
 
 **Step 5: Merge and Close**
 * Once your PR has been approved by a teammate, merge it into the `develop` branch.
-* After the merge is complete, move the Trello card from "In Progress" or "In Review" to the "Done" column.
+* After the merge is complete, move the Trello card from "Doing" to the "Done" column.
