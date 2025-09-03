@@ -46,7 +46,7 @@ refactor: Code changes that neither fix a bug nor add a feature
     git checkout -b feature/user-profile-page
 
     # Example for a bug fix:
-    git checkout -b fix/login-button-bug
+    git commit -m "fix: resolve issue where login button was unresponsive"
     ```
 
 ## Our 5-Step Development Workflow
