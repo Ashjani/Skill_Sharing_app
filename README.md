@@ -1,8 +1,3 @@
-Got it 👍 I’ll **keep all your original wording exactly the same**, but I’ll re-format it into cleaner, more consistent **Markdown** so it looks polished in your README.
-
-Here’s the improved version:
-
-````markdown
 # Skill-Sharing Community Platform
 
 Welcome to the official repository for the Skill-Sharing Community Platform project.
