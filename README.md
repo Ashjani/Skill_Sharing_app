@@ -19,14 +19,14 @@ To get a local copy of the project on your computer, please follow the following
 
    ```sh
    git clone [paste-the-repository-url-here]
-````
+
 
 4. **Navigate into the Project Folder**
 
    ```sh
    cd Skill_Sharing_app
-   ```
-
+```
+```
 You now have the project on your computer and are ready to start working!
 
 ---
@@ -75,6 +75,58 @@ This collection stores information about each skill or service offered by a user
 * **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js, which helps us manage relationships between data and provides schema validation.
 * **Dotenv**: A zero-dependency module that loads environment variables from a `.env` file, allowing us to keep secrets out of our code.
 
+---
+## API Endpoints
+
+This section documents the available API endpoints for the application.
+
+### User Authentication
+
+#### Register a New User
+
+* **Method:** `POST`
+* **Endpoint:** `/api/users/register`
+* **Description:** Creates a new user account.
+* **Request Body:**
+    ```json
+    {
+      "username": "testuser",
+      "email": "test@example.com",
+      "password": "password123"
+    }
+    ```
+* **Success Response (201 Created):**
+    ```json
+    {
+      "_id": "631a0b3e5e6d1c4a9f2b8d5e",
+      "username": "testuser",
+      "email": "test@example.com",
+      "message": "User registered successfully"
+    }
+    ```
+
+---
+#### Login a User
+
+* **Method:** `POST`
+* **Endpoint:** `/api/users/login`
+* **Description:** Authenticates a user.
+* **Request Body:**
+    ```json
+    {
+      "email": "test@example.com",
+      "password": "password123"
+    }
+    ```
+* **Success Response (200 OK):**
+    ```json
+    {
+      "_id": "631a0b3e5e6d1c4a9f2b8d5e",
+      "username": "testuser",
+      "email": "test@example.com",
+      "message": "Logged in successfully"
+    }
+    ```
 ---
 
 ## How to Create a Branch
