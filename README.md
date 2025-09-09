@@ -19,18 +19,48 @@ To get a local copy of the project on your computer, please follow the following
 
    ```sh
    git clone [paste-the-repository-url-here]
-
+``
 
 4. **Navigate into the Project Folder**
 
    ```sh
    cd Skill_Sharing_app
-```
-```
+   ```
+
 You now have the project on your computer and are ready to start working!
 
 ---
 
+# Running the Application Locally
+
+To run the application, you will need two terminals running simultaneously: one for the **MongoDB database** and one for the **Node.js server**.
+
+
+
+## 1. Start Your MongoDB Server
+Open a new terminal window and run the following command to start the MongoDB database.  
+You must leave this terminal running in the background.
+
+```bash
+mongod
+```
+
+
+## 2. Start the Node.js Server
+Open a second terminal window, navigate to the project's root directory, and run the following command to start the application server with **nodemon**.
+
+```bash
+npm run 
+```
+
+## 3. Access the Application
+Once both servers are running, open your web browser and go to:
+
+```
+http://localhost:3000
+```
+
+---
 ## Project Structure
 
 This project follows the **Model-View-Controller (MVC)** model to keep the code organized.
@@ -75,58 +105,6 @@ This collection stores information about each skill or service offered by a user
 * **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js, which helps us manage relationships between data and provides schema validation.
 * **Dotenv**: A zero-dependency module that loads environment variables from a `.env` file, allowing us to keep secrets out of our code.
 
----
-## API Endpoints
-
-This section documents the available API endpoints for the application.
-
-### User Authentication
-
-#### Register a New User
-
-* **Method:** `POST`
-* **Endpoint:** `/api/users/register`
-* **Description:** Creates a new user account.
-* **Request Body:**
-    ```json
-    {
-      "username": "testuser",
-      "email": "test@example.com",
-      "password": "password123"
-    }
-    ```
-* **Success Response (201 Created):**
-    ```json
-    {
-      "_id": "631a0b3e5e6d1c4a9f2b8d5e",
-      "username": "testuser",
-      "email": "test@example.com",
-      "message": "User registered successfully"
-    }
-    ```
-
----
-#### Login a User
-
-* **Method:** `POST`
-* **Endpoint:** `/api/users/login`
-* **Description:** Authenticates a user.
-* **Request Body:**
-    ```json
-    {
-      "email": "test@example.com",
-      "password": "password123"
-    }
-    ```
-* **Success Response (200 OK):**
-    ```json
-    {
-      "_id": "631a0b3e5e6d1c4a9f2b8d5e",
-      "username": "testuser",
-      "email": "test@example.com",
-      "message": "Logged in successfully"
-    }
-    ```
 ---
 
 ## How to Create a Branch
@@ -304,5 +282,14 @@ If you forget to add a reviewer at creation, you can add one later.
 
 3. **Add a Reviewer**
    Click the gear icon ⚙️ in the **"Reviewers"** section, select teammates, and GitHub will notify them immediately.
+
+---
+
+### `mongod` Command Not Recognized
+- **Problem:** You run `mongod` in the terminal and get a **"command not recognized"** error.  
+- **Reason:** MongoDB is installed, but its location is not added to your system’s PATH variable.  
+- **Solution:**  
+  1. Locate your MongoDB **bin** directory (e.g., `C:\Program Files\MongoDB\Server\7.0\bin`).  
+  2. Add it to your system’s **environment variables**.   
 
 
