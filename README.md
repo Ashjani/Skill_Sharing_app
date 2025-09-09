@@ -31,6 +31,26 @@ You now have the project on your computer and are ready to start working!
 
 ---
 
+---
+
+## Environment Variables
+
+To run this project, you will need to add a `.env` file to the root of the project directory. This file stores sensitive information and configuration settings.
+
+Create a file named `.env` and add the following variables:
+
+```env
+# MongoDB Connection String (use your local or cloud URI)
+MONGO_URI=mongodb://localhost:27017/skill-sharing-db
+
+# Port for the server to run on
+PORT=3000
+
+# Secret key for signing JSON Web Tokens (use a long, random string)
+JWT_SECRET=your_super_secret_string_for_jwt
+
+---
+
 ## Project Structure
 
 This project follows the **Model-View-Controller (MVC)** model to keep the code organized.
@@ -74,6 +94,7 @@ This collection stores information about each skill or service offered by a user
 * **Express.js**: A fast and minimalist web framework for Node.js that we use to build our server and handle routing.
 * **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js, which helps us manage relationships between data and provides schema validation.
 * **Dotenv**: A zero-dependency module that loads environment variables from a `.env` file, allowing us to keep secrets out of our code.
+**jsonwebtoken**: A library to generate and verify JSON Web Tokens for secure authentication.
 
 ---
 ## API Endpoints
