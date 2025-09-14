@@ -1,0 +1,33 @@
+<nav class="white">
+  <div class="nav-wrapper container">
+    <a href="/" class="brand-logo black-text">SkillLink</a>
+    <a href="#" data-target="mobile-nav" class="sidenav-trigger black-text">
+      <i class="material-icons">menu</i>
+    </a>
+    <ul class="right hide-on-med-and-down">
+      <li><a href="/">Home</a></li>
+      <li><a href="/explore">Explore</a></li>
+      <li><a href="/how-it-works">How It Works</a></li>
+      <% if (user) { %>
+        <li><a href="/dashboard">Dashboard</a></li>
+        <li><a href="/logout">Logout</a></li>
+      <% } else { %>
+        <li><a href="/login">Log In</a></li>
+        <li><a class="btn blue" href="/signup">Join Now</a></li>
+      <% } %>
+    </ul>
+  </div>
+</nav>
+
+<ul class="sidenav" id="mobile-nav">
+  <li><a href="/">Home</a></li>
+  <li><a href="/explore">Explore</a></li>
+  <li><a href="/how-it-works">How It Works</a></li>
+  <% if (user) { %>
+    <li><a href="/dashboard">Dashboard</a></li>
+    <li><a href="/logout">Logout</a></li>
+  <% } else { %>
+    <li><a href="/login">Log In</a></li>
+    <li><a href="/signup">Join Now</a></li>
+  <% } %>
+</ul>
