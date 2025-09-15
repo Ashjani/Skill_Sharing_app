@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Ashjani/Skill_Sharing_app#readme",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.2",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
