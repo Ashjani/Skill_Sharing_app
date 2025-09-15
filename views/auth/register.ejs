@@ -1,0 +1,89 @@
+<!-- Sign Up Page -->
+<div class="row" style="margin:0 -24px;">
+  <!-- Left: Form card -->
+  <div class="col s12 l6 white" style="min-height:80vh; display:flex; align-items:center; justify-content:center;">
+    <div class="card z-depth-1" style="max-width:420px; width:100%; border-radius:12px;">
+      <div class="card-content">
+        <h5 class="center-align" style="margin-bottom:4px;">SkillLink</h5>
+        <p class="center-align grey-text text-darken-1">Join millions sharing skills</p>
+
+        <!-- Social buttons -->
+        <div class="row" style="margin-top:18px;">
+          <div class="col s12" style="margin-bottom:8px;">
+            <a href="/auth/google" class="btn white black-text valign-wrapper" style="width:100%; border:1px solid #eee;">
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="" style="height:18px;margin-right:10px;">
+              Continue with Google
+            </a>
+          </div>
+          <div class="col s12">
+            <a href="/auth/facebook" class="btn white black-text valign-wrapper" style="width:100%; border:1px solid #eee;">
+              <i class="material-icons left" style="color:#1877F2;">thumb_up</i>
+              Continue with Facebook
+            </a>
+          </div>
+        </div>
+
+        <div class="divider" style="margin:12px 0 18px 0;"></div>
+        <p class="center-align grey-text">or sign up with email</p>
+
+        <!-- Email sign up -->
+        <form action="/auth/register" method="POST" autocomplete="on" style="margin-top:10px;">
+          <div class="row" style="margin-bottom:0;">
+            <div class="input-field col s12 m6">
+              <input id="firstName" name="firstName" type="text" required>
+              <label for="firstName">First name</label>
+            </div>
+            <div class="input-field col s12 m6">
+              <input id="lastName" name="lastName" type="text" required>
+              <label for="lastName">Last name</label>
+            </div>
+          </div>
+
+          <div class="input-field">
+            <input id="email" name="email" type="email" required>
+            <label for="email">Email address</label>
+          </div>
+
+          <div class="input-field">
+            <input id="password" name="password" type="password" minlength="8" required>
+            <label for="password">Password</label>
+            <span class="helper-text">Must be at least 8 characters</span>
+          </div>
+
+          <p style="margin-bottom:16px;">
+            <label>
+              <input type="checkbox" name="accept" required />
+              <span class="grey-text text-darken-1">
+                I agree to the <a href="/terms">Terms of Service</a> and <a href="/privacy">Privacy Policy</a>
+              </span>
+            </label>
+          </p>
+
+          <button class="btn-large blue" type="submit" style="width:100%;">Create account</button>
+        </form>
+
+        <p class="center-align" style="margin-top:14px;">
+          Already have an account? <a href="/login">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Gradient promo -->
+  <div class="col s12 l6" style="min-height:80vh; display:flex; align-items:center; justify-content:center;
+       background: linear-gradient(135deg,#0ea5e9,#22c55e);">
+    <div class="center-align" style="max-width:460px; padding:16px;">
+      <img src="/images/illustration-people.png" alt="" style="width:220px; height:auto; border-radius:16px; box-shadow:0 8px 30px rgba(0,0,0,.15); margin-bottom:20px;">
+      <h5 class="white-text" style="margin-bottom:8px;">Unlock your potential</h5>
+      <p class="white-text" style="opacity:.95;">
+        Offer your skills, earn time-credits, and redeem services in tutoring, fitness, IT, design, and more.
+      </p>
+      <ul class="white-text left-align" style="margin-top:14px; display:inline-block;">
+        <li>• Exchange skills without money</li>
+        <li>• Connect with trusted members</li>
+        <li>• Discover services tailored to you</li>
+        <li>• Grow by helping others</li>
+      </ul>
+    </div>
+  </div>
+</div>
