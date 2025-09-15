@@ -1,48 +1,50 @@
-
-const dotenv = require('dotenv');
-require('dotenv').config();                    // load .env first
-
-const express = require('express');
+// server.js
 const path = require('path');
+const express = require('express');
+const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
-
-const connectDB = require('./config/db');      // uses process.env.MONGO_URI
-const userRoutes = require('./routes/userRoutes');
-
-// Load environment variables
+const connectDB = require('./config/db.js');
 dotenv.config();
-connectDB();                                   // connect to Mongo
-
+connectDB();
 const app = express();
 
-/* ---------- Middleware ---------- */
-app.use(express.urlencoded({ extended: true })); // form-data
-app.use(express.json());                         // JSON bodies
-app.use(express.static(path.join(__dirname, 'public'))); // /public assets
 
-/* ---------- View engine (EJS) ---------- */
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// --- Middleware ---
+app.use(express.json()); // To parse JSON bodies for our API
+app.use(express.urlencoded({ extended: true })); // To parse form data
+app.use(express.static(path.join(__dirname, 'public'))); // To serve static files like CSS and JS
+
+
+// --- EJS setup ---
 app.use(expressLayouts);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'layouts/main');
 
-/* ---------- Locals available in all EJS views ---------- */
+
+// --- Locals Middleware ---
 app.use((req, res, next) => {
-  res.locals.user = null;       // set to req.user when auth is added
+  res.locals.user = req.user || null; 
   res.locals.title = 'SkillLink';
   next();
 });
 
-/* ---------- Routes ---------- */
-app.use('/', userRoutes);       // renders /signup, /login, handles POST /register, /login
 
-/* ---------- Health + 404 ---------- */
-app.get('/health', (_req, res) => res.status(200).send('OK'));
-app.use((_req, res) => res.status(404).send('Not Found'));
+// --- Routes ---
+const userRoutes = require('./routes/userRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 
-/* ---------- Start server ---------- */
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Mount Routers
+app.use('/api/users', userRoutes);
+app.use('/api/services', serviceRoutes);
+
+
+// --- 404 Handler ---
+app.use((_req, res) => {
+  res.status(404).send('Not Found');
 });
 
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
