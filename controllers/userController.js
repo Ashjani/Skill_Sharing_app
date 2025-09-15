@@ -1,5 +1,6 @@
-const User = require('../models/user'); // a user model defined in models/user.js
-const bcrypt = require('bcryptjs'); // For hashing password
+const User = require('../models/user');
+const bcrypt = require('bcryptjs');
+const generateToken = require('../utils/generateToken'); // <-- Import the token generation utility
 
 /**
  * @desc    Register a new user
@@ -28,14 +29,17 @@ const registerUser = async (req, res) => {
     });
     await user.save();
 
-    // TODO: Generate JWT here in the next task
-
-    res.status(201).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      message: 'User registered successfully',
-    });
+    // If user was created successfully, generate a token
+    if (user) {
+      res.status(201).json({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        token: generateToken(user._id), // <-- Generate and send token
+      });
+    } else {
+      res.status(400).json({ message: 'Invalid user data' });
+    }
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -52,24 +56,17 @@ const loginUser = async (req, res) => {
 
     // 1. Check if user exists
     const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid credentials' });
+    // Check if user exists AND if passwords match
+    if (user && (await bcrypt.compare(password, user.password))) {
+      res.json({
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        token: generateToken(user._id), // <-- Generate and send token
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' }); // Use 401 for unauthorized
     }
-
-    // 2. Compare passwords
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
-    // TODO: Generate JWT here in the next task
-
-    res.status(200).json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      message: 'Logged in successfully',
-    });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
