@@ -34,11 +34,11 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);       // renders /signup, /login, handles POST /register, /login
 
 /* ---------- Health + 404 ---------- */
-app.get('/healthz', (_req, res) => res.status(200).send('OK'));
+app.get('/health', (_req, res) => res.status(200).send('OK'));
 app.use((_req, res) => res.status(404).send('Not Found'));
 
 /* ---------- Start server ---------- */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

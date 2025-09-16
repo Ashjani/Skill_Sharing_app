@@ -3,66 +3,144 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register • SkillLink</title>
+    <title>Create your account • SkillLink</title>
 
-    <!-- Materialize CSS -->
+    <!-- Materialize CSS + Icons -->
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
       rel="stylesheet"
     />
-    <!-- Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
     />
+
     <style>
+      :root {
+        --card-radius: 14px;
+        --light: #f7f8fc;
+        --border: #e9eef5;
+        --muted: #6b7280;
+      }
       body {
         margin: 0;
-        font-family: "Roboto", sans-serif;
+        font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+        background: #fff;
       }
-      .card {
-        border-radius: 12px;
+      /* left panel look */
+      .left-pane {
+        background: var(--light);
+      }
+      .auth-card {
+        max-width: 420px;
+        width: 100%;
+        border-radius: var(--card-radius);
+        border: 1px solid var(--border);
+      }
+      .auth-card .btn {
+        height: 42px;
+        line-height: 42px;
+        border-radius: 10px;
+      }
+      .input-field input {
+        height: 3rem;
+      }
+      .divider {
+        background: #eef0f4;
       }
       .helper-text {
-        font-size: 0.85rem;
-        color: #666;
+        color: #9aa3b2;
+      }
+      .terms small {
+        color: #738091;
+      }
+      /* right gradient panel */
+      .right-pane {
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        color: #fff;
+      }
+      .feature-list {
+        display: inline-block;
+        text-align: left;
+        list-style: none;
+        padding-left: 0;
+        margin-top: 12px;
+      }
+      .feature-list li {
+        margin: 8px 0;
+        position: relative;
+        padding-left: 26px;
+      }
+      .feature-list li:before {
+        content: "check_circle";
+        font-family: "Material Icons";
+        position: absolute;
+        left: 0;
+        top: -2px;
+        font-size: 18px;
+        opacity: 0.95;
+      }
+      /* small tweaks */
+      .brand-sub {
+        color: #94a3b8;
+        font-size: 13px;
+        margin-top: -6px;
+      }
+      @media (max-width: 992px) {
+        .left-pane,
+        .right-pane {
+          min-height: auto !important;
+        }
+        .right-pane {
+          padding: 36px 0;
+        }
       }
     </style>
   </head>
   <body>
-    <div class="row" style="margin: 0 -24px">
-      <!-- Left: Form card -->
+    <div class="row" style="margin: 0">
+      <!-- Left: light panel + form -->
       <div
-        class="col s12 l6 white"
+        class="col s12 l6 left-pane"
         style="
-          min-height: 80vh;
+          min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
         "
       >
-        <div
-          class="card z-depth-1"
-          style="max-width: 420px; width: 100%; border-radius: 12px"
-        >
-          <div class="card-content">
-            <h5 class="center-align" style="margin-bottom: 4px">SkillLink</h5>
-            <p class="center-align grey-text text-darken-1">
-              Join millions sharing skills
-            </p>
+        <div class="auth-card card z-depth-0">
+          <div class="card-content" style="padding: 28px 26px">
+            <h5 class="center-align" style="margin: 0 0 4px">SkillLink</h5>
+            <p class="center-align brand-sub">Join millions sharing skills</p>
 
             <!-- Social buttons -->
-            <div class="row" style="margin-top: 18px">
+            <div class="row" style="margin-top: 18px; margin-bottom: 8px">
               <div class="col s12" style="margin-bottom: 8px">
                 <a
                   href="/auth/google"
-                  class="btn white black-text valign-wrapper"
-                  style="width: 100%; border: 1px solid #eee"
+                  class="btn white black-text"
+                  style="
+                    width: 100%;
+                    border: 1px solid #e6eaf0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                  "
                 >
                   <img
                     src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                     alt=""
-                    style="height: 18px; margin-right: 10px"
+                    style="
+                      height: 18px;
+                      margin-right: 10px;
+                      vertical-align: middle;
+                    "
                   />
                   Continue with Google
                 </a>
@@ -70,19 +148,26 @@
               <div class="col s12">
                 <a
                   href="/auth/facebook"
-                  class="btn white black-text valign-wrapper"
-                  style="width: 100%; border: 1px solid #eee"
+                  class="btn white black-text"
+                  style="
+                    width: 100%;
+                    border: 1px solid #e6eaf0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                  "
                 >
-                  <i class="material-icons left" style="color: #1877f2"
-                    >thumb_up</i
-                  >
+                  <i class="fab fa-facebook-f left" style="color: #1877f2"></i>
                   Continue with Facebook
                 </a>
               </div>
             </div>
 
-            <div class="divider" style="margin: 12px 0 18px 0"></div>
-            <p class="center-align grey-text">or sign up with email</p>
+            <div class="divider" style="margin: 10px 0 16px"></div>
+            <p class="center-align" style="color: #6b7280; margin-bottom: 14px">
+              or sign up with email
+            </p>
 
             <!-- Email sign up -->
             <form
@@ -90,7 +175,7 @@
               action="/auth/register"
               method="POST"
               autocomplete="on"
-              style="margin-top: 10px"
+              novalidate
             >
               <div class="row" style="margin-bottom: 0">
                 <div class="input-field col s12 m6">
@@ -108,7 +193,7 @@
                 <label for="email">Email address</label>
               </div>
 
-              <div class="input-field">
+              <div class="input-field" style="margin-bottom: 10px">
                 <input
                   id="password"
                   name="password"
@@ -120,13 +205,15 @@
                 <span class="helper-text">Must be at least 8 characters</span>
               </div>
 
-              <p style="margin-bottom: 16px">
+              <p class="terms" style="margin-bottom: 16px">
                 <label>
                   <input type="checkbox" name="accept" required />
-                  <span class="grey-text text-darken-1">
-                    I agree to the <a href="/terms">Terms of Service</a> and
-                    <a href="/privacy">Privacy Policy</a>
-                  </span>
+                  <span
+                    ><small
+                      >I agree to the <a href="/terms">Terms of Service</a> and
+                      <a href="/privacy">Privacy Policy</a></small
+                    ></span
+                  >
                 </label>
               </p>
 
@@ -142,21 +229,20 @@
         </div>
       </div>
 
-      <!-- Right: Gradient promo -->
+      <!-- Right: gradient info + image -->
       <div
-        class="col s12 l6"
+        class="col s12 l6 right-pane"
         style="
-          min-height: 80vh;
+          min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          background: linear-gradient(135deg, #0ea5e9, #22c55e);
         "
       >
-        <div class="center-align" style="max-width: 460px; padding: 16px">
+        <div class="center-align" style="max-width: 480px; padding: 16px">
           <img
-            src="/images/illustration-people.png"
-            alt=""
+            src="/images/signup_img.png"
+            alt="People collaborating"
             style="
               width: 220px;
               height: auto;
@@ -165,29 +251,24 @@
               margin-bottom: 20px;
             "
           />
-          <h5 class="white-text" style="margin-bottom: 8px">
-            Unlock your potential
-          </h5>
-          <p class="white-text" style="opacity: 0.95">
-            Offer your skills, earn time-credits, and redeem services in
-            tutoring, fitness, IT, design, and more.
+          <h5 style="margin-bottom: 8px">Unlock your potential</h5>
+          <p style="opacity: 0.95">
+            Join a growing community of learners, doers, and sharers. Offer your
+            skills, earn time-credits, and discover services in tutoring,
+            fitness, IT, design, and more.
           </p>
-          <ul
-            class="white-text left-align"
-            style="margin-top: 14px; display: inline-block"
-          >
-            <li>• Exchange skills without money</li>
-            <li>• Connect with trusted members</li>
-            <li>• Discover services tailored to you</li>
-            <li>• Grow by helping others</li>
+          <ul class="feature-list">
+            <li>Exchange skills without money — earn and spend credits</li>
+            <li>Connect with trusted community members</li>
+            <li>Discover services tailored to your needs</li>
+            <li>Grow your skills while helping others</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- Materialize JS -->
+    <!-- Materialize JS + your validation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Validation JS -->
     <script src="/js/validation.js"></script>
   </body>
 </html>

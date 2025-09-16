@@ -1,5 +1,7 @@
-/* public/css/main.css */
+
 body { font-family: 'Roboto', sans-serif; }
 nav .brand-logo { font-weight: bold; }
 .card { border: 1px solid #eee; }
 input[type="email"], input[type="password"], input[type="text"] { background: #fff; }
+
+
