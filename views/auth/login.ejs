@@ -1,185 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login • SkillLink</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login • SkillLink</title>
 
-    <!-- Materialize CSS -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
-      rel="stylesheet"
-    />
-    <!-- Material Icons -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        margin: 0;
-        font-family: "Roboto", sans-serif;
-      }
-      .card {
-        border-radius: 12px;
-      }
-      .helper-text {
-        font-size: 0.85rem;
-        color: #666;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="row" style="margin: 0 -24px">
-      <!-- Left: Gradient panel -->
-      <div
-        class="col s12 l6"
-        style="
-          min-height: 80vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, #0ea5e9, #22c55e);
-        "
-      >
-        <div
-          class="center-align white-text"
-          style="max-width: 480px; padding: 16px"
-        >
-          <img
-            src="/images/logo-mark.svg"
-            alt=""
-            style="width: 72px; height: auto; margin-bottom: 10px"
-          />
-          <h5 style="margin-bottom: 6px">SkillLink</h5>
-          <p style="opacity: 0.95">
-            Connect, learn, and share knowledge with experts worldwide.
-          </p>
-          <ul
-            class="left-align"
-            style="margin-top: 14px; display: inline-block; opacity: 0.95"
-          >
-            <li>• Learn from industry experts</li>
-            <li>• Share your expertise with others</li>
-            <li>• Build meaningful connections</li>
-          </ul>
-        </div>
+  <!-- Materialize CSS -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Material Icons -->
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <!-- Font Awesome (Facebook icon) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body { margin:0; font-family:Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif; }
+    .auth-card { border-radius:12px; }
+    .auth-divider { height:1px; background:#eee; margin:14px 0 10px; }
+    .muted { color:#64748b; }
+    .btn-outline {
+      background:#fff; border:1px solid #e6eaf0; color:#111827; width:100%;
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      height:44px; text-transform:none; border-radius:10px;
+    }
+    .btn-outline img { height:20px; width:20px; }
+    .btn-outline i { font-size:20px; }
+    .signin-btn {
+      background:#2563EB; /* your brand blue */
+      width:100%; height:44px; border-radius:10px; text-transform:none;
+    }
+    .mini { font-size:.85rem; }
+    .input-field input { height: 2.6rem; }
+    .full-panel { min-height:100vh; display:flex; }
+    .left-panel {
+      background: linear-gradient(135deg,#0ea5e9,#22c55e);
+      display:flex; align-items:flex-end; justify-content:center;
+      padding-bottom:60px; /* pushes content down */
+    }
+    .panel-copy { max-width:420px; padding:16px; text-align:center; }
+    .bullets li { display:flex; align-items:center; gap:10px; margin:10px 0; }
+    .bullets i { color:#fff; opacity:.95; }
+    .right-bg { background:#fafbff; display:flex; align-items:center; justify-content:center; }
+  </style>
+</head>
+<body>
+
+  <div class="row" style="margin:0;">
+
+    <!-- Left: Gradient panel (pushed down) -->
+    <div class="col s12 l6 full-panel left-panel">
+      <div class="panel-copy white-text">
+        <img src="/images/login_img.png" alt="SkillLink"
+             style="width:72px; height:auto; margin-bottom:16px;">
+        <h5 style="margin:0 0 6px;">SkillLink</h5>
+        <p style="opacity:.95">Connect, Learn, and Share<br>Knowledge with Experts Worldwide</p>
+
+        <ul class="bullets left-align" style="display:inline-block; margin-top:14px;">
+          <li><i class="material-icons">check_circle</i>Learn from industry experts</li>
+          <li><i class="material-icons">check_circle</i>Share your expertise with others</li>
+          <li><i class="material-icons">check_circle</i>Build meaningful connections</li>
+        </ul>
       </div>
+    </div>
 
-      <!-- Right: Form card -->
-      <div
-        class="col s12 l6 white"
-        style="
-          min-height: 80vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        "
-      >
-        <div
-          class="card z-depth-1"
-          style="max-width: 420px; width: 100%; border-radius: 12px"
-        >
-          <div class="card-content">
-            <h5 class="center-align" style="margin-bottom: 4px">
-              Welcome Back
-            </h5>
-            <p class="center-align grey-text text-darken-1">
-              Sign in to your account to continue
-            </p>
+    <!-- Right: Form card -->
+    <div class="col s12 l6 full-panel right-bg">
+      <div class="card auth-card z-depth-1" style="max-width:420px; width:100%;">
+        <div class="card-content">
 
-            <!-- Social buttons -->
-            <div class="row" style="margin-top: 18px">
-              <div class="col s12" style="margin-bottom: 8px">
-                <a
-                  href="/auth/google"
-                  class="btn white black-text valign-wrapper"
-                  style="width: 100%; border: 1px solid #eee"
-                >
-                  <img
-                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                    alt=""
-                    style="height: 18px; margin-right: 10px"
-                  />
-                  Continue with Google
-                </a>
-              </div>
-              <div class="col s12">
-                <a
-                  href="/auth/facebook"
-                  class="btn white black-text valign-wrapper"
-                  style="width: 100%; border: 1px solid #eee"
-                >
-                  <i class="material-icons left" style="color: #1877f2"
-                    >thumb_up</i
-                  >
-                  Continue with Facebook
-                </a>
-              </div>
+          <h5 class="center-align" style="margin-bottom:4px;">Welcome Back</h5>
+          <p class="center-align muted">Sign in to your account to continue</p>
+
+          <!-- Social buttons -->
+          <div class="row" style="margin-top:18px;">
+            <div class="col s12" style="margin-bottom:10px;">
+              <a href="/auth/google" class="btn btn-outline">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                <span>Continue with Google</span>
+              </a>
             </div>
-
-            <div class="divider" style="margin: 12px 0 18px 0"></div>
-            <p class="center-align grey-text">or continue with email</p>
-
-            <!-- Email login -->
-            <form
-              id="loginForm"
-              action="/auth/login"
-              method="POST"
-              autocomplete="on"
-              style="margin-top: 10px"
-            >
-              <div class="input-field">
-                <input id="loginEmail" name="email" type="email" required />
-                <label for="loginEmail">Email address</label>
-              </div>
-
-              <div class="input-field">
-                <input
-                  id="loginPassword"
-                  name="password"
-                  type="password"
-                  required
-                />
-                <label for="loginPassword">Password</label>
-                <a href="/forgot-password" class="right" style="margin-top: 6px"
-                  >Forgot password?</a
-                >
-              </div>
-
-              <p style="margin-bottom: 14px">
-                <label>
-                  <input type="checkbox" name="remember" />
-                  <span class="grey-text text-darken-1">Remember me</span>
-                </label>
-              </p>
-
-              <button class="btn-large blue" type="submit" style="width: 100%">
-                Sign In
-              </button>
-            </form>
-
-            <p class="center-align" style="margin-top: 14px">
-              Don’t have an account? <a href="/register">Sign up</a>
-            </p>
-
-            <div class="center-align" style="margin-top: 12px">
-              <a
-                href="/contact"
-                class="grey-text text-darken-1"
-                style="margin-right: 12px"
-                >Contact Support</a
-              >
-              <a href="/help" class="grey-text text-darken-1">Help Center</a>
+            <div class="col s12">
+              <a href="/auth/facebook" class="btn btn-outline">
+                <i class="fab fa-facebook-f" style="color:#1877F2;"></i>
+                <span>Continue with Facebook</span>
+              </a>
             </div>
           </div>
+
+          <div class="auth-divider"></div>
+          <p class="center-align muted mini">Or continue with email</p>
+
+          <!-- Email login -->
+          <form id="loginForm" action="/auth/login" method="POST" autocomplete="on" style="margin-top:8px;">
+            <div class="input-field">
+              <input id="loginEmail" name="email" type="email" required>
+              <label for="loginEmail">Email address</label>
+            </div>
+
+            <div class="input-field">
+              <input id="loginPassword" name="password" type="password" required>
+              <label for="loginPassword">Password</label>
+              <a href="/forgot-password" class="right mini" style="margin-top:6px;">Forgot password?</a>
+            </div>
+
+            <p class="mini" style="margin-bottom:16px;">
+              <label>
+                <input type="checkbox" name="remember"/>
+                <span class="muted">Remember me</span>
+              </label>
+            </p>
+
+            <button class="btn signin-btn" type="submit">Sign In</button>
+          </form>
+
+          <p class="center-align mini" style="margin-top:14px;">
+            Don’t have an account? <a href="/register">Sign up</a>
+          </p>
+
+          <div class="center-align mini" style="margin-top:10px;">
+            <a href="/contact" class="muted" style="margin-right:12px;">Contact Support</a>
+            <a href="/help" class="muted">Help Center</a>
+          </div>
+
         </div>
       </div>
     </div>
 
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Validation JS -->
-    <script src="/js/validation.js"></script>
-  </body>
+  </div>
+
+  <!-- Materialize JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="/js/validation.js"></script>
+</body>
 </html>
