@@ -1,4 +1,4 @@
-// server.js
+
 require('dotenv').config();                    // load .env first
 
 const express = require('express');
@@ -8,6 +8,8 @@ const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');      // uses process.env.MONGO_URI
 const userRoutes = require('./routes/userRoutes');
 
+// Load environment variables
+dotenv.config();
 connectDB();                                   // connect to Mongo
 
 const app = express();
@@ -42,3 +44,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
