@@ -1,13 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const emailRegex =
-    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i; 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   // Utility functions
   function ensureHelper(input) {
     // Check if a helper text span already exists
     let helper = input.parentElement.querySelector(".helper-text.__dyn");
     if (!helper) {
       helper = document.createElement("span");
-      helper.className = "helper-text __dyn"; 
+      helper.className = "helper-text __dyn";
       input.parentElement.appendChild(helper);
     }
     return helper;
@@ -17,9 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
     input.classList.add("invalid");
     const helper = ensureHelper(input);
     helper.textContent = message;
-    helper.style.color = "#e53935"; 
+    helper.style.color = "#e53935";
     if (window.M && M.toast) {
-      
     }
   }
 
@@ -104,11 +102,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (!accept.checked) {
-        
         if (window.M && M.toast) {
           M.toast({
-            html:
-              "You must accept the Terms of Service and Privacy Policy to continue.",
+            html: "You must accept the Terms of Service and Privacy Policy to continue.",
             displayLength: 2500,
           });
         }
