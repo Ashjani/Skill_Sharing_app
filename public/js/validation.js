@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-    /* Registration Form  */
+  /* Registration Form  */
   const registerForm = document.querySelector("form[action='/auth/register']");
   if (registerForm) {
     registerForm.addEventListener("submit", (e) => {
