@@ -1,30 +1,47 @@
+
+require('dotenv').config();                    // load .env first
+
 const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db.js');
+const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
+
+const connectDB = require('./config/db');      // uses process.env.MONGO_URI
 const userRoutes = require('./routes/userRoutes');
 
 // Load environment variables
 dotenv.config();
-
-// Connect to the database
-connectDB();
+connectDB();                                   // connect to Mongo
 
 const app = express();
 
-// Middleware to parse JSON bodies.
-app.use(express.json());
+/* ---------- Middleware ---------- */
+app.use(express.urlencoded({ extended: true })); // form-data
+app.use(express.json());                         // JSON bodies
+app.use(express.static(path.join(__dirname, 'public'))); // /public assets
 
-// Mount the user routes
-app.use('/api/users', userRoutes);
+/* ---------- View engine (EJS) ---------- */
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
 
-// Define the port
+/* ---------- Locals available in all EJS views ---------- */
+app.use((req, res, next) => {
+  res.locals.user = null;       // set to req.user when auth is added
+  res.locals.title = 'SkillLink';
+  next();
+});
+
+/* ---------- Routes ---------- */
+app.use('/', userRoutes);       // renders /signup, /login, handles POST /register, /login
+
+/* ---------- Health + 404 ---------- */
+app.get('/health', (_req, res) => res.status(200).send('OK'));
+app.use((_req, res) => res.status(404).send('Not Found'));
+
+/* ---------- Start server ---------- */
 const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
-// Only start the server if the file is run directly, not when imported
-if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
-
-module.exports = app; // Export the app for testing purposes

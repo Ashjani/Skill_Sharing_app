@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create your account • SkillLink</title>
+
+    <!-- Materialize CSS + Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --card-radius: 14px;
+        --light: #f7f8fc;
+        --border: #e9eef5;
+        --muted: #6b7280;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+        background: #fff;
+      }
+      /* left panel look */
+      .left-pane {
+        background: var(--light);
+      }
+      .auth-card {
+        max-width: 420px;
+        width: 100%;
+        border-radius: var(--card-radius);
+        border: 1px solid var(--border);
+      }
+      .auth-card .btn {
+        height: 42px;
+        line-height: 42px;
+        border-radius: 10px;
+      }
+      .input-field input {
+        height: 3rem;
+      }
+      .divider {
+        background: #eef0f4;
+      }
+      .helper-text {
+        color: #9aa3b2;
+      }
+      .terms small {
+        color: #738091;
+      }
+      /* right gradient panel */
+      .right-pane {
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        color: #fff;
+      }
+      .feature-list {
+        display: inline-block;
+        text-align: left;
+        list-style: none;
+        padding-left: 0;
+        margin-top: 12px;
+      }
+      .feature-list li {
+        margin: 8px 0;
+        position: relative;
+        padding-left: 26px;
+      }
+      .feature-list li:before {
+        content: "check_circle";
+        font-family: "Material Icons";
+        position: absolute;
+        left: 0;
+        top: -2px;
+        font-size: 18px;
+        opacity: 0.95;
+      }
+      /* small tweaks */
+      .brand-sub {
+        color: #94a3b8;
+        font-size: 13px;
+        margin-top: -6px;
+      }
+      @media (max-width: 992px) {
+        .left-pane,
+        .right-pane {
+          min-height: auto !important;
+        }
+        .right-pane {
+          padding: 36px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row" style="margin: 0">
+      <!-- Left: light panel + form -->
+      <div
+        class="col s12 l6 left-pane"
+        style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div class="auth-card card z-depth-0">
+          <div class="card-content" style="padding: 28px 26px">
+            <h5 class="center-align" style="margin: 0 0 4px">SkillLink</h5>
+            <p class="center-align brand-sub">Join millions sharing skills</p>
+
+            <!-- Social buttons -->
+            <div class="row" style="margin-top: 18px; margin-bottom: 8px">
+              <div class="col s12" style="margin-bottom: 8px">
+                <a
+                  href="/auth/google"
+                  class="btn white black-text"
+                  style="
+                    width: 100%;
+                    border: 1px solid #e6eaf0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                  "
+                >
+                  <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                    alt=""
+                    style="
+                      height: 18px;
+                      margin-right: 10px;
+                      vertical-align: middle;
+                    "
+                  />
+                  Continue with Google
+                </a>
+              </div>
+              <div class="col s12">
+                <a
+                  href="/auth/facebook"
+                  class="btn white black-text"
+                  style="
+                    width: 100%;
+                    border: 1px solid #e6eaf0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                  "
+                >
+                  <i class="fab fa-facebook-f left" style="color: #1877f2"></i>
+                  Continue with Facebook
+                </a>
+              </div>
+            </div>
+
+            <div class="divider" style="margin: 10px 0 16px"></div>
+            <p class="center-align" style="color: #6b7280; margin-bottom: 14px">
+              or sign up with email
+            </p>
+
+            <!-- Email sign up -->
+            <form
+              id="registerForm"
+              action="/auth/register"
+              method="POST"
+              autocomplete="on"
+              novalidate
+            >
+              <div class="row" style="margin-bottom: 0">
+                <div class="input-field col s12 m6">
+                  <input id="firstName" name="firstName" type="text" required />
+                  <label for="firstName">First name</label>
+                </div>
+                <div class="input-field col s12 m6">
+                  <input id="lastName" name="lastName" type="text" required />
+                  <label for="lastName">Last name</label>
+                </div>
+              </div>
+
+              <div class="input-field">
+                <input id="email" name="email" type="email" required />
+                <label for="email">Email address</label>
+              </div>
+
+              <div class="input-field" style="margin-bottom: 10px">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  minlength="8"
+                  required
+                />
+                <label for="password">Password</label>
+                <span class="helper-text">Must be at least 8 characters</span>
+              </div>
+
+              <p class="terms" style="margin-bottom: 16px">
+                <label>
+                  <input type="checkbox" name="accept" required />
+                  <span
+                    ><small
+                      >I agree to the <a href="/terms">Terms of Service</a> and
+                      <a href="/privacy">Privacy Policy</a></small
+                    ></span
+                  >
+                </label>
+              </p>
+
+              <button class="btn-large blue" type="submit" style="width: 100%">
+                Create account
+              </button>
+            </form>
+
+            <p class="center-align" style="margin-top: 14px">
+              Already have an account? <a href="/login">Sign in</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: gradient info + image -->
+      <div
+        class="col s12 l6 right-pane"
+        style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div class="center-align" style="max-width: 480px; padding: 16px">
+          <img
+            src="/images/signup_img.png"
+            alt="People collaborating"
+            style="
+              width: 220px;
+              height: auto;
+              border-radius: 16px;
+              box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+              margin-bottom: 20px;
+            "
+          />
+          <h5 style="margin-bottom: 8px">Unlock your potential</h5>
+          <p style="opacity: 0.95">
+            Join a growing community of learners, doers, and sharers. Offer your
+            skills, earn time-credits, and discover services in tutoring,
+            fitness, IT, design, and more.
+          </p>
+          <ul class="feature-list">
+            <li>Exchange skills without money — earn and spend credits</li>
+            <li>Connect with trusted community members</li>
+            <li>Discover services tailored to your needs</li>
+            <li>Grow your skills while helping others</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Materialize JS + your validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/validation.js"></script>
+  </body>
+</html>
