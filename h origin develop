@@ -1,0 +1,187 @@
+[33mcommit 28afcbd80a01e52fce2c6fd66d4336aed9a180e3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdevelop[m[33m)[m
+Author: IsurangiGuniyangodage <s225065034@deakin.edu.au>
+Date:   Sat Sep 20 12:52:24 2025 +1000
+
+    A
+    main css changes done in login and register pages
+
+[1mdiff --git a/public/js/validation.js b/public/js/validation.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e2d88ed[m
+[1m--- /dev/null[m
+[1m+++ b/public/js/validation.js[m
+[36m@@ -0,0 +1,174 @@[m
+[32m+[m[32mdocument.addEventListener("DOMContentLoaded", () => {[m
+[32m+[m[32m  const emailRegex =[m
+[32m+[m[32m    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;[m[41m [m
+[32m+[m[32m  // Utility functions[m
+[32m+[m[32m  function ensureHelper(input) {[m
+[32m+[m[32m    // Check if a helper text span already exists[m
+[32m+[m[32m    let helper = input.parentElement.querySelector(".helper-text.__dyn");[m
+[32m+[m[32m    if (!helper) {[m
+[32m+[m[32m      helper = document.createElement("span");[m
+[32m+[m[32m      helper.className = "helper-text __dyn";[m[41m [m
+[32m+[m[32m      input.parentElement.appendChild(helper);[m
+[32m+[m[32m    }[m
+[32m+[m[32m    return helper;[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  function setError(input, message) {[m
+[32m+[m[32m    input.classList.add("invalid");[m
+[32m+[m[32m    const helper = ensureHelper(input);[m
+[32m+[m[32m    helper.textContent = message;[m
+[32m+[m[32m    helper.style.color = "#e53935";[m[41m [m
+[32m+[m[32m    if (window.M && M.toast) {[m
+[32m+[m[41m      [m
+[32m+[m[32m    }[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  function clearError(input) {[m
+[32m+[m[32m    input.classList.remove("invalid");[m
+[32m+[m[32m    const helper = input.parentElement.querySelector(".helper-text.__dyn");[m
+[32m+[m[32m    if (helper) helper.textContent = "";[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  function required(input, label) {[m
+[32m+[m[32m    const val = input.value.trim();[m
+[32m+[m[32m    if (!val) {[m
+[32m+[m[32m      setError(input, `${label} is required.`);[m
+[32m+[m[32m      return false;[m
+[32m+[m[32m    }[m
+[32m+[m[32m    clearError(input);[m
+[32m+[m[32m    return true;[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  // Register Form[m
+[32m+[m
+[32m+[m[32m  const registerForm = document.querySelector("form[action='/auth/register']");[m
+[32m+[m[32m  if (registerForm) {[m
+[32m+[m[32m    const firstName = registerForm.querySelector("#firstName");[m
+[32m+[m[32m    const lastName = registerForm.querySelector("#lastName");[m
+[32m+[m[32m    const email = registerForm.querySelector("#email");[m
+[32m+[m[32m    const password = registerForm.querySelector("#password");[m
+[32m+[m[32m    const accept = registerForm.querySelector("input[name='accept']");[m
+[32m+[m
+[32m+[m[32m    // live validation[m
+[32m+[m[32m    firstName.addEventListener("blur", () => required(firstName, "First name"));[m
+[32m+[m[32m    lastName.addEventListener("blur", () => required(lastName, "Last name"));[m
+[32m+[m
+[32m+[m[32m    email.addEventListener("input", () => {[m
+[32m+[m[32m      const val = email.value.trim();[m
+[32m+[m[32m      if (!val) {[m
+[32m+[m[32m        setError(email, "Email address is required.");[m
+[32m+[m[32m      } else if (!emailRegex.test(val)) {[m
+[32m+[m[32m        setError(email, "Please enter a valid email address.");[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(email);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    password.addEventListener("input", () => {[m
+[32m+[m[32m      const val = password.value;[m
+[32m+[m[32m      if (!val) {[m
+[32m+[m[32m        setError(password, "Password is required.");[m
+[32m+[m[32m      } else if (val.length < 8) {[m
+[32m+[m[32m        setError(password, "Password must be at least 8 characters.");[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(password);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    registerForm.addEventListener("submit", (e) => {[m
+[32m+[m[32m      let ok = true;[m
+[32m+[m
+[32m+[m[32m      if (!required(firstName, "First name")) ok = false;[m
+[32m+[m[32m      if (!required(lastName, "Last name")) ok = false;[m
+[32m+[m
+[32m+[m[32m      const eVal = email.value.trim();[m
+[32m+[m[32m      if (!eVal) {[m
+[32m+[m[32m        setError(email, "Email address is required.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else if (!emailRegex.test(eVal)) {[m
+[32m+[m[32m        setError(email, "Please enter a valid email address.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(email);[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      const pVal = password.value;[m
+[32m+[m[32m      if (!pVal) {[m
+[32m+[m[32m        setError(password, "Password is required.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else if (pVal.length < 8) {[m
+[32m+[m[32m        setError(password, "Password must be at least 8 characters.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(password);[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      if (!accept.checked) {[m
+[32m+[m[41m        [m
+[32m+[m[32m        if (window.M && M.toast) {[m
+[32m+[m[32m          M.toast({[m
+[32m+[m[32m            html:[m
+[32m+[m[32m              "You must accept the Terms of Service and Privacy Policy to continue.",[m
+[32m+[m[32m            displayLength: 2500,[m
+[32m+[m[32m          });[m
+[32m+[m[32m        }[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      if (!ok) e.preventDefault();[m
+[32m+[m[32m    });[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  // login Form[m
+[32m+[m
+[32m+[m[32m  const loginForm = document.querySelector("form[action='/auth/login']");[m
+[32m+[m[32m  if (loginForm) {[m
+[32m+[m[32m    const email = loginForm.querySelector("#loginEmail");[m
+[32m+[m[32m    const password = loginForm.querySelector("#loginPassword");[m
+[32m+[m
+[32m+[m[32m    email.addEventListener("input", () => {[m
+[32m+[m[32m      const val = email.value.trim();[m
+[32m+[m[32m      if (!val) {[m
+[32m+[m[32m        setError(email, "Email address is required.");[m
+[32m+[m[32m      } else if (!emailRegex.test(val)) {[m
+[32m+[m[32m        setError(email, "Please enter a valid email address.");[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(email);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    password.addEventListener("input", () => {[m
+[32m+[m[32m      const val = password.value;[m
+[32m+[m[32m      if (!val) {[m
+[32m+[m[32m        setError(password, "Password is required.");[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(password);[m
+[32m+[m[32m      }[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m    loginForm.addEventListener("submit", (e) => {[m
+[32m+[m[32m      let ok = true;[m
+[32m+[m
+[32m+[m[32m      const eVal = email.value.trim();[m
+[32m+[m[32m      if (!eVal) {[m
+[32m+[m[32m        setError(email, "Email address is required.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else if (!emailRegex.test(eVal)) {[m
+[32m+[m[32m        setError(email, "Please enter a valid email address.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(email);[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      const pVal = password.value;[m
+[32m+[m[32m      if (!pVal) {[m
+[32m+[m[32m        setError(password, "Password is required.");[m
+[32m+[m[32m        ok = false;[m
+[32m+[m[32m      } else {[m
+[32m+[m[32m        clearError(password);[m
+[32m+[m[32m      }[m
+[32m+[m
+[32m+[m[32m      if (!ok) e.preventDefault();[m
+[32m+[m[32m    });[m
+[32m+[m[32m  }[m
+[32m+[m[32m});[m
