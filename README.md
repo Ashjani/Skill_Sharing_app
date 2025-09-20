@@ -290,6 +290,54 @@ If you forget to add a reviewer at creation, you can add one later.
 - **Reason:** MongoDB is installed, but its location is not added to your system’s PATH variable.  
 - **Solution:**  
   1. Locate your MongoDB **bin** directory (e.g., `C:\Program Files\MongoDB\Server\7.0\bin`).  
-  2. Add it to your system’s **environment variables**.   
+  2. Add it to your system’s **environment variables**.  
+
+Authentication Pages (Login & Register)
+
+The authentication system introduces two core pages: Login and Register, designed to give users a seamless experience when accessing the Skill-Sharing Community Platform. Both pages were implemented using EJS templates for server-side rendering and styled with Materialize CSS for responsiveness and modern design.
+
+Login Page
+
+Purpose: Provides users with access to the platform by entering valid credentials.
+
+UI Design:
+
+Responsive card layout (views/auth/login.ejs) with Materialize form components.
+
+Integration of Material Icons for a polished look.
+
+Custom styles defined in public/css/main.css for consistent branding.
+
+Validation:
+
+Client-side validation using public/js/validation.js.
+
+Ensures required fields (email and password) are not empty and meet format requirements before submission.
+
+Register Page
+
+Purpose: Allows new users to create an account to participate in the community.
+
+UI Design:
+
+Responsive card layout (views/auth/register.ejs) styled with Materialize CSS.
+
+Input fields for username, email, and password with clear hints and placeholder text.
+
+Consistent design with the login page to ensure usability.
+
+Validation:
+
+Client-side validation checks email format, password length/strength, and ensures no fields are left empty.
+
+Provides immediate user feedback for incorrect input before the form is submitted.
+
+Shared UI Enhancements
+
+Custom Stylesheet (public/css/main.css): Centralized styles for form layouts, input spacing, and button design.
+
+Reusable Partials: Navbar and footer partials integrated for consistent layout across pages.
+
+Accessibility & Responsiveness: Layout tested to ensure it adapts to different screen sizes, following a mobile-first approach. 
 
 
