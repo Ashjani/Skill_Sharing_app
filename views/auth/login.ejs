@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login • SkillLink</title>
+
+    <!-- Materialize CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!-- Material Icons -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <!-- Font Awesome (Facebook icon) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --card-radius: 14px;
+        --border: #e9eef5;
+        --muted: #64748b;
+        --panel-bg: #fafbff;
+        --brand-blue: #2563eb;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+        background: #fff;
+      }
+
+      /* layout */
+      .full-h {
+        min-height: 100vh;
+      }
+      .left-pane {
+        background: linear-gradient(135deg, #0ea5e9, #22c55e);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 68px; /* pushes content down to match design */
+        color: #fff;
+      }
+      .right-pane {
+        background: var(--panel-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* left content */
+      .panel-copy {
+        max-width: 420px;
+        padding: 16px;
+        text-align: center;
+      }
+      .panel-bullets {
+        list-style: none;
+        padding: 0;
+        margin: 14px 0 0;
+        display: inline-block;
+        text-align: left;
+      }
+      .panel-bullets li {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin: 10px 0;
+      }
+      .panel-bullets i {
+        color: #fff;
+        opacity: 0.95;
+      }
+
+      /* card + form */
+      .auth-card {
+        max-width: 420px;
+        width: 100%;
+        border-radius: var(--card-radius);
+        border: 1px solid var(--border);
+      }
+      .auth-card .card-content {
+        padding: 28px 26px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .mini {
+        font-size: 0.9rem;
+      }
+
+      .input-field input {
+        height: 2.8rem;
+      }
+      .btn-outline {
+        background: #fff;
+        border: 1px solid #e6eaf0;
+        color: #111827;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        height: 44px;
+        text-transform: none;
+        border-radius: 10px;
+      }
+      .btn-outline img {
+        height: 20px;
+        width: 20px;
+      }
+      .btn-outline i {
+        font-size: 18px;
+      }
+      .signin-btn {
+        background: var(--brand-blue);
+        width: 100%;
+        height: 44px;
+        border-radius: 10px;
+        text-transform: none;
+      }
+      .auth-divider {
+        height: 1px;
+        background: #eef0f4;
+        margin: 16px 0 12px;
+      }
+
+      @media (max-width: 992px) {
+        .left-pane,
+        .right-pane {
+          min-height: auto;
+        }
+        .left-pane {
+          padding: 36px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row" style="margin: 0">
+      <!-- LEFT: gradient panel (content pushed down) -->
+      <div
+        class="col s12 l6 left-pane full-h"
+        style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div class="panel-copy">
+          <!-- swap image if you like: /images/login_img.png -->
+          <img
+            src="/images/login_img.png"
+            alt="SkillLink"
+            style="width: 72px; height: auto; margin-bottom: 16px"
+          />
+          <h5 style="margin: 0 0 6px">SkillLink</h5>
+          <p style="opacity: 0.95; margin: 0">
+            Connect, Learn, and Share Knowledge with Experts Worldwide.
+          </p>
+
+          <ul class="panel-bullets">
+            <li>
+              <i class="material-icons">check_circle</i>Learn from industry
+              experts
+            </li>
+            <li>
+              <i class="material-icons">check_circle</i>Share your expertise
+              with others
+            </li>
+            <li>
+              <i class="material-icons">check_circle</i>Build meaningful
+              connections
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RIGHT: form card -->
+      <div class="col s12 l6 right-pane full-h"
+      style="
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        ">
+        <div class="card auth-card z-depth-0">
+          <div class="card-content">
+            <h5 class="center-align" style="margin-bottom: 4px">
+              Welcome Back
+            </h5>
+            <p class="center-align muted">
+              Sign in to your account to continue
+            </p>
+
+            <!-- Social buttons -->
+            <div class="row" style="margin-top: 18px">
+              <div class="col s12" style="margin-bottom: 10px">
+                <a href="/auth/google" class="btn btn-outline">
+                  <img
+                    src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+                    alt="Google"
+                  />
+                  <span>Continue with Google</span>
+                </a>
+              </div>
+              <div class="col s12">
+                <a href="/auth/facebook" class="btn btn-outline">
+                  <i class="fab fa-facebook-f" style="color: #1877f2"></i>
+                  <span>Continue with Facebook</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="auth-divider"></div>
+            <p class="center-align muted mini">Or continue with email</p>
+
+            <!-- Email login -->
+            <form
+              id="loginForm"
+              action="/auth/login"
+              method="POST"
+              autocomplete="on"
+              style="margin-top: 10px"
+            >
+              <div class="input-field">
+                <input id="loginEmail" name="email" type="email" required />
+                <label for="loginEmail">Email address</label>
+              </div>
+
+              <div class="input-field">
+                <input
+                  id="loginPassword"
+                  name="password"
+                  type="password"
+                  required
+                />
+                <label for="loginPassword">Password</label>
+                <a
+                  href="/forgot-password"
+                  class="right mini"
+                  style="margin-top: 6px"
+                  >Forgot password?</a
+                >
+              </div>
+
+              <p class="mini" style="margin-bottom: 16px">
+                <label>
+                  <input type="checkbox" name="remember" />
+                  <span class="muted">Remember me</span>
+                </label>
+              </p>
+
+              <button class="btn signin-btn" type="submit">Sign In</button>
+            </form>
+
+            <p class="center-align mini" style="margin-top: 14px">
+              Don’t have an account? <a href="/register">Sign up</a>
+            </p>
+
+            <div class="center-align mini" style="margin-top: 10px">
+              <a href="/contact" class="muted" style="margin-right: 12px"
+                >Contact Support</a
+              >
+              <a href="/help" class="muted">Help Center</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/validation.js"></script>
+  </body>
+</html>
