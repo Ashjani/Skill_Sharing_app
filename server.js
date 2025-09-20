@@ -1,4 +1,5 @@
 
+const dotenv = require('dotenv');
 require('dotenv').config();                    // load .env first
 
 const express = require('express');
