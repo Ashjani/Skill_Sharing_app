@@ -1,10 +1,13 @@
 // controllers/serviceController.js
-const Service = require("../models/Service");
+const Service = require("../models/service");
 
 // Create a new service
 exports.createService = async (req, res) => {
   try {
-    const service = new Service(req.body);
+    const service = new Service({
+      ...req.body,
+      user: req.user.id // Assign the service to the logged-in user
+    });
     await service.save();
     res.status(201).json(service);
   } catch (err) {

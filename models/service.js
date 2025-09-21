@@ -1,17 +1,21 @@
-// models/Service.js
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const ServiceSchema = new mongoose.Schema(
-  {
-    title: { type: String, required: true, trim: true, maxlength: 120 },
-    description: { type: String, required: true, maxlength: 2000 },
-    category: { type: String, required: true, trim: true },
-    location: { type: String, trim: true }, // e.g., city/suburb
-    tags: [{ type: String, trim: true, lowercase: true }],
-    status: { type: String, enum: ["active", "archived"], default: "active" },
-    createdBy: { type: String, required: true } // later we’ll link to user accounts
-  },
-  { timestamps: true }
-);
+const serviceSchema = new Schema({
+    title: { type: String, required: true, trim: true },
+    description: { type: String, required: true },
+    category: { type: String, required: true },
+    user: { 
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    
+    status: { 
+        type: String,
+        enum: ['available', 'in_progress', 'completed'],
+        default: 'available'
+    }
+}, { timestamps: true });
 
-module.exports = mongoose.model("Service", ServiceSchema);
+module.exports = mongoose.model('Service', serviceSchema);
