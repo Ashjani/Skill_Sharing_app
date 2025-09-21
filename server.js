@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -32,7 +33,14 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/', userRoutes);  // renders /signup, /login, handles POST /register, /login
+app.use('/', userRoutes);
+app.use('/api/services', serviceRoutes);
+
+
+// render the create service form
+app.get('/services/new', (req, res) => {
+  res.render('createService');
+});
 
 // 404 Handler
 app.get('/health', (_req, res) => res.status(200).send('OK'));
@@ -40,7 +48,7 @@ app.use((_req, res) => res.status(404).send('Not Found'));
 
 // Start server
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
