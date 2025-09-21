@@ -170,4 +170,97 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!ok) e.preventDefault();
     });
   }
+
+  // ---------------- Contact ----------------
+const contactForm = document.getElementById("contactForm");
+console.log("[validation] contactForm found?", !!contactForm);
+
+if (contactForm) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+  const phoneRegex = /^[+\d()\-.\s]{6,20}$/; // flexible but safe
+
+  const firstName = contactForm.querySelector("#firstName");
+  const lastName  = contactForm.querySelector("#lastName");
+  const email     = contactForm.querySelector("#email");
+  const phone     = contactForm.querySelector("#phone");
+  const subject   = contactForm.querySelector("#subject"); // native <select>
+  const message   = contactForm.querySelector("#message");
+  const consent   = contactForm.querySelector("input[name='consent']"); // <-- correct
+
+  // live validation
+  firstName?.addEventListener("blur", () => required(firstName, "First name"));
+  lastName?.addEventListener("blur",  () => required(lastName,  "Last name"));
+
+  email?.addEventListener("input", () => {
+    const v = email.value.trim();
+    if (!v) setError(email, "Email address is required.");
+    else if (!emailRegex.test(v)) setError(email, "Please enter a valid email address.");
+    else clearError(email);
+  });
+
+  phone?.addEventListener("input", () => {
+    const v = phone.value.trim();
+    if (v && !phoneRegex.test(v)) setError(phone, "Enter a valid phone (digits, +, (), - allowed).");
+    else clearError(phone);
+  });
+
+  message?.addEventListener("input", () => {
+    const len = message.value.trim().length;
+    if (len < 20) setError(message, "Message must be at least 20 characters.");
+    else clearError(message);
+  });
+
+  // consent live toggle
+  consent?.addEventListener("change", () => {
+    if (consent.checked) clearError(consent);
+    else setError(consent, "You must agree to receive communications before submitting.");
+  });
+
+  // Validate the select (Materialize-enhanced ok)
+  function validateSelect(sel) {
+    if (!sel || !sel.value) {
+      const visible = sel.closest(".input-field")?.querySelector("input") || sel;
+      setError(visible, "Please choose a subject.");
+      return false;
+    }
+    const visible = sel.closest(".input-field")?.querySelector("input") || sel;
+    clearError(visible);
+    return true;
+  }
+
+  contactForm.addEventListener("submit", (e) => {
+    let ok = true;
+
+    if (!required(firstName, "First name")) ok = false;
+    if (!required(lastName,  "Last name"))  ok = false;
+
+    const eVal = email.value.trim();
+    if (!eVal) { setError(email, "Email address is required."); ok = false; }
+    else if (!emailRegex.test(eVal)) { setError(email, "Please enter a valid email address."); ok = false; }
+    else clearError(email);
+
+    const pVal = phone.value.trim();
+    if (pVal && !phoneRegex.test(pVal)) { setError(phone, "Enter a valid phone."); ok = false; }
+    else clearError(phone);
+
+    if (!validateSelect(subject)) ok = false;
+
+    const mVal = message.value.trim();
+    if (mVal.length < 20) { setError(message, "Message must be at least 20 characters."); ok = false; }
+    else clearError(message);
+
+    if (consent && !consent.checked) {
+      setError(consent, "You must agree to receive communications before submitting.");
+      window.M?.toast && M.toast({ html: "Please agree to communications.", displayLength: 2000 });
+      ok = false;
+    }
+
+    if (!ok) {
+      e.preventDefault();
+      window.M?.toast && M.toast({ html: "Please fix the highlighted fields.", displayLength: 2500 });
+    } else {
+      window.M?.toast && M.toast({ html: "Sending...", displayLength: 1200 });
+    }
+  });
+}
 });
