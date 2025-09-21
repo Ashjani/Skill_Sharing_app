@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser } = require('../controllers/userController');
-const { protect } = require('../middleware/authMiddleware'); // Here we import the middleware
+const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
 
 // Render views
 router.get('/register', (req, res) => res.render('auth/register', { title: 'Sign Up • SkillLink' }));
