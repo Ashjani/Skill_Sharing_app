@@ -47,17 +47,6 @@ app.get('/services/new', (req, res) => {
   res.render('createService');
 });
 
-// render the browse services page
-app.get('/services', async (req, res) => {
-  try {
-    const services = await Service.find().lean(); // fetch all services
-    res.render('services', { services });
-  } catch (err) {
-    res.status(500).send('Error loading services');
-  }
-});
-
-
 /* Routes */
 app.use("/", pageRoutes);
 app.use("/auth", userRoutes);
