@@ -22,6 +22,11 @@ const userSchema = new Schema({
     credits: {
         type: Number,
         default: 1
+    },
+    role: {
+        type: String,
+        enum: ['Member', 'Admin'], // Restrict roles to these values
+        default: 'Member'         // New users are 'Member' by default
     }
 }, { timestamps: true });
 
