@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
+
+// Mock data for categories + featured cards on home page
+
 const categories = [
   {
     icon: "code",
@@ -58,9 +61,11 @@ const featured = [
   },
 ];
 
-// Home
-router.get("/", (req, res) => {
-  res.render("home", { categories, featured });
+
+// Home page
+router.get('/', (req, res) => {
+  console.log('>>> pageRoutes: GET /');
+  res.render('home', { categories, featured }); 
 });
 
 // About
@@ -72,6 +77,7 @@ router.get("/about", (req, res) => {
 router.get("/contact", (req, res) => {
   res.render("contact", { title: "Contact • SkillLink" });
 });
+
 
 router.post("/contact", (req, res) => {
   console.log("Contact form:", req.body);
