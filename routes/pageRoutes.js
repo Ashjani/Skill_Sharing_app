@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// Mock data for categories + featured cards (swap to DB later)
+// Mock data for categories + featured cards on home page
 const categories = [
   {
     icon: "code",
@@ -62,7 +62,7 @@ const featured = [
 // Home page
 router.get('/', (req, res) => {
   console.log('>>> pageRoutes: GET /');
-  res.render('home', { categories, featured }); // home.ejs must exist in /views
+  res.render('home', { categories, featured }); 
 });
 
 // About page
@@ -75,7 +75,7 @@ router.get("/contact", (req, res) => {
   res.render("contact", { title: "Contact • SkillLink" });
 });
 
-// POST Contact (simple stub)
+// POST Contact 
 router.post('/contact', (req, res) => {
   // TODO: save to DB / send email
   console.log('Contact form:', req.body);
