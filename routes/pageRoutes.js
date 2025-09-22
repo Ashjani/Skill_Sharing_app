@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Mock data for categories + featured cards (swap to DB later)
 const categories = [
   {
     icon: "code",
@@ -59,30 +58,96 @@ const featured = [
   },
 ];
 
-// Home page
-router.get('/', (req, res) => {
-  console.log('>>> pageRoutes: GET /');
-  res.render('home', { categories, featured }); // home.ejs must exist in /views
+// Home
+router.get("/", (req, res) => {
+  res.render("home", { categories, featured });
 });
 
-// About page
+// About
 router.get("/about", (req, res) => {
   res.render("about", { title: "About • SkillLink" });
 });
 
-// Contact page
+// Contact
 router.get("/contact", (req, res) => {
   res.render("contact", { title: "Contact • SkillLink" });
 });
 
-// POST Contact (simple stub)
-router.post('/contact', (req, res) => {
-  // TODO: save to DB / send email
-  console.log('Contact form:', req.body);
-  return res.status(200).render('contact', {
-    title: 'Contact • SkillLink',
-    sent: true
-  });
+router.post("/contact", (req, res) => {
+  console.log("Contact form:", req.body);
+  res.render("contact", { title: "Contact • SkillLink", sent: true });
+});
+
+// Services
+router.get("/services", (req, res) => {
+  const services = [
+    {
+      name: "Alex Chen",
+      role: "Web Dev",
+      title: "I will create a modern responsive website design",
+      price: "$125",
+      rating: 4.9,
+      img: "/images/service1.jpg",
+    },
+    {
+      name: "Sarah Johnson",
+      role: "Top Rated",
+      title: "I will write engaging blog content and articles",
+      price: "$45",
+      rating: 5.0,
+      img: "/images/service2.jpg",
+    },
+    {
+      name: "Mike Rodriguez",
+      role: "Designer",
+      title: "I will design a professional logo for your brand",
+      price: "$75",
+      rating: 4.8,
+      img: "/images/service3.png",
+    },
+    {
+      name: "Emma Davis",
+      role: "Social Media",
+      title: "I will manage your social media marketing campaigns",
+      price: "$20",
+      rating: 4.7,
+      img: "/images/service4.png",
+    },
+    {
+      name: "David Kumar",
+      role: "Mobile Dev",
+      title: "I will develop a custom mobile application",
+      price: "$80",
+      rating: 5.0,
+      img: "/images/service5.png",
+    },
+    {
+      name: "James Wilson",
+      role: "Video Editor",
+      title: "I will edit professional videos for your business",
+      price: "$15",
+      rating: 4.6,
+      img: "/images/service6.jpg",
+    },
+    {
+      name: "Liza Zhang",
+      role: "Data Analyst",
+      title: "I will provide data analysis and business insights",
+      price: "$30",
+      rating: 5.0,
+      img: "/images/service7.png",
+    },
+    {
+      name: "Carlos Martinez",
+      role: "Translator",
+      title: "I will translate documents in multiple languages",
+      price: "$25",
+      rating: 4.8,
+      img: "/images/service8.jpg",
+    },
+  ];
+
+  res.render("services", { title: "Services • SkillLink", services });
 });
 
 module.exports = router;
