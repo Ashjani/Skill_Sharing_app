@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Service</title>
+</head>
+<body>
+  <h1>Create a New Service</h1>
+  <form action="/api/services" method="POST">
+    <label>Title:</label>
+    <input type="text" name="title" required /><br/>
+
+    <label>Description:</label>
+    <textarea name="description" required></textarea><br/>
+
+    <label>Category:</label>
+    <input type="text" name="category" required /><br/>
+
+    <label>Status:</label>
+    <select name="status">
+      <option value="available">Available</option>
+      <option value="in_progress">In Progress</option>
+      <option value="completed">Completed</option>
+    </select><br/>
+
+    <!-- later you can hide this and auto-fill logged-in user -->
+    <label>User ID:</label>
+    <input type="text" name="user" required /><br/>
+
+    <button type="submit">Create Service</button>
+  </form>
+</body>
+</html>
