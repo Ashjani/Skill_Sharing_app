@@ -5,17 +5,21 @@ const serviceSchema = new Schema({
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     category: { type: String, required: true },
-    user: { 
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
-    
-    status: { 
+    status: {
         type: String,
         enum: ['available', 'in_progress', 'completed'],
         default: 'available'
-    }
+    },
+    reviews: [{ // Linking servis.js to reviews
+        type: Schema.Types.ObjectId,
+        ref: 'Review'
+    }]
 }, { timestamps: true });
+
 
 module.exports = mongoose.model('Service', serviceSchema);
