@@ -1,0 +1,150 @@
+<!--  Services Hero  -->
+<section class="services-hero">
+  <div class="hero-inner center">
+    <h3>Discover Professional Services</h3>
+    <p class="muted">
+      Find the perfect freelancer for your project from thousands of skilled
+      professionals.
+    </p>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search for services (e.g., web design, copywriting, marketing...)"
+      />
+      <button class="btn indigo">Search</button>
+    </div>
+
+    <div class="filter-row">
+      <!-- All Categories -->
+      <div class="dropdown" data-filter="category">
+        <button class="dropbtn" type="button" aria-expanded="false">
+          All Categories ▾
+        </button>
+        <div class="dropdown-content">
+          <button data-value="">All Categories</button>
+          <button data-value="programming">Programming</button>
+          <button data-value="design">Design</button>
+          <button data-value="business">Business</button>
+          <button data-value="music">Music</button>
+          <button data-value="cooking">Cooking</button>
+          <button data-value="languages">Languages</button>
+        </div>
+      </div>
+
+      <!-- Price Range -->
+      <div class="dropdown" data-filter="price">
+        <button class="dropbtn" type="button" aria-expanded="false">
+          Price Range ▾
+        </button>
+        <div class="dropdown-content">
+          <button data-value="">Any</button>
+          <button data-value="under-50">Under $50</button>
+          <button data-value="50-200">$50 – $200</button>
+          <button data-value="200-500">$200 – $500</button>
+          <button data-value="500-plus">$500+</button>
+        </div>
+      </div>
+
+      <!-- Delivery Time -->
+      <div class="dropdown" data-filter="delivery">
+        <button class="dropbtn" type="button" aria-expanded="false">
+          Delivery Time ▾
+        </button>
+        <div class="dropdown-content">
+          <button data-value="">Any</button>
+          <button data-value="1">1 day</button>
+          <button data-value="3">3 days</button>
+          <button data-value="7">7 days</button>
+          <button data-value="14">2+ weeks</button>
+        </div>
+      </div>
+
+      <!-- Sort -->
+      <div class="dropdown sort" data-filter="sort">
+        <button class="dropbtn" type="button" aria-expanded="false">
+          Sort by: Relevance ▾
+        </button>
+        <div class="dropdown-content">
+          <button data-value="relevance">Relevance</button>
+          <button data-value="price-asc">Price: Low → High</button>
+          <button data-value="price-desc">Price: High → Low</button>
+          <button data-value="newest">Newest</button>
+          <button data-value="top">Top Rated</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--  Services Grid  -->
+<section class="services-list container">
+  <h6 class="muted"><%= services.length %> services available</h6>
+  <p class="tiny muted">Showing results for all categories</p>
+
+  <div class="services-grid">
+    <% (services || []).forEach(function (s) { %>
+    <div class="service-card">
+      <img src="<%= s.img %>" alt="<%= s.title %>" class="service-img" />
+      <div class="service-body">
+        <h6 class="service-title"><%= s.title %></h6>
+        <p class="muted tiny">By <%= s.name %> – <%= s.role %></p>
+        <div class="service-footer">
+          <span class="price">From <%= s.price %></span>
+          <a
+            href="/services/<%= s.name.replace(' ', '-') %>"
+            class="btn-small indigo"
+            >View Details</a
+          >
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dropdowns = document.querySelectorAll(".filter-row .dropdown");
+
+    function closeAll(except) {
+      dropdowns.forEach((d) => {
+        if (d !== except) {
+          d.classList.remove("open");
+          const b = d.querySelector(".dropbtn");
+          if (b) b.setAttribute("aria-expanded", "false");
+        }
+      });
+    }
+
+    dropdowns.forEach((dd) => {
+      const btn = dd.querySelector(".dropbtn");
+      const menu = dd.querySelector(".dropdown-content");
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const willOpen = !dd.classList.contains("open");
+        closeAll(dd);
+        dd.classList.toggle("open", willOpen);
+        btn.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      });
+
+      menu.addEventListener("click", (e) => {
+        const item = e.target.closest("button");
+        if (!item) return;
+        const text = item.textContent.trim();
+        btn.textContent =
+          dd.dataset.filter === "sort"
+            ? "Sort by: " + text + " ▾"
+            : text + " ▾";
+        dd.classList.remove("open");
+        btn.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    document.addEventListener("click", () => closeAll());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAll();
+    });
+  });
+</script>

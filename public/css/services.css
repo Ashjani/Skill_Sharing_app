@@ -1,0 +1,164 @@
+/* ========== Services Hero ========== */
+.services-hero {
+  background: #f8f9ff;
+  padding: 40px 20px;
+  border-bottom: 1px solid #eaeaf1;
+}
+.services-hero h3 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.services-hero .muted {
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* Search bar */
+.search-bar {
+  display: flex;
+  gap: 10px;
+  max-width: 700px;
+  margin: 0 auto 20px;
+}
+.search-bar input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* ========== Filters (Dropdowns) ========== */
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropbtn {
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  max-height: 260px;
+  overflow: auto;
+}
+
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+.dropdown-content button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.dropdown-content button:hover {
+  background: #f6f7fb;
+}
+
+/* Keep the "Sort by" on the right on wider screens */
+@media (min-width: 992px) {
+  .dropdown.sort {
+    margin-left: auto;
+  }
+}
+
+/* ========== Services List & Cards ========== */
+.services-list {
+  padding: 40px 20px;
+}
+.services-list h6 {
+  font-weight: 600;
+}
+
+.services-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.service-card {
+  border: 1px solid #eaeaf1;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.service-img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.service-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}
+
+.service-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.service-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  font-weight: 700;
+  color: #333;
+}
+
+.dropbtn:focus,
+.dropbtn:active {
+  outline: none;
+  background: #fff;  /* stay white */
+  box-shadow: none;  /* remove glow */
+  color: #333;       /* text color */
+}
+
+.dropdown-content button:focus,
+.dropdown-content button:active {
+  outline: none;
+  background: #f6f7fb; /* subtle hover background */
+}
