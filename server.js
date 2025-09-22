@@ -5,6 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const Service = require('./models/service');
 
 // Load environment variables
 
@@ -45,7 +46,6 @@ app.use('/api/services', serviceRoutes);
 app.get('/services/new', (req, res) => {
   res.render('createService');
 });
-
 
 /* Routes */
 app.use("/", pageRoutes);
