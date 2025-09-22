@@ -1,5 +1,112 @@
-<section class="section">
-  <h4>Share Skills. Earn Credits. Grow Together.</h4>
-  <p>Offer your skills and redeem credits for services you need.</p>
-  <a href="/register" class="btn blue">Join Now</a>
+<!-- Top “hero” panel -->
+<section class="home-hero z-depth-0">
+  <div class="home-hero__inner">
+ 
+
+    <div class="row home-hero__content">
+      <div class="col s12 m7 home-hero__copy">
+        <h1 class="home-title">
+          <span class="accent">Share Skills</span>, Earn Credits<br />
+          Grow Together
+        </h1>
+        <p class="home-subtitle">
+          Join our community where knowledge, skills, and time are the real currency.
+          Offer what you know best, earn time-credits, and redeem them for services you need.
+        </p>
+
+        <div class="home-cta">
+          <a href="/skills" class="btn indigo darken-1 waves-effect">Explore Skills
+            <i class="material-icons right">arrow_forward</i>
+          </a>
+          <a href="/auth/register" class="btn-flat waves-effect">Become a Member</a>
+        </div>
+      </div>
+
+      <div class="col s12 m5 home-hero__image-wrap">
+        <img
+            src="/images/home.png"
+            alt="Home Hero"
+            style="width: 750px; height: auto; margin-bottom: 10px"
+          />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats strip -->
+<section class="home-stats">
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat__value">15K+</div>
+      <div class="stat__label">Skills Shared</div>
+    </div>
+    <div class="stat">
+      <div class="stat__value">50K+</div>
+      <div class="stat__label">Community Members</div>
+    </div>
+    <div class="stat">
+      <div class="stat__value">95%</div>
+      <div class="stat__label">Success Rate</div>
+    </div>
+  </div>
+</section>
+
+<!-- Popular categories -->
+<section class="home-section home-categories">
+  <div class="section-head">
+    <h5>Popular Service Categories</h5>
+    <p>Discover and exchange skills across diverse fields</p>
+  </div>
+
+  <div class="card-grid">
+    <%- include('partials/category-card', { icon:'code',        title:'Programming', description:'Coding help, app building, or tech troubleshooting.', link:'#' }) %>
+    <%- include('partials/category-card', { icon:'psychology',  title:'Design',      description:'Graphic design, UI/UX, and creative support.',     link:'#' }) %>
+    <%- include('partials/category-card', { icon:'business',    title:'Business',    description:'Entrepreneurship tips and career guidance.',      link:'#' }) %>
+    <%- include('partials/category-card', { icon:'restaurant',  title:'Cooking',     description:'Share recipes and cooking techniques.',           link:'#' }) %>
+    <%- include('partials/category-card', { icon:'music_note',  title:'Music',       description:'Learn instruments or music basics.',              link:'#' }) %>
+    <%- include('partials/category-card', { icon:'language',    title:'Languages',   description:'Practice and exchange new languages.',            link:'#' }) %>
+  </div>
+</section>
+
+<!-- Featured skills -->
+<section class="home-section home-featured">
+  <div class="section-head with-link">
+    <h5>Featured Skills</h5>
+    <a href="/skills">View All Skills</a>
+  </div>
+
+  <div class="card-grid cards-3">
+    <%- include('partials/featured-card', {
+         image:'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop',
+         title:'Basic Web Design',
+         subtitle:'Alex Chen — Senior Developer',
+         rating:'4.9 (234)', price:'$25'
+    }) %>
+
+    <%- include('partials/featured-card', {
+         image:'https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?q=80&w=1200&auto=format&fit=crop',
+         title:'Beginner Guitar Lessons',
+         subtitle:'Sarah Wilson — Guitarist',
+         rating:'4.8 (189)', price:'$29'
+    }) %>
+
+    <%- include('partials/featured-card', {
+         image:'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop',
+         title:'Italian Cuisine Mastery',
+         subtitle:'Marco Rodriguez — Chef',
+         rating:'4.9 (165)', price:'$45'
+    }) %>
+  </div>
+</section>
+
+<!-- CTA band -->
+<section class="home-cta-band">
+  <div class="cta-content">
+    <h5>Ready to Start Sharing Your Skills?</h5>
+    <p>Join our community of passionate members. Offer your skills, earn time-credits, and redeem them for services you need. Start giving and receiving today!</p>
+    <div class="cta-actions">
+      <a href="/auth/register" class="btn white black-text">Join as Member</a>
+      <a href="/skills/new" class="btn-flat white-text">Offer a Skill</a>
+    </div>
+  </div>
 </section>

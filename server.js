@@ -7,22 +7,32 @@ const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 
 // Load environment variables
+
 dotenv.config();
 
-// Connect to the database
+const express = require("express");
+const path = require("path");
+const expressLayouts = require("express-ejs-layouts");
+
+const connectDB = require("./config/db");
+const pageRoutes = require("./routes/pageRoutes"); // <-- home/about/contact
+const userRoutes = require("./routes/userRoutes"); // <-- /auth/*
+
 connectDB();
 
 const app = express();
-
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
 // View engine (EJS)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+/* EJS */
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 app.use(expressLayouts);
+
 app.set('layout', 'layouts/main');
 
 // Locals available in all EJS views
@@ -42,13 +52,20 @@ app.get('/services/new', (req, res) => {
   res.render('createService');
 });
 
-// 404 Handler
-app.get('/health', (_req, res) => res.status(200).send('OK'));
-app.use((_req, res) => res.status(404).send('Not Found'));
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+/* Routes */
+app.use("/", pageRoutes);
+app.use("/auth", userRoutes);
+
+
+/* 404 LAST */
+app.use((_req, res) => res.status(404).send("Not Found"));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
+
+
+
 
