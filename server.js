@@ -5,6 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const Service = require('./models/service');
 
 // Load environment variables
 
@@ -44,6 +45,16 @@ app.use('/api/services', serviceRoutes);
 // render the create service form
 app.get('/services/new', (req, res) => {
   res.render('createService');
+});
+
+// render the browse services page
+app.get('/services', async (req, res) => {
+  try {
+    const services = await Service.find().lean(); // fetch all services
+    res.render('services', { services });
+  } catch (err) {
+    res.status(500).send('Error loading services');
+  }
 });
 
 
