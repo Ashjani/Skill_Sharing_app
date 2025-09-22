@@ -10,13 +10,7 @@ const serviceRoutes = require('./routes/serviceRoutes');
 
 dotenv.config();
 
-const express = require("express");
-const path = require("path");
-const expressLayouts = require("express-ejs-layouts");
-
-const connectDB = require("./config/db");
 const pageRoutes = require("./routes/pageRoutes"); // <-- home/about/contact
-const userRoutes = require("./routes/userRoutes"); // <-- /auth/*
 
 connectDB();
 
