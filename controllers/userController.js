@@ -9,18 +9,23 @@ const generateToken = require('../utils/generateToken'); // <-- Import the new f
  */
 const registerUser = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    // 1. Get firstName, lastName, email, and password from the request body
+    const { firstName, lastName, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: 'User with this email already exists' });
     }
 
+    // 2. Create a username by combining the first and last name
+    const username = `${firstName} ${lastName}`;
+
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // 3. Save the combined username to the database
     const user = new User({
-      username,
+      username, // Use the combined username
       email,
       password: hashedPassword,
     });
