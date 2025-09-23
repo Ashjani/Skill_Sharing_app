@@ -14,7 +14,7 @@ const reviewSchema = new Schema({
         trim: true
     },
     // The user who wrote the review
-    reviewer: {
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true
