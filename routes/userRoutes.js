@@ -1,19 +1,15 @@
-const express = require('express');
+ const express = require('express');
 const router = express.Router();
 const { registerUser, loginUser } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
 
-// Render views
-router.get('/register', (req, res) => res.render('auth/register', { title: 'Sign Up • SkillLink' }));
-router.get('/login', (req, res) => res.render('auth/login', { title: 'Log In • SkillLink' }));
-
-// Define the POST route for registering a new user
+// API endpoint for registering a new user define the POST route for registering a new user
 router.post('/register', registerUser);
 
-// Define the POST route for logging in a user
+// API endpoint for logging in a user, define the POST route for logging in a user
 router.post('/login', loginUser);
 
-// Protected route - only accessible if the user provides a valid token
+// API endpoint for getting user profile protected route - only accessible if the user provides a valid token
 router.get('/profile', protect, (req, res) => {
   res.status(200).json({
     message: 'You have access to this protected data!',

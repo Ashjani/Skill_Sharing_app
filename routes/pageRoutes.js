@@ -79,11 +79,15 @@ router.get("/contact", (req, res) => {
   res.render("contact", { title: "Contact • SkillLink" });
 });
 
+// Handle contact form submission
+router.get('/register', (req, res) => res.render('register', { title: 'Sign Up • SkillLink' }));
+router.get('/login', (req, res) => res.render('login', { title: 'Log In • SkillLink' }));
 
 router.post("/contact", (req, res) => {
   console.log("Contact form:", req.body);
   res.render("contact", { title: "Contact • SkillLink", sent: true });
 });
+
 
 
 // // Services

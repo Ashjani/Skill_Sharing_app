@@ -27,7 +27,12 @@ const userSchema = new Schema({
         type: String,
         enum: ['Member', 'Admin'], // Restrict roles to these values
         default: 'Member'         // New users are 'Member' by default
-    }
+    },
+    reviews: [// this lets us track all the reviews written by a  user.
+        {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review'
+    }]
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
