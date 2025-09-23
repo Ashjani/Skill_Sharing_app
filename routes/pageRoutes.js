@@ -169,5 +169,18 @@ router.get('/services/new', (req, res) => {
   res.render('createService', { title: 'Offer a New Service' });
 });
 
+// render the logged-in user's services
+router.get('/my-services', async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.redirect('/auth/login'); // redirect if not logged in
+    }
+
+    const services = await Service.find({ user: req.user.id }).lean();
+    res.render('myServices', { title: 'My Services • SkillLink', services });
+  } catch (err) {
+    res.status(500).send('Error loading your services');
+  }
+});
 
 module.exports = router;

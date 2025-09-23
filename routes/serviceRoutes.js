@@ -22,3 +22,34 @@ router.put("/:id", protect, serviceController.updateService);
 router.delete("/:id", protect,  serviceController.deleteService);
 
 module.exports = router;
+
+// Render edit service form
+router.get('/:id/edit', async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id).lean();
+    if (!service) {
+      return res.status(404).send('Service not found');
+    }
+    res.render('editService', { service });
+  } catch (err) {
+    res.status(500).send('Error loading service');
+  }
+});
+
+// Handle service update
+router.post('/:id', async (req, res) => {
+  try {
+    const { title, description, category, status } = req.body;
+
+    await Service.findByIdAndUpdate(
+      req.params.id,
+      { title, description, category, status },
+      { new: true }
+    );
+
+    // After update, redirect back to the services list
+    res.redirect('/services');
+  } catch (err) {
+    res.status(500).send('Error updating service');
+  }
+});

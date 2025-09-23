@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const Service = require('./models/service');
+const methodOverride = require('method-override');
 
 // Load environment variables
 
@@ -18,6 +19,7 @@ connectDB();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
 
 // View engine (EJS)
