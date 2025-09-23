@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Service = require('./models/service');
+const Service = require('../models/service.js');
 
 // Mock data for categories + featured cards on home page
 
