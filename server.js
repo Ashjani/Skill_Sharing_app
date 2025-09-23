@@ -8,7 +8,6 @@ const connectDB = require('./config/db');
 const pageRoutes = require("./routes/pageRoutes");
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
-const reviewRoutes = require('./routes/reviewRoutes'); // Assuming you created this in the previous steps
 
 // --- Core Setup ---
 dotenv.config();
@@ -40,10 +39,9 @@ app.use('/', pageRoutes);
 // API routes (prefixed with /api)
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
-app.use('/api/reviews', reviewRoutes);
 
 
-// --- 404 Handler (Must be last) ---
+// --- 404 Handler 
 app.use((_req, res) => {
     res.status(404).send("Error 404: Page Not Found");
 });
@@ -54,5 +52,4 @@ const server = app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)
 );
 
-// Export for testing purposes
 module.exports = { app, server };
