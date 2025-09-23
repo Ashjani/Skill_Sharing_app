@@ -5,7 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 
 // --- Import Route Files ---
-const pageRoutes = require("./routes/pageRoutes");
+const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes'); // Assuming you created this in the previous steps

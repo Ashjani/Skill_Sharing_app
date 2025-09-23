@@ -21,7 +21,7 @@ router.put("/:id", protect, serviceController.updateService);
 // Delete
 router.delete("/:id", protect,  serviceController.deleteService);
 
-module.exports = router;
+
 
 // Render edit service form
 router.get('/:id/edit', async (req, res) => {
@@ -53,3 +53,17 @@ router.post('/:id', async (req, res) => {
     res.status(500).send('Error updating service');
   }
 });
+
+// Delete a service (POST method)
+router.post('/services/:id/delete', async (req, res) => {
+  try {
+    await Service.findByIdAndDelete(req.params.id);
+    res.redirect('/my-services'); // After deleting, go back to list
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting service');
+  }
+});
+
+
+module.exports = router;

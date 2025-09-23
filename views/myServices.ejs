@@ -12,10 +12,13 @@
     <ul>
       <% services.forEach(service => { %>
         <li>
-          <strong><%= service.title %></strong> - <%= service.status %>
-          <br>
-          <a href="/services/<%= service._id %>/edit">Edit</a> |
-          <form action="/services/<%= service._id %>?_method=DELETE" method="POST" style="display:inline;">
+          <strong><%= service.title %></strong><br>
+
+          <!-- Edit button -->
+          <a href="/services/<%= service._id %>/edit">Edit</a>
+
+          <!-- Delete button -->
+          <form action="/services/<%= service._id %>/delete" method="POST" style="display:inline;">
             <button type="submit">Delete</button>
           </form>
         </li>
