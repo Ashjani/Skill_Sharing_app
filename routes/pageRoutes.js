@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
+const { protect } = require('../middleware/authMiddleware');
 
 // Mock data for categories + featured cards on home page
 
@@ -170,15 +171,22 @@ router.get('/services/new', (req, res) => {
 });
 
 // render the logged-in user's services
-router.get('/my-services', async (req, res) => {
+router.get('/my-services', protect, async (req, res) => {
   try {
-    if (!req.user) {
-      return res.redirect('/auth/login'); // redirect if not logged in
-    }
+    // 👇 Add this log to see which user is making the request
+    console.log("Logged in user:", req.user);
 
     const services = await Service.find({ user: req.user.id }).lean();
-    res.render('myServices', { title: 'My Services • SkillLink', services });
+
+    // 👇 Add this log to see what services were fetched
+    console.log("Services found:", services);
+
+    res.render('myServices', {
+      title: 'My Services • SkillLink',
+      services
+    });
   } catch (err) {
+    console.error(err);
     res.status(500).send('Error loading your services');
   }
 });
