@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+</head>
+<body>
+  <h1>My Services</h1>
+
+  <% if (services.length === 0) { %>
+    <p>You have not created any services yet.</p>
+  <% } else { %>
+    <ul>
+      <% services.forEach(service => { %>
+        <li>
+          <strong><%= service.title %></strong><br>
+
+          <!-- Edit button -->
+          <a href="/services/<%= service._id %>/edit">Edit</a>
+
+          <!-- Delete button -->
+          <form action="/services/<%= service._id %>/delete" method="POST" style="display:inline;">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

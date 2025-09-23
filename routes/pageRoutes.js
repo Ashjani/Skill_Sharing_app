@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
+const { protect } = require('../middleware/authMiddleware');
 
 // Mock data for categories + featured cards on home page
 
@@ -173,5 +174,46 @@ router.get('/services/new', (req, res) => {
   res.render('createService', { title: 'Offer a New Service' });
 });
 
+// // render the logged-in user's services
+// router.get('/my-services', async (req, res) => {
+//   try {
+//     console.log("Logged in user:", req.user); // debug log
+//     const services = await Service.find({ user: req.user._id }).lean();
+//     res.render('myServices', {
+//       title: 'My Services • Skilllink',
+//       services,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Error loading your services');
+//   }
+// });
+// TEMP: bypass protect to debug in browser
+router.get('/my-services', async (req, res) => {
+  try {
+    // Hardcode a user ID for testing
+    const userId = '68d23e88f4ae06c337e64062'; // test2@example.com’s ID from MongoDB
+    const services = await Service.find({ user: userId }).lean();
+
+    res.render('myServices', {
+      title: 'My Services • Skilllink',
+      services
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading your services');
+  }
+});
+
+// delete a service
+router.post('/services/:id/delete', async (req, res) => {
+  try {
+    await Service.findByIdAndDelete(req.params.id);
+    res.redirect('/my-services'); // redirect back after deleting
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting service');
+  }
+});
 
 module.exports = router;
