@@ -8,7 +8,7 @@ const connectDB = require('./config/db');
 const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
-const reviewRoutes = require('./routes/reviewRoutes'); // Assuming you created this in the previous steps
+const reviewRoutes = require('./routes/reviewRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
 

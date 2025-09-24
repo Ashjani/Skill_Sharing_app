@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
+const Review = require('../models/review.js');
 
 const protect = async (req, res, next) => {
   let token;
@@ -39,4 +40,24 @@ const admin = (req, res, next) => {
     }
 };
 
-module.exports = { protect, admin };
+const checkReviewOwnership = async (req, res, next) => {
+    try {
+        const review = await Review.findById(req.params.id);
+
+        if (!review) {
+            return res.status(404).json({ message: 'Review not found' });
+        }
+
+        // Check if the review's user ID matches the logged-in user's ID
+        if (review.user.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Forbidden: You do not own this review' });
+        }
+
+        next(); // If the user is the owner, proceed
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+module.exports = { protect, admin, checkReviewOwnership };
