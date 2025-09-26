@@ -1,0 +1,37 @@
+<% /* views/account/bookings.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'bookings' }) %>
+
+  <main class="account-main">
+    <h4 class="no-margin">My Bookings</h4>
+    <p class="muted small">Track requests you made and received</p>
+
+    <% if ((bookings || []).length === 0) { %>
+      <div class="card">
+        <div class="card-content">
+          <p class="muted">No bookings yet.</p>
+        </div>
+      </div>
+    <% } %>
+
+    <ul class="collection">
+      <% (bookings || []).forEach(function(b){ %>
+        <li class="collection-item avatar">
+          <img src="https://i.pravatar.cc/64?u=<%= b._id %>" alt="" class="circle">
+          <span class="title"><%= b.service?.title || 'Service' %></span>
+          <p class="tiny muted">
+            With <%= (b.provider?.firstName || '') %> <%= (b.provider?.lastName || '') %>
+            &nbsp;•&nbsp; Status: <strong><%= b.status %></strong>
+            <% if (b.date) { %> • Date: <%= new Date(b.date).toDateString() %><% } %>
+          </p>
+          <div class="secondary-content">
+            <a href="/services/<%= b.service?._id %>" class="btn-flat">View</a>
+            <% if (b.status === 'Completed') { %>
+              <a href="/services/<%= b.service?._id %>#rate" class="btn-small indigo">Rate</a>
+            <% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
+</section>

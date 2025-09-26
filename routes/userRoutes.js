@@ -1,5 +1,8 @@
  const express = require('express');
 const router = express.Router();
+const Skill = require("../models/skill");
+const Booking = require("../models/booking");
+const MessageThread = require("../models/messageThread");
 const { registerUser, loginUser } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
 
@@ -15,6 +18,61 @@ router.get('/profile', protect, (req, res) => {
     message: 'You have access to this protected data!',
     user: req.user, // The user object is attached to the request in the middleware
   });
+});
+
+// Profile (update)
+router.post("/profile", protect, async (req, res) => {
+  try {
+    req.user.bio = req.body.bio;
+    await req.user.save();
+    res.redirect("/profile");
+  } catch (err) {
+    res.status(400).send("Error updating profile");
+  }
+});
+
+// Skills
+router.get("/skills", protect, async (req, res) => {
+  const skills = await Skill.find({ user: req.user._id });
+  res.render("account/skills", { title: "My Skills • SkillLink", active: "skills", skills });
+});
+
+router.post("/skills", protect, async (req, res) => {
+  await Skill.create({ ...req.body, user: req.user._id });
+  res.redirect("/skills");
+});
+
+// Bookings
+router.get("/bookings", protect, async (req, res) => {
+  const bookings = await Booking.find({ $or: [{ requester: req.user._id }, { provider: req.user._id }] })
+    .populate("service")
+    .populate("requester provider");
+  res.render("account/bookings", { title: "Bookings • SkillLink", active: "bookings", bookings });
+});
+
+// Messages: list
+router.get("/messages", protect, async (req, res) => {
+  const threads = await MessageThread.find({ participants: req.user._id })
+    .populate("participants", "firstName lastName")
+    .lean();
+  res.render("account/messages", { title: "Messages • SkillLink", threads, user: req.user });
+});
+
+// Messages: single thread page
+router.get("/messages/:threadId", protect, async (req, res) => {
+  const thread = await MessageThread
+    .findById(req.params.threadId)
+    .populate("messages.sender", "firstName lastName")
+    .lean();
+  if (!thread) return res.status(404).send("Thread not found");
+  res.render("account/thread", { title: "Conversation • SkillLink", thread, user: req.user });
+});
+router.post("/messages/:threadId", protect, async (req, res) => {
+  const thread = await MessageThread.findById(req.params.threadId);
+  if (!thread) return res.status(404).send("Thread not found");
+  thread.messages.push({ sender: req.user._id, text: req.body.text });
+  await thread.save();
+  res.redirect(`/messages/${req.params.threadId}`);
 });
 
 module.exports = router;

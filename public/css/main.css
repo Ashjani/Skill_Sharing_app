@@ -274,4 +274,24 @@ input[type="email"], input[type="password"], input[type="text"] { background: #f
 /* show helper text consistently under inputs */
 .input-field .helper-text.__dyn { margin-top: 2px; display: block; }
 
+.account-wrap {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.account-sidebar {
+  flex: 0 0 220px;
+}
+
+.account-main {
+  flex: 1;
+}
+
+.collection-item.active {
+  background: #e8eaf6; /* light indigo */
+  font-weight: bold;
+}
+
+
 

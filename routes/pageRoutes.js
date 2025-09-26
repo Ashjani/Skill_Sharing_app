@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
+<<<<<<< Updated upstream
 const { protect } = require('../middleware/authMiddleware');
+=======
+const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
+>>>>>>> Stashed changes
 
 // Mock data for categories + featured cards on home page
 
@@ -174,6 +178,7 @@ router.get('/services/new', (req, res) => {
   res.render('createService', { title: 'Offer a New Service' });
 });
 
+<<<<<<< Updated upstream
 // // render the logged-in user's services
 // router.get('/my-services', async (req, res) => {
 //   try {
@@ -215,5 +220,56 @@ router.post('/services/:id/delete', async (req, res) => {
     res.status(500).send('Error deleting service');
   }
 });
+=======
+// User Account Pages
+router.get("/dashboard", (req, res) => {
+  res.render("account/dashboard", { title: "Dashboard • SkillLink" });
+});
+
+router.get("/profile", (req, res) => {
+  res.render("account/profile", { title: "My Profile • SkillLink" });
+});
+
+router.get("/skills", (req, res) => {
+  res.render("account/skills", { title: "My Skills • SkillLink" });
+});
+
+router.get("/bookings", (req, res) => {
+  res.render("account/bookings", { title: "My Bookings • SkillLink" });
+});
+
+
+// Messages: simple stubs (list + one thread)
+router.get('/messages',        (req, res) => res.render('account/messages', { title: 'Messages • SkillLink', threads: [] }));
+router.get('/messages/:id',    (req, res) => res.render('account/thread',   { title: 'Conversation • SkillLink', threadId: req.params.id, messages: [] }));
+router.post('/messages/:id',   (req, res) => { /* save message … */ res.redirect(`/messages/${req.params.id}`); });
+
+// Profile
+router.get("/profile", protect, async (req, res) => {
+  res.render("account/profile", { title: "My Profile", user: req.user });
+});
+
+// Skills
+router.get("/skills", protect, async (req, res) => {
+  const services = await Service.find({ user: req.user.id });
+  res.render("account/skills", { title: "My Skills", skills: services });
+});
+
+// Bookings
+router.get("/bookings", protect, async (req, res) => {
+  const bookings = [];
+  res.render("account/bookings", { title: "My Bookings", bookings });
+});
+
+// Messages
+const MessageThread = require("../models/messageThread");
+router.get("/messages", protect, async (req, res) => {
+  const threads = await MessageThread.find({ participants: req.user.id })
+    .populate("participants", "firstName lastName")
+    .populate("lastMessage");
+  res.render("account/messages", { title: "Messages", threads });
+});
+
+>>>>>>> Stashed changes
 
 module.exports = router;

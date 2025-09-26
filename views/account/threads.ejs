@@ -1,0 +1,30 @@
+<% /* views/account/threads.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'messages' }) %>
+
+  <main class="account-main">
+    <h4 class="no-margin">Conversation</h4>
+    <div class="card">
+      <div class="card-content" style="max-height:50vh; overflow:auto">
+        <% (thread.messages || []).forEach(function(m){ %>
+          <div style="margin-bottom:10px">
+            <strong><%= m.sender.equals(user._id) ? 'You' : (m.sender.firstName || 'User') %>:</strong>
+            <span><%= m.text %></span>
+            <div class="tiny muted"><%= new Date(m.sentAt).toLocaleString() %></div>
+          </div>
+        <% }) %>
+      </div>
+      <div class="card-action">
+        <form action="/messages/<%= thread._id %>" method="POST" class="row" style="margin-bottom:0">
+          <div class="input-field col s9">
+            <input type="text" name="text" id="text" required placeholder="Type a message...">
+            <label for="text">Message</label>
+          </div>
+          <div class="col s3 right-align">
+            <button type="submit" class="btn indigo">Send</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</section>

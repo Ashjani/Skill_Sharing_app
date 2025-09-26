@@ -1,0 +1,248 @@
+<% /* views/account/dashboard.ejs */ %>
+<section class="account-wrap">
+  <aside class="account-sidebar z-depth-1">
+    <div class="account-user">
+      <img src="https://i.pravatar.cc/120?img=13" alt="User" class="circle avatar">
+      <div>
+        <div class="name"><%= (user && user.name) || "Sarah Johnson" %></div>
+        <div class="role grey-text text-darken-1">Graphic Designer & Yoga Instructor</div>
+      </div>
+    </div>
+
+    <ul class="sidenav-links">
+      <li><a class="active" href="/dashboard"><i class="material-icons left">dashboard</i>Dashboard</a></li>
+      <li><a href="/profile"><i class="material-icons left">person</i>My Profile</a></li>
+      <li><a href="/skills"><i class="material-icons left">stars</i>My Skills</a></li>
+      <li><a href="/bookings"><i class="material-icons left">event_available</i>Bookings</a></li>
+      <li><a href="/messages"><i class="material-icons left">chat</i>Messages</a></li>
+    </ul>
+
+    <div class="quick-stats card">
+      <div class="card-content">
+        <div class="title small grey-text text-darken-1">Quick Stats</div>
+        <div class="stat-row"><span>Services Completed</span><strong>42</strong></div>
+        <div class="stat-row"><span>Credits Earned</span><strong>156</strong></div>
+        <div class="stat-row"><span>Member Since</span><strong>Jan 2024</strong></div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="account-main">
+    <!-- Top bar -->
+    <div class="account-top row">
+      <div class="col s12 m8">
+        <h5 class="no-margin">Dashboard</h5>
+        <div class="grey-text">Manage your skills and track your activities</div>
+      </div>
+      <div class="col s12 m4 right-align">
+        <a href="/services/new" class="btn indigo waves-effect waves-light">
+          <i class="material-icons left">add</i> Add New Skill
+        </a>
+      </div>
+    </div>
+
+    <!-- Credits card -->
+    <div class="card gradient-credits">
+      <div class="card-content white-text">
+        <div class="row valign-wrapper">
+          <div class="col s8">
+            <div class="tiny upper">Time Credit Balance</div>
+            <div class="credits-value">24 <span>hours</span></div>
+            <div class="tiny">Available for service requests</div>
+          </div>
+          <div class="col s4 right-align">
+            <i class="material-icons large white-text" style="opacity:.9">schedule</i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About me -->
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">About Me</span>
+        <p class="grey-text text-darken-1">
+          I’m a passionate software developer with over 8 years of experience in web development and data science.
+          I love sharing my knowledge and learning new skills from the community. When I’m not coding,
+          you can find me practicing yoga, gardening, or exploring new cooking techniques.
+        </p>
+      </div>
+    </div>
+
+    <!-- My Skills -->
+    <div class="row">
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">My Skills</span>
+            <ul class="collection">
+              <li class="collection-item">
+                <span class="badge new" data-badge-caption="12 requests this month"></span>
+                <strong>Graphic Design</strong> <span class="chip">Creative</span>
+                <div class="tiny grey-text">Branding, digital illustrations for businesses</div>
+                <div class="right-align">
+                  <a href="/skills" class="tiny">Edit</a>
+                </div>
+              </li>
+              <li class="collection-item">
+                <span class="badge" data-badge-caption="8 requests this month"></span>
+                <strong>Yoga Instruction</strong> <span class="chip">Wellness</span>
+                <div class="tiny grey-text">Beginner to advanced sessions, meditation, mindfulness</div>
+                <div class="right-align">
+                  <a href="/skills" class="tiny">Edit</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity (+ rating widget) -->
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Recent Activity</span>
+
+            <!-- Activity item with rating -->
+            <div class="activity-item">
+              <i class="material-icons green-text">check_circle</i>
+              <div class="activity-body">
+                <div class="title">Service completed with John Smith</div>
+                <div class="caption">Yoga session • <strong>+2 credits</strong> earned • 2 hours ago</div>
+
+                <!-- Rating widget -->
+                <form class="rating-form" action="/ratings" method="POST">
+                  <input type="hidden" name="bookingId" value="bk_123_demo">
+                  <div class="stars" data-stars>
+                    <% for (let i=1;i<=5;i++){ %>
+                      <i class="material-icons" data-star="<%= i %>">star_border</i>
+                    <% } %>
+                  </div>
+                  <div class="input-field">
+                    <textarea name="comment" id="ratingComment" class="materialize-textarea" placeholder="Leave a short review (optional)"></textarea>
+                    <label for="ratingComment">Review</label>
+                  </div>
+                  <button type="submit" class="btn-small indigo waves-effect waves-light">Submit rating</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <i class="material-icons blue-text">mark_email_unread</i>
+              <div class="activity-body">
+                <div class="title">New service request received</div>
+                <div class="caption">Logo design from Emma Wilson • 5 hours ago</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <i class="material-icons amber-text">star</i>
+              <div class="activity-body">
+                <div class="title">New 5-star review received</div>
+                <div class="caption">From Michael Brown for graphic design • 1 day ago</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests (actionable) -->
+    <div class="card">
+      <div class="card-content">
+        <div class="row valign-wrapper">
+          <div class="col s8"><span class="card-title">Pending Requests</span></div>
+          <div class="col s4 right-align"><a href="/bookings" class="tiny">View All</a></div>
+        </div>
+        <ul class="collection">
+          <li class="collection-item avatar">
+            <img src="https://i.pravatar.cc/64?img=66" alt="" class="circle">
+            <span class="title">David Chen</span>
+            <p class="grey-text">Requesting: Logo Design (3 hours) • submitted 2 hours ago</p>
+            <div class="secondary-content">
+              <a href="#!" class="btn-flat red-text">Decline</a>
+              <a href="/bookings" class="btn-small green">Accept</a>
+            </div>
+          </li>
+          <li class="collection-item avatar">
+            <img src="https://i.pravatar.cc/64?img=23" alt="" class="circle">
+            <span class="title">Lisa Park</span>
+            <p class="grey-text">Requesting: Yoga Session (1 hour) • submitted 5 hours ago</p>
+            <div class="secondary-content">
+              <a href="#!" class="btn-flat red-text">Decline</a>
+              <a href="/bookings" class="btn-small green">Accept</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Recent Reviews -->
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Recent Reviews</span>
+        <ul class="collection">
+          <li class="collection-item">
+            <strong>Mike Johnson</strong>
+            <span class="stars-inline">
+              <i class="material-icons amber-text">star</i>
+              <i class="material-icons amber-text">star</i>
+              <i class="material-icons amber-text">star</i>
+              <i class="material-icons amber-text">star</i>
+              <i class="material-icons amber-text">star_half</i>
+            </span>
+            <div class="tiny chip">Web Development</div>
+            <p class="grey-text">“Sarah’s web development session was incredibly helpful! …”</p>
+          </li>
+          <li class="collection-item">
+            <strong>Emma Wilson</strong>
+            <span class="stars-inline">
+              <i class="material-icons amber-text">star</i><i class="material-icons amber-text">star</i><i class="material-icons amber-text">star</i><i class="material-icons amber-text">star</i><i class="material-icons amber-text">star</i>
+            </span>
+            <div class="tiny chip">Yoga Instruction</div>
+            <p class="grey-text">“Amazing yoga session! …”</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- rating stars JS (inline for this page) -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const starWrap = document.querySelector('[data-stars]');
+    if (!starWrap) return;
+    let current = 0;
+
+    function paint(n){
+      starWrap.querySelectorAll('i').forEach(i=>{
+        const val = +i.dataset.star;
+        i.textContent = (val <= n) ? 'star' : 'star_border';
+      });
+    }
+
+    starWrap.addEventListener('mouseover', (e)=>{
+      const i = e.target.closest('i[data-star]');
+      if (!i) return;
+      paint(+i.dataset.star);
+    });
+    starWrap.addEventListener('mouseleave', ()=> paint(current));
+    starWrap.addEventListener('click', (e)=>{
+      const i = e.target.closest('i[data-star]');
+      if (!i) return;
+      current = +i.dataset.star;
+      paint(current);
+      // inject hidden input for form submit
+      let hidden = document.querySelector('input[name="rating"]');
+      if (!hidden){
+        hidden = document.createElement('input');
+        hidden.type = 'hidden'; hidden.name = 'rating';
+        starWrap.closest('form').appendChild(hidden);
+      }
+      hidden.value = current;
+    });
+
+    paint(0);
+  });
+</script>

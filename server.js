@@ -36,6 +36,7 @@ app.use((req, res, next) => {
   next();
 });
 
+<<<<<<< Updated upstream
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)
 app.use('/', pageRoutes);
@@ -44,13 +45,27 @@ app.use('/', pageRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/services', serviceRoutes);
 
+=======
+>>>>>>> Stashed changes
 
 // --- 404 Handler 
 app.use((_req, res) => {
     res.status(404).send("Error 404: Page Not Found");
 });
 
+<<<<<<< Updated upstream
 // --- Server Initialization ---
+=======
+// Routes
+app.use("/", pageRoutes);
+app.use("/auth", userRoutes);
+app.use('/api/services', serviceRoutes);
+
+
+// 404 handler (keep as last route)
+app.use((_req, res) => res.status(404).send("Not Found"));
+
+>>>>>>> Stashed changes
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)

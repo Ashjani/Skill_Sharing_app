@@ -1,0 +1,42 @@
+<% /* views/account/messages.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'messages' }) %>
+
+  <main class="account-main">
+    <h4 class="no-margin">Messages</h4>
+    <p class="muted small">Conversations with providers and requesters</p>
+
+    <% if ((threads || []).length === 0) { %>
+      <div class="card">
+        <div class="card-content">
+          <p class="muted">No conversations yet.</p>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="messages-list">
+      <% (threads || []).forEach(function(t){ %>
+        <div class="card">
+          <div class="card-content">
+            <div class="row" style="margin-bottom:0">
+              <div class="col s9">
+                <span class="card-title" style="margin-bottom:6px">
+                  <%= t.participants
+                        .filter(p => p._id.toString() !== (user?._id?.toString() || ''))
+                        .map(p => (p.firstName || 'User'))
+                        .join(', ') %>
+                </span>
+                <p class="muted tiny">
+                  <%= t.messages?.length ? t.messages[t.messages.length-1].text : 'No messages yet' %>
+                </p>
+              </div>
+              <div class="col s3 right-align">
+                <a href="/messages/<%= t._id %>" class="btn-small indigo">Open</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+</section>

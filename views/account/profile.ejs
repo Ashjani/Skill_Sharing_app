@@ -1,0 +1,35 @@
+<% /* views/account/profile.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'profile' }) %>
+
+  <main class="account-main">
+    <h4 class="no-margin">My Profile</h4>
+    <p class="muted small">Update your personal details and bio</p>
+
+    <form action="/profile" method="POST" class="card">
+      <div class="card-content">
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input id="firstName" name="firstName" type="text" value="<%= user?.firstName || '' %>" required>
+            <label for="firstName" class="active">First Name</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input id="lastName" name="lastName" type="text" value="<%= user?.lastName || '' %>" required>
+            <label for="lastName" class="active">Last Name</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input id="email" name="email" type="email" value="<%= user?.email || '' %>" disabled>
+            <label for="email" class="active">Email</label>
+          </div>
+          <div class="input-field col s12">
+            <textarea id="bio" name="bio" class="materialize-textarea" rows="4"><%= user?.bio || '' %></textarea>
+            <label for="bio" class="active">Bio</label>
+          </div>
+        </div>
+      </div>
+      <div class="card-action right-align">
+        <button type="submit" class="btn indigo waves-effect waves-light">Save Changes</button>
+      </div>
+    </form>
+  </main>
+</section>
