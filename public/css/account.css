@@ -1,0 +1,29 @@
+/* Layout */
+.account-wrap { display:flex; gap:18px; }
+.account-sidebar { width:300px; padding:14px; background:#fff; border:1px solid #eaeaf1; border-radius:12px; }
+.account-main { flex:1; }
+.account-user { display:flex; gap:12px; align-items:center; margin-bottom:10px; }
+.account-user .avatar { width:56px; height:56px; }
+.sidenav-links { list-style:none; margin:10px 0 14px; padding:0; }
+.sidenav-links li a { display:block; padding:10px 12px; border-radius:8px; color:#333; }
+.sidenav-links li a.active, .sidenav-links li a:hover { background:#f6f7fb; }
+.quick-stats .stat-row { display:flex; justify-content:space-between; margin:6px 0; }
+
+/* Credits gradient */
+.gradient-credits { border:0; border-radius:12px;
+  background: radial-gradient(120% 150% at 0% 0%, #6a77e2 0%, #3b4bd6 60%, #4f59db 100%); }
+.gradient-credits .credits-value { font-size:36px; font-weight:800; }
+.gradient-credits .credits-value span { font-size:18px; font-weight:600; opacity:.9; margin-left:6px; }
+
+/* Activity list */
+.activity-item { display:flex; gap:12px; margin-bottom:14px; }
+.activity-item .title { font-weight:700; }
+.activity-item .caption { font-size:.9rem; color:#666; }
+
+/* Stars */
+.stars i { cursor:pointer; vertical-align:middle; }
+.stars-inline i { font-size:18px; vertical-align:middle; }
+
+/* Utilities */
+.upper { text-transform:uppercase; letter-spacing:.06em; }
+.no-margin { margin:0; }

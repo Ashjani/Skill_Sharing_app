@@ -1,0 +1,75 @@
+<% /* views/account/skills.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'skills' }) %>
+
+  <main class="account-main">
+    <h4 class="no-margin">My Skills</h4>
+    <p class="muted small">Add skills you can offer to earn credits</p>
+
+    <form action="/skills" method="POST" class="card">
+      <div class="card-content">
+        <div class="row">
+          <div class="input-field col s12 m6">
+            <input id="title" name="title" type="text" required>
+            <label for="title">Skill Title</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <input id="credits" name="credits" type="number" min="1" value="1">
+            <label for="credits">Credits per session</label>
+          </div>
+          <div class="input-field col s12">
+            <textarea id="description" name="description" class="materialize-textarea" rows="3"></textarea>
+            <label for="description">Description</label>
+          </div>
+          <div class="input-field col s12 m6">
+            <select name="category" id="category">
+              <option value="Programming">Programming</option>
+              <option value="Design">Design</option>
+              <option value="Business">Business</option>
+              <option value="Music">Music</option>
+              <option value="Cooking">Cooking</option>
+              <option value="Languages">Languages</option>
+            </select>
+            <label for="category">Category</label>
+          </div>
+        </div>
+      </div>
+      <div class="card-action right-align">
+        <button type="submit" class="btn indigo waves-effect waves-light">Add Skill</button>
+      </div>
+    </form>
+
+    <div class="card">
+      <div class="card-content">
+        <span class="card-title">Your Skills</span>
+        <% if ((skills || []).length === 0) { %>
+          <p class="muted">No skills yet. Add one above 👆</p>
+        <% } %>
+        <ul class="collection">
+          <% (skills || []).forEach(function(s){ %>
+            <li class="collection-item">
+              <div class="row" style="margin-bottom:0">
+                <div class="col s8">
+                  <strong><%= s.title %></strong>
+                  <div class="tiny muted"><%= s.category %> • <%= s.credits %> credits</div>
+                  <div class="grey-text"><%= s.description %></div>
+                </div>
+                <div class="col s4 right-align">
+                  <a href="/services/<%= s._id %>" class="btn-flat">View</a>
+                  <!-- Hook up update/delete later -->
+                </div>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    </div>
+  </main>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const selects = document.querySelectorAll('select');
+    M.FormSelect.init(selects, {});
+  });
+</script>

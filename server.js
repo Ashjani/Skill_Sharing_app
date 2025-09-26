@@ -36,12 +36,12 @@ app.use((req, res, next) => {
   next();
 });
 
+
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)
 app.use('/', pageRoutes);
-
 // API routes (prefixed with /api)
-app.use('/api/users', userRoutes);
+app.use('/api/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
 
 
@@ -49,6 +49,7 @@ app.use('/api/services', serviceRoutes);
 app.use((_req, res) => {
     res.status(404).send("Error 404: Page Not Found");
 });
+
 
 // --- Server Initialization ---
 const PORT = process.env.PORT || 3000;
