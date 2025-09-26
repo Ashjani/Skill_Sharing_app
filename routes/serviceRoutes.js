@@ -21,7 +21,6 @@ router.put("/:id", protect, serviceController.updateService);
 // Delete
 router.delete("/:id", protect,  serviceController.deleteService);
 
-<<<<<<< Updated upstream
 
 
 // Render edit service form
@@ -68,21 +67,3 @@ router.post('/services/:id/delete', async (req, res) => {
 
 
 module.exports = router;
-=======
-// GET /api/services/me  -> services created by the logged-in user
-router.get("/me/mine", protect, serviceController.getMyServices);
-
-//Ratings
-// GET /api/services/:id/ratings
-router.get("/:id/ratings", serviceController.getRatingsForService);
-
-// POST /api/services/:id/ratings  (body: { rating:1-5, comment })
-router.post("/:id/ratings", protect, serviceController.addRating);
-
-// CRUD (owners/admin)
-router.post("/", protect, serviceController.createService);
-router.put("/:id", protect, serviceController.updateService);
-router.delete("/:id", protect, serviceController.deleteService);
-
-module.exports = router;
->>>>>>> Stashed changes

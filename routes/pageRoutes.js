@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
-<<<<<<< Updated upstream
-const { protect } = require('../middleware/authMiddleware');
-=======
 const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
->>>>>>> Stashed changes
 
 // Mock data for categories + featured cards on home page
 
@@ -178,7 +174,6 @@ router.get('/services/new', (req, res) => {
   res.render('createService', { title: 'Offer a New Service' });
 });
 
-<<<<<<< Updated upstream
 // // render the logged-in user's services
 // router.get('/my-services', async (req, res) => {
 //   try {
@@ -220,7 +215,6 @@ router.post('/services/:id/delete', async (req, res) => {
     res.status(500).send('Error deleting service');
   }
 });
-=======
 // User Account Pages
 router.get("/dashboard", (req, res) => {
   res.render("account/dashboard", { title: "Dashboard • SkillLink" });
@@ -270,6 +264,5 @@ router.get("/messages", protect, async (req, res) => {
   res.render("account/messages", { title: "Messages", threads });
 });
 
->>>>>>> Stashed changes
 
 module.exports = router;
