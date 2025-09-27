@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
-const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
+const Skill = require('../models/skill.js'); // Make sure Skill model is imported
+const Booking = require('../models/booking.js'); // Make sure Booking model is imported
+const { protect } = require('../middleware/authMiddleware');
+const MessageThread = require("../models/messageThread");
 
 // Mock data for categories + featured cards on home page
 
@@ -63,6 +66,7 @@ const featured = [
 ];
 
 
+// --- PUBLIC ROUTES ---
 // Home page
 router.get('/', (req, res) => {
   console.log('>>> pageRoutes: GET /');
@@ -205,6 +209,10 @@ router.get('/my-services', async (req, res) => {
   }
 });
 
+// --- AUTH ROUTES ---
+router.get('/register', (req, res) => res.render('auth/register', { title: 'Sign Up • SkillLink' }));
+router.get('/login', (req, res) => res.render('auth/login', { title: 'Log In • SkillLink' }));
+
 // delete a service
 router.post('/services/:id/delete', async (req, res) => {
   try {
@@ -215,7 +223,8 @@ router.post('/services/:id/delete', async (req, res) => {
     res.status(500).send('Error deleting service');
   }
 });
-// User Account Pages
+
+// --- PROTECTED ACCOUNT PAGES ---
 router.get("/dashboard", (req, res) => {
   res.render("account/dashboard", { title: "Dashboard • SkillLink" });
 });
@@ -224,12 +233,44 @@ router.get("/profile", (req, res) => {
   res.render("account/profile", { title: "My Profile • SkillLink" });
 });
 
-router.get("/skills", (req, res) => {
-  res.render("account/skills", { title: "My Skills • SkillLink" });
+router.get("/skills", protect, async (req, res) => {
+  try {
+    const userSkills = await Skill.find({ user: req.user._id }).lean();
+    res.render("account/skills", { 
+      title: "My Skills • SkillLink", 
+      skills: userSkills 
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
 });
 
-router.get("/bookings", (req, res) => {
-  res.render("account/bookings", { title: "My Bookings • SkillLink" });
+router.get("/bookings", protect, async (req, res) => {
+    try {
+        const userBookings = await Booking.find({
+            $or: [{ requester: req.user._id }, { provider: req.user._id }]
+        })
+        .populate('service')
+        .populate('requester', 'username')
+        .populate('provider', 'username')
+        .lean();
+
+        res.render("account/bookings", { 
+            title: "My Bookings • SkillLink", 
+            bookings: userBookings 
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+});
+
+router.get("/messages", protect, async (req, res) => {
+  const threads = await MessageThread.find({ participants: req.user.id })
+    .populate("participants", "username")
+    .populate("lastMessage");
+  res.render("account/messages", { title: "Messages", threads, user: req.user });
 });
 
 
@@ -238,31 +279,27 @@ router.get('/messages',        (req, res) => res.render('account/messages', { ti
 router.get('/messages/:id',    (req, res) => res.render('account/thread',   { title: 'Conversation • SkillLink', threadId: req.params.id, messages: [] }));
 router.post('/messages/:id',   (req, res) => { /* save message … */ res.redirect(`/messages/${req.params.id}`); });
 
-// Profile
-router.get("/profile", protect, async (req, res) => {
-  res.render("account/profile", { title: "My Profile", user: req.user });
+router.get('/my-services', protect, async (req, res) => {
+  try {
+    const services = await Service.find({ user: req.user._id }).lean();
+    res.render('myServices', {
+      title: 'My Services • Skilllink',
+      services
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error loading your services');
+  }
 });
 
-// Skills
-router.get("/skills", protect, async (req, res) => {
-  const services = await Service.find({ user: req.user.id });
-  res.render("account/skills", { title: "My Skills", skills: services });
+router.post('/services/:id/delete', async (req, res) => {
+  try {
+    await Service.findByIdAndDelete(req.params.id);
+    res.redirect('/my-services');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting service');
+  }
 });
-
-// Bookings
-router.get("/bookings", protect, async (req, res) => {
-  const bookings = [];
-  res.render("account/bookings", { title: "My Bookings", bookings });
-});
-
-// Messages
-const MessageThread = require("../models/messageThread");
-router.get("/messages", protect, async (req, res) => {
-  const threads = await MessageThread.find({ participants: req.user.id })
-    .populate("participants", "firstName lastName")
-    .populate("lastMessage");
-  res.render("account/messages", { title: "Messages", threads });
-});
-
 
 module.exports = router;

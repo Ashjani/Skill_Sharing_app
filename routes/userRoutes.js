@@ -1,10 +1,26 @@
- const express = require('express');
+const express = require('express');
 const router = express.Router();
 const Skill = require("../models/skill");
 const Booking = require("../models/booking");
 const MessageThread = require("../models/messageThread");
 const { registerUser, loginUser } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware'); // Middleware to protect routes
+
+// @desc    Render the registration page
+// @route   GET /auth/register
+router.get('/register', (req, res) => {
+  res.render('auth/register', { title: 'Sign Up • SkillLink' });
+});
+
+// @desc    Render the login page
+// @route   GET /auth/login
+router.get('/login', (req, res) => {
+  res.render('auth/login', { title: 'Log In • SkillLink' });
+});
+
+//existing POST routes for the API...
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 // API endpoint for registering a new user define the POST route for registering a new user
 router.post('/register', registerUser);
