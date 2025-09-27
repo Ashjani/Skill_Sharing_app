@@ -40,8 +40,8 @@ app.use((req, res, next) => {
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)
 app.use('/', pageRoutes);
-// API routes (prefixed with /api)
-app.use('/api/auth', userRoutes);
+// API routes (prefixed with /auth)
+app.use('/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
 
 
