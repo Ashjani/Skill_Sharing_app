@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
-const generateToken = require('../utils/generateToken'); // <-- Import the new function
+const tokenUtils = require('../utils/generateToken'); // <-- Import the new function
 
 /**
  * @desc    Register a new user
@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
-        token: generateToken(user._id), // Generate and send token
+        token: tokenUtils.generateToken(user._id), // Generate and send token
       });
     } else {
       res.status(400).json({ message: 'Invalid user data' });
@@ -64,7 +64,7 @@ const loginUser = async (req, res) => {
         _id: user._id,
         username: user.username,
         email: user.email,
-        token: generateToken(user._id), //Generate and send token
+        token: tokenUtils.generateToken(user._id), //Generate and send token
       });
     } else {
       res.status(401).json({ message: 'Invalid credentials' }); // Use 401 for unauthorized
