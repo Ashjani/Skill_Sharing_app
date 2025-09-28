@@ -339,5 +339,15 @@ Custom Stylesheet (public/css/main.css): Centralized styles for form layouts, in
 Reusable Partials: Navbar and footer partials integrated for consistent layout across pages.
 
 Accessibility & Responsiveness: Layout tested to ensure it adapts to different screen sizes, following a mobile-first approach. 
-
+---
+## Key Workflows/ ## Data Flows
+## Data Flow Summary: Creating a New Review
+This summary outlines the line-by-line process by which data passes through your application when a logged-in user makes a new review.
+1.	API Request: A logged-in user makes a review on the frontend, and it makes a POST request to the /api/reviews route. The request includes a JSON Web Token (JWT) in the Authorization header and a body with the serviceId, rating, and comment
+2.	Authentication Middleware: The protect middleware intercepts the request. It verifies the JWT to know whether the user is logged in and appends the user data to the request object (req.user).
+3.	Controller Logic: The request is passed to the createReview function in the reviewController.
+4.	Document Creation: The controller establishes a new Review document. It populates the rating and comment fields of the request body, the service ID of the request, and assigns the user field based on the ID of req. user.
+5.	Database Insertion: The new Review document is put into the reviews collection in MongoDB.
+6.	Update Relationships: Upon successful creation, the newly created review's unique _id is pushed into the reviews array saved in both the respective User document and the Service document to uphold the one-to-many relationships.
+7.	API Response: The server sends back a 201 Created status code along with the created review object as a JSON response.
 
