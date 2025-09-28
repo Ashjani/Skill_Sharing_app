@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Skill = require("../models/skill");
+const Service = require("../models/service");
 const Booking = require("../models/booking");
 const MessageThread = require("../models/messageThread");
 const { registerUser, loginUser } = require('../controllers/userController');
@@ -49,12 +49,12 @@ router.post("/profile", protect, async (req, res) => {
 
 // Skills
 router.get("/skills", protect, async (req, res) => {
-  const skills = await Skill.find({ user: req.user._id });
+  const skills = await Service.find({ user: req.user._id });
   res.render("account/skills", { title: "My Skills • SkillLink", active: "skills", skills });
 });
 
 router.post("/skills", protect, async (req, res) => {
-  await Skill.create({ ...req.body, user: req.user._id });
+  await Service.create({ ...req.body, user: req.user._id });
   res.redirect("/skills");
 });
 

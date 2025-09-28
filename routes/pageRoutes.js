@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const Service = require('../models/service.js');
-const Skill = require('../models/skill.js'); // Make sure Skill model is imported
 const Booking = require('../models/booking.js'); // Make sure Booking model is imported
 const { protect } = require('../middleware/authMiddleware');
 const MessageThread = require("../models/messageThread");
@@ -235,7 +234,7 @@ router.get("/profile", (req, res) => {
 
 router.get("/skills", protect, async (req, res) => {
   try {
-    const userSkills = await Skill.find({ user: req.user._id }).lean();
+    const userSkills = await Service.find({ user: req.user._id }).lean();
     res.render("account/skills", { 
       title: "My Skills • SkillLink", 
       skills: userSkills 
