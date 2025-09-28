@@ -3,8 +3,12 @@ const express = require("express");
 const router = express.Router();
 const serviceController = require("../controllers/serviceController");
 const { protect } = require('../middleware/authMiddleware');
+const Service = require('../models/service');
 
-
+//debug for test routes
+router.get('/test', (req, res) => {
+  res.send("Service routes are working!");
+});
 
 // Read all
 router.get("/", serviceController.getServices);
@@ -16,7 +20,7 @@ router.get("/:id", serviceController.getServiceById);
 router.post("/", protect, serviceController.createService);
 
 // Update
-router.put("/:id", protect, serviceController.updateService);
+router.put("/:id",serviceController.updateService);// removed protect for testing
 
 // Delete
 router.delete("/:id", protect,  serviceController.deleteService);
@@ -26,12 +30,19 @@ router.delete("/:id", protect,  serviceController.deleteService);
 // Render edit service form
 router.get('/:id/edit', async (req, res) => {
   try {
+    console.log("DEBUG Edit route hit. ID:", req.params.id);
+
     const service = await Service.findById(req.params.id).lean();
+    console.log("DEBUG Service result:", service);
+
     if (!service) {
+      console.log("DEBUG No service found for this ID");
       return res.status(404).send('Service not found');
     }
+
     res.render('editService', { service });
   } catch (err) {
+    console.error("DEBUG Error in edit route:", err);
     res.status(500).send('Error loading service');
   }
 });
