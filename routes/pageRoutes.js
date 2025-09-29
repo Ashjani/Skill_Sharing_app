@@ -183,7 +183,6 @@ router.get('/profile',   protect, accountController.getProfile);
 router.post('/profile', protect, accountController.updateProfile);
 router.get('/skills',    protect, accountController.getSkills);
 router.post('/skills',   protect, accountController.createSkill);
-router.get('/bookings',  protect, accountController.getBookings);
 router.get('/messages',  protect, accountController.getThreads);
 router.get('/messages/:threadId', protect, accountController.getThread);
 router.post('/messages/:threadId', protect, accountController.postThreadMessage); 

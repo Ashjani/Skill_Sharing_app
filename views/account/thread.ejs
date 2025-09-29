@@ -1,0 +1,40 @@
+<% /* views/account/thread.ejs */ %>
+<section class="account-wrap">
+  <%- include('../partials/accountSidebar', { active: 'messages', user, stats }) %>
+
+  <main class="account-main conversation-wrap">
+    <div class="conversation-header">
+      <h4>Conversation</h4>
+      <p>
+        Booking: <%= (thread && thread.booking) ? thread.booking._id : '' %>
+        <% if (thread && thread.booking && thread.booking.service) { %>
+          • <a href="/services/<%= thread.booking.service %>">View service</a>
+        <% } %>
+      </p>
+    </div>
+
+    <div class="messages-list">
+      <% (thread.messages || []).forEach(function(m){ 
+        const isSelf = user && String(m.sender?._id) === String(user._id);
+      %>
+        <div class="message-item 
+            <%= m.system ? 'system' : (isSelf ? 'self' : 'other') %>">
+          <div>
+            <% if (m.system) { %>
+              <em>System</em>: <%= m.body %>
+            <% } else { %>
+              <strong><%= m.sender?.firstName || 'User' %></strong>: <%= m.body %>
+            <% } %>
+          </div>
+          <div class="message-meta"><%= new Date(m.createdAt).toLocaleString() %></div>
+        </div>
+      <% }) %>
+    </div>
+
+    <form method="POST" action="/messages/<%= thread._id %>" class="message-form">
+      <input name="text" placeholder="Write a message…" />
+      <button type="submit">Send</button>
+    </form>
+  </main>
+</section>
+

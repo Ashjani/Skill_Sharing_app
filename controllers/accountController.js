@@ -80,24 +80,30 @@ exports.createSkill = async (req, res) => {
 };
 
 // GET /bookings
-exports.getBookings = async (req, res) => {
-  const user = req.user;
-  const stats = buildStats(user);
+// exports.getBookings = async (req, res) => {
+//   const user = req.user;
+//   const stats = buildStats(user);
 
-  const bookings = await Booking.find({
-    $or: [{ requester: user._id }, { provider: user._id }],
-  })
-    .populate("service")
-    .populate("requester provider")
-    .lean();
+//   const bookings = await Booking.find({
+//     $or: [{ requester: user._id }, { provider: user._id }],
+//   })
+//     .populate("service")
+//     .populate("requester provider")
+//     .lean();
 
-  res.render("account/bookings", {
-    title: "Bookings • SkillLink",
-    user,
-    stats,
-    bookings,
-  });
-};
+//   // pass flash safely and clear it
+//   const flash = req.session.success || null;
+//   req.session.success = null;
+
+//   res.render("account/bookings", {
+//     title: "Bookings • SkillLink",
+//     user,
+//     stats,
+//     bookings,
+//     flash,                
+//   });
+// };
+
 
 // GET /messages
 exports.getThreads = async (req, res) => {
@@ -117,17 +123,20 @@ exports.getThreads = async (req, res) => {
 };
 
 // GET /messages/:threadId
+
 exports.getThread = async (req, res) => {
   const user = req.user;
   const stats = buildStats(user);
 
   const thread = await MessageThread.findById(req.params.threadId)
     .populate("messages.sender", "firstName lastName username")
+    .populate("booking") // optional
     .lean();
 
   if (!thread) return res.status(404).send("Thread not found");
 
-  res.render("account/thread", {
+  // If your file is 'views/account/messages.ejs' change path accordingly:
+  res.render("account/thread", {  // <-- make sure this matches the file path
     title: "Conversation • SkillLink",
     user,
     stats,
@@ -135,12 +144,26 @@ exports.getThread = async (req, res) => {
   });
 };
 
-// POST /messages/:threadId (send a message)
-exports.postThreadMessage = async (req, res) => {
-  const thread = await MessageThread.findById(req.params.threadId);
-  if (!thread) return res.status(404).send("Thread not found");
 
-  thread.messages.push({ sender: req.user._id, text: req.body.text });
-  await thread.save();
-  res.redirect(`/messages/${req.params.threadId}`);
+// controllers/accountController.js
+exports.postThreadMessage = async (req, res) => {
+  try {
+    const thread = await MessageThread.findById(req.params.threadId);
+    if (!thread) return res.status(404).send('Thread not found');
+
+    const text = (req.body.text || '').trim();
+    if (!text) return res.redirect(`/messages/${req.params.threadId}`);
+
+    // your schema uses "body", not "text"
+    thread.messages.push({ sender: req.user._id, body: text, system: false });
+
+    await thread.save(); // if this throws, we catch and respond below
+
+    return res.redirect(`/messages/${req.params.threadId}`);
+  } catch (err) {
+    console.error('postThreadMessage error:', err);
+    //  always end the request
+    return res.status(500).send('Failed to send message');
+  }
 };
+

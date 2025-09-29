@@ -1,16 +1,26 @@
-const express = require('express');
+// routes/bookingRoutes.js
+const express = require("express");
 const router = express.Router();
-const { createBooking, updateBookingStatus } = require('../controllers/bookingController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect } = require("../middleware/authMiddleware");
+const bookingCtrl = require("../controllers/bookingController");
 
-// Note: We need a unique route for creating a booking from a service page
-// So we'll put that in its own router file or a serviceRoutes file. 
-// For now, let's make a dedicated booking router.
+// CREATE a pending booking request
+// POST /api/bookings/request/:serviceId
+router.post("/request/:serviceId", protect, bookingCtrl.createBooking);
 
-// Create a new booking request for a service
-router.post('/request/:id', protect, createBooking);
+// LIST current user's bookings
+// GET /api/bookings
+router.get("/", protect, bookingCtrl.listBookings);
 
-// Update an existing booking's status (such as accept, decline, complete)
-router.patch('/:id/status', protect, updateBookingStatus);
+// PROVIDER actions
+// POST /api/bookings/:id/accept
+router.post("/:id/accept", protect, bookingCtrl.acceptBooking);
+
+// POST /api/bookings/:id/decline
+router.post("/:id/decline", protect, bookingCtrl.declineBooking);
+
+// MESSAGES
+// POST /api/bookings/:id/message
+router.post("/:id/message", protect, bookingCtrl.postMessage);
 
 module.exports = router;
