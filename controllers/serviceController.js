@@ -9,7 +9,7 @@ exports.createService = async (req, res) => {
     });
 
     await service.save();
-    res.redirect('/my-services');
+    res.redirect('/services/my-services');
     //res.status(201).json(service);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -61,7 +61,7 @@ exports.updateService = async (req, res) => {
     await service.save();
 
     // Redirect back to My Services page after updating
-    res.redirect('/my-services');
+    res.redirect('/services/my-services');
   } catch (err) {
     console.error("Update error:", err.message);
     res.status(500).json({ error: "Error updating service" });
@@ -77,29 +77,36 @@ exports.deleteService = async (req, res) => {
       return res.status(404).json({ message: "Service not found" });
     }
 
-    // --- OWNERSHIP CHECK ---
-    // A user can delete if they are the owner OR if they are an admin.
-    if (service.user.toString() !== req.user.id && req.user.role !== 'Admin') {
-      return res.status(401).json({ message: 'User not authorized' });
+    // Ownership check (optional)
+    if (service.user.toString() !== req.user.id && req.user.role !== "Admin") {
+      return res.status(401).json({ message: "User not authorized" });
     }
-    
-    await service.remove(); 
-    res.json({ message: "Service deleted" });
+
+    await service.remove();
+
+    // Fetch updated services and re-render directly
+    const services = await Service.find({ user: req.user.id }).sort("-createdAt");
+    res.render("myServices", { services });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
+
 
 // Get services created by the logged-in user
 exports.getMyServices = async (req, res) => {
   try {
     const myServices = await Service.find({ user: req.user.id }).sort('-createdAt');
-    res.json(myServices);
+    // Render the EJS page with fresh data
+    res.render('myServices', { services: myServices });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error(err);
+    res.status(500).send('Error loading services');
   }
 };
+
 
 // Get ratings for a service (with rater details)
 exports.getRatingsForService = async (req, res) => {

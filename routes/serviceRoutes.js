@@ -15,7 +15,7 @@ router.get("/new", (req, res) => {
 // My Services page
 router.get("/my-services", async (req, res) => {
   try {
-    const services = await Service.find(); // show all for now
+    const services = await Service.find().sort('-createdAt').lean();
     console.log("SERVICES:", services);    // debug log
     res.render("myServices", { services });
   } catch (err) {
@@ -23,7 +23,6 @@ router.get("/my-services", async (req, res) => {
     res.status(500).send("Error loading services");
   }
 });
-
 
 // Read one by ID (must come AFTER /new, otherwise "new" is treated as an ID)
 router.get("/:id", serviceController.getServiceById);
@@ -35,17 +34,21 @@ router.post("/", serviceController.createService); //removed protec for testing
 router.put("/:id", serviceController.updateService); //removed protect for test
 
 // Delete
-router.delete("/:id", protect,  serviceController.deleteService);
+// router.delete("/:id", protect,  serviceController.deleteService);
 
 // edit service form
 router.get('/:id/edit', async (req, res) => {
   try {
+    console.log("EDIT ROUTE HIT:", req.params.id); // <--- ADD THIS
+
     const service = await Service.findById(req.params.id).lean();
     if (!service) {
       return res.status(404).send('Service not found');
     }
+
     res.render('editService', { service });
   } catch (err) {
+    console.error(err);
     res.status(500).send('Error loading service');
   }
 });
@@ -62,24 +65,23 @@ router.post('/:id', async (req, res) => {
     );
 
     // After update, go back to My Services
-    res.redirect('/my-services');
+    res.redirect('/services/my-services');
   } catch (err) {
     console.error(err);
     res.status(500).send('Error updating service');
   }
 });
 
-
 // Delete a service (POST method)
-router.post('/services/:id/delete', async (req, res) => {
+router.post('/:id/delete', async (req, res) => {
   try {
-    await Service.findByIdAndDelete(req.params.id);
-    res.redirect('/my-services'); // After deleting, go back to list
+    await Service.findByIdAndDelete(req.params.id);  // ✅ ensures delete finishes
+    const services = await Service.find();           // ✅ fetch fresh list
+    res.render('myServices', { services });          // ✅ render immediately
   } catch (err) {
     console.error(err);
     res.status(500).send('Error deleting service');
   }
 });
-
 
 module.exports = router;

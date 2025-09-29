@@ -1,0 +1,109 @@
+/* CREATE SERVICE FORM STYLE */
+.page-shell {
+  padding: 28px 16px 56px;
+}
+ 
+.create-service-wrap {
+  max-width: 720px;
+  margin: 40px auto;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 28px;
+  box-shadow: 0 6px 22px rgba(15, 23, 42, 0.06);
+}
+ 
+.create-service-wrap h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #0f172a;
+  text-align: center;
+}
+ 
+.create-service-wrap p {
+  text-align: center;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+ 
+/* Labels */
+.create-service-wrap label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #374151;
+}
+ 
+/* Inputs, selects, textarea */
+.create-service-wrap input[type="text"],
+.create-service-wrap input[type="number"],
+.create-service-wrap textarea,
+.create-service-wrap select {
+  display: block;
+  width: 100%;
+  max-width: 100%;            /* prevent overflow */
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+  box-sizing: border-box;      /* ensures padding + border stay inside 100% */
+}
+ 
+ 
+.create-service-wrap textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+ 
+.create-service-wrap input:focus,
+.create-service-wrap textarea:focus,
+.create-service-wrap select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+ 
+/* Submit button */
+.create-service-wrap button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  width: 100%;
+}
+ 
+.create-service-wrap button:hover {
+  background: #1e40af;
+}
+ 
+/* Responsive */
+@media (max-width: 600px) {
+  .create-service-wrap {
+    padding: 20px;
+    margin: 20px;
+  }
+}
+ 
+/* Prevent labels from changing color on focus */
+.create-service-wrap label {
+  color: #374151 !important;   /* dark grey */
+  font-weight: 600;
+}
+ 
+/* Remove unwanted Materialize/Bootstrap rules */
+.create-service-wrap input:focus + label,
+.create-service-wrap textarea:focus + label,
+.create-service-wrap select:focus + label {
+  color: #374151 !important;
+}
+ 
