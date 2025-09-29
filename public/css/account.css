@@ -1,4 +1,10 @@
-/* Layout */
+/* 0) Design tokens (light touch) */
+:root{
+  --ink-900:#0f172a; --ink-800:#111827; --ink-600:#475569; --ink-500:#64748b;
+  --line:#eaeaf1; --panel:#ffffff; --chip:#f6f7fb;
+  --radius:12px; --gap:18px; --pad:20px;
+}
+Layout
 .account-wrap { display:flex; gap:18px; }
 .account-sidebar { width:300px; padding:14px; background:#fff; border:1px solid #eaeaf1; border-radius:12px; }
 .account-main { flex:1; }
@@ -7,7 +13,60 @@
 .sidenav-links { list-style:none; margin:10px 0 14px; padding:0; }
 .sidenav-links li a { display:block; padding:10px 12px; border-radius:8px; color:#333; }
 .sidenav-links li a.active, .sidenav-links li a:hover { background:#f6f7fb; }
-.quick-stats .stat-row { display:flex; justify-content:space-between; margin:6px 0; }
+
+/* QUICK STATS – exact alignment like the mock */
+.quick-stats.card {
+  border-radius: 12px;
+}
+
+.quick-stats .card-content {
+  padding: 18px 20px;
+}
+
+.qs-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 10px;
+}
+
+/* one row per stat, label left / value right */
+.qs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+/* keep label on a single line */
+.qs-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;     /* prevents breaking like “Services”/“Completed” */
+}
+
+/* right-aligned bold numbers */
+.qs-value {
+  min-width: 56px;         /* keeps the column steady */
+  text-align: right;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* green highlight for credits */
+.qs-value.positive {
+  color: #16a34a;
+}
+
+/* (Optional) tighten rows on very small screens */
+@media (max-width: 420px) {
+  .qs-label { font-size: 15px; }
+  .qs-value { min-width: 48px; font-size: 17px; }
+}
+
 
 /* Credits gradient */
 .gradient-credits { border:0; border-radius:12px;
@@ -27,3 +86,204 @@
 /* Utilities */
 .upper { text-transform:uppercase; letter-spacing:.06em; }
 .no-margin { margin:0; }
+
+/* Pending Requests — clean flex layout */
+.pending-requests {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.pending-requests .req-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  background: #fff;
+}
+.pending-requests .req-item:last-child {
+  border-bottom: 0;
+}
+
+.req-avatar img {
+  display: block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.req-main {
+  min-width: 0;
+  flex: 1;                 /* take remaining space */
+}
+
+.req-title {
+  line-height: 1.2;
+  margin-bottom: 2px;
+  font-weight: 600;
+  color: #111827;
+}
+.req-meta {
+  font-size: 0.92rem;
+  color: #6b7280;          /* grey-500 */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.req-meta .req-skill { color: #374151; } /* darker for skill */
+.req-meta .dot { margin: 0 6px; color: #cbd5e1; } /* separator */
+
+.req-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.req-actions .btn-small {
+  height: 32px;
+  line-height: 32px;
+  border-radius: 8px;
+}
+.req-actions .btn-flat {
+  min-width: 0;
+  padding: 0 6px;
+}
+
+/* Optional: card body padding harmonize if needed */
+.card .pending-requests {
+  border: 0;               /* use card border instead */
+  border-radius: 0;
+}
+
+/* ---------- Profile page cards ---------- */
+.profile-card {
+  border: 1px solid #eaeaf1;
+  border-radius: 12px;
+}
+
+/* top header */
+.profile-head .ph-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.profile-head .avatar {
+  width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+}
+.ph-name { font-weight: 700; color:#0f172a; }
+.ph-role { color:#64748b; }
+.ph-loc { color:#94a3b8; }
+
+/* common title inside cards */
+.profile-card-title {
+  font-weight: 700;
+  margin-bottom: 12px;
+  color:#0f172a;
+}
+
+/* grid helpers */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 992px) { /* >= large screens */
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+}
+.grid-span-2 { grid-column: 1 / -1; }
+.gap-18 { gap: 18px; }
+
+/* ensure Materialize input spacing looks tight inside grid */
+.profile-form .input-field { margin-top: 6px; margin-bottom: 10px; }
+
+/* points bar */
+.points-bar {
+  border-radius: 10px;
+  padding: 16px 14px;
+  margin: 4px 0 12px;
+  color:#fff;
+  background: linear-gradient(90deg, #3b5bdb, #4f46e5);
+  text-align: center;
+}
+.points-number { font-size: 24px; font-weight: 800; line-height: 1; }
+.points-caption { opacity: .9; }
+
+/* mini stats (two small tiles) */
+.mini-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.mini { background:#f8fafc; border:1px solid #eef2f7; border-radius:10px; padding:10px; text-align:center; }
+.mini-num { font-weight:800; font-size:18px; }
+.mini-cap { color:#64748b; }
+
+/* key-value list on the right card */
+.kv { list-style:none; margin: 4px 0 0; padding:0; }
+.kv li { display:flex; justify-content:space-between; padding:6px 2px; border-bottom:1px dashed #eef2f7; }
+.kv li:last-child { border-bottom:0; }
+.kv span { color:#475569; }
+.kv strong { color:#0f172a; }
+
+/* contact & address rows */
+.kv-row { display:flex; gap:14px; padding:6px 0; }
+.kv-key { min-width: 140px; color:#64748b; }
+.kv-val { color:#0f172a; }
+
+/* page header */
+.account-top { margin-bottom: 10px; }
+
+/* Profile header card */
+.profile-header {
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 20px;
+}
+
+/* Profile info wrapper */
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* space between avatar and text */
+}
+
+/* Avatar */
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Text styling */
+.profile-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-name {
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+  color: #111827;
+}
+
+.profile-text p {
+  margin: 2px 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+

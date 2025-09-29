@@ -3,6 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
 
 // --- Import Route Files ---
 const pageRoutes = require('./routes/pageRoutes');
@@ -11,6 +12,7 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
+ 
 
 // --- Core Setup ---
 dotenv.config();
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(cookieParser());
 
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)

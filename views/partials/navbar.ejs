@@ -88,18 +88,21 @@
       </div>
 
       <% if (user) { %>
-        <a href="/dashboard" class="black-text">
-          <i class="material-icons" style="vertical-align: middle">account_circle</i>
-          <%= user.name %>
-        </a>
-        <a href="/logout" class="black-text">Logout</a>
+      <a href="/dashboard" class="black-text">
+        <i class="material-icons" style="vertical-align: middle"
+          >account_circle</i
+        >
+        <%= user.name %>
+      </a>
+      <a href="/logout" class="black-text">Logout</a>
       <% } else { %>
-        <a href="/auth/login" class="black-text">Sign In</a>
-        <a
-          href="/auth/register"
-          class="btn"
-          style="border-radius: 6px; background-color: #2563eb"
-        >Join Now</a>
+      <a href="/auth/login" class="black-text">Sign In</a>
+      <a
+        href="/auth/register"
+        class="btn"
+        style="border-radius: 6px; background-color: #2563eb"
+        >Join Now</a
+      >
       <% } %>
     </div>
   </div>
@@ -114,15 +117,26 @@
   <li><a href="/contact">Contact</a></li>
 
   <% if (user) { %>
-    <li><a href="/dashboard"><i class="material-icons">account_circle</i> <%= user.name %></a></li>
-    <li><a href="/logout">Logout</a></li>
+  <li>
+    <a href="/dashboard"
+      ><i class="material-icons">account_circle</i> <%= user.name %></a
+    >
+  </li>
+  // Logout link
+  <li>
+    <a href="auth/logout"
+      ><i class="material-icons left">exit_to_app</i>Logout</a
+    >
+  </li>
+
   <% } else { %>
-    <li><a href="/auth/login">Sign In</a></li>
-    <li>
-      <a
-        href="/auth/register"
-        style="color: white; background: #2563eb; border-radius: 6px"
-      >Join Now</a>
-    </li>
+  <li><a href="/auth/login">Sign In</a></li>
+  <li>
+    <a
+      href="/auth/register"
+      style="color: white; background: #2563eb; border-radius: 6px"
+      >Join Now</a
+    >
+  </li>
   <% } %>
 </ul>
