@@ -10,6 +10,7 @@ const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes'); 
+const bookingRoutes = require('./routes/bookingRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
  
@@ -46,6 +47,8 @@ app.use('/', pageRoutes);
 // API routes (prefixed with /auth)
 app.use('/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
+// booking routes
+app.use('/api/bookings', bookingRoutes);
 
 
 // --- 404 Handler 

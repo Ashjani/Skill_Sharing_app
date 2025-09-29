@@ -15,6 +15,7 @@ const serviceSchema = new Schema({
         enum: ['available', 'in_progress', 'completed'],
         default: 'available'
     },
+    credits: { type: Number, default: 1, min: 1 },
     reviews: [{ // Linking servis.js to reviews
         type: Schema.Types.ObjectId,
         ref: 'Review'
