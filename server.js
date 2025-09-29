@@ -26,6 +26,7 @@ app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
 
+
 // --- View Engine Setup ---
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -47,8 +48,11 @@ app.use('/', pageRoutes);
 // API routes (prefixed with /auth)
 app.use('/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
+app.use('/api/reviews', reviewRoutes);
+
 // booking routes
 app.use('/api/bookings', bookingRoutes);
+
 
 
 // --- 404 Handler 

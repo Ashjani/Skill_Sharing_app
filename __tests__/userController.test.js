@@ -7,11 +7,9 @@ const User = require('../models/user');
 const tokenUtils = require('../utils/generateToken');
 
 describe('Authentication Controller (Mocha/Chai)', () => {
-  after((done) => {
-    mongoose.connection.close();
-    server.close(done);
+  after(async () => {
+    await mongoose.connection.close();
   });
-
   afterEach(() => {
     sinon.restore();
   });
@@ -26,7 +24,7 @@ describe('Authentication Controller (Mocha/Chai)', () => {
       };
 
       sinon.stub(User, 'findOne').resolves(null);
-      // This is the corrected line: we now stub User.create directly.
+      // we now stub User.create directly.
       sinon.stub(User, 'create').resolves(mockSavedUser);
       sinon.stub(tokenUtils, 'generateToken').returns('mock_jwt_token');
 
