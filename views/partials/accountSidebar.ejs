@@ -1,16 +1,71 @@
-<aside class="account-sidebar">
-  <ul class="collection">
-    <li class="collection-item <%= active === 'profile' ? 'active' : '' %>">
-      <a href="/profile">Profile</a>
+<% /* views/partials/accountSidebar.ejs */ %>
+<aside class="account-sidebar z-depth-1">
+  <!-- User header -->
+  <div class="account-user">
+    <img
+      src="<%= (user && user.avatar) || 'https://i.pravatar.cc/120?img=24' %>"
+      alt="User"
+      class="circle avatar"
+    />
+    <div>
+      <div class="name">
+        <%= user?.firstName && user?.lastName ? `${user.firstName} ${user.lastName}` : (user?.username || 'Sarah Johnson') %>
+      </div>
+
+      <div class="role grey-text text-darken-1">
+        <%= (user && user.title) || '' %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nav links -->
+  <ul class="sidenav-links">
+    <li>
+      <a class="<%= active === 'dashboard' ? 'active' : '' %>" href="/dashboard">
+        <i class="material-icons left">dashboard</i>Dashboard
+      </a>
     </li>
-    <li class="collection-item <%= active === 'skills' ? 'active' : '' %>">
-      <a href="/skills">My Skills</a>
+    <li>
+      <a class="<%= active === 'profile' ? 'active' : '' %>" href="/profile">
+        <i class="material-icons left">person</i>My Profile
+      </a>
     </li>
-    <li class="collection-item <%= active === 'bookings' ? 'active' : '' %>">
-      <a href="/bookings">Bookings</a>
+    <li>
+      <a class="<%= active === 'skills' ? 'active' : '' %>" href="/skills">
+        <i class="material-icons left">stars</i>My Skills
+      </a>
     </li>
-    <li class="collection-item <%= active === 'messages' ? 'active' : '' %>">
-      <a href="/messages">Messages</a>
+    <li>
+      <a class="<%= active === 'bookings' ? 'active' : '' %>" href="/bookings">
+        <i class="material-icons left">event_available</i>Bookings
+      </a>
+    </li>
+    <li>
+      <a class="<%= active === 'messages' ? 'active' : '' %>" href="/messages">
+        <i class="material-icons left">chat</i>Messages
+      </a>
     </li>
   </ul>
+
+  <!-- Quick stats -->
+  <div class="quick-stats card">
+    <div class="card-content">
+      <div class="qs-title">Quick Stats</div>
+
+      <div class="qs-row">
+        <div class="qs-label">Services Completed</div>
+        <div class="qs-value"><%= (stats && stats.completed) ?? 42 %></div>
+      </div>
+
+      <div class="qs-row">
+        <div class="qs-label">Credits Earned</div>
+        <div class="qs-value positive"><%= (stats && stats.credits) ?? 156 %></div>
+      </div>
+
+      <div class="qs-row">
+        <div class="qs-label">Member Since</div>
+        <div class="qs-value"><%= (stats && stats.memberSince) ?? 'Jan 2024' %></div>
+      </div>
+    </div>
+  </div>
 </aside>

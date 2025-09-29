@@ -1,0 +1,113 @@
+/* ============ My Skills — page scaffold ============ */
+.account-main { padding-top: 4px; }
+.page-sub { margin-top: -6px; color: #64748b; }
+
+/* compact profile header card (reusable) */
+.profile-mini {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1px solid #e5e7eb; border-radius: 12px;
+  background: #fff; box-shadow: 0 1px 2px rgba(15,23,42,.04);
+}
+.profile-mini .avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.profile-mini .name { font-weight: 700; color: #0f172a; }
+.profile-mini .muted { color: #64748b; font-size: 12.5px; }
+
+/* ============ Skills editor card ============ */
+.skill-editor.card { border-radius: 12px; }
+.skill-editor .card-content { padding: 16px; }
+.skill-editor .editor-head { display: flex; align-items: center; gap: 10px; }
+.skill-editor .editor-head .tiny { color:#64748b; }
+
+.editor-rows { display: grid; gap: 10px; margin-top: 10px; }
+
+/* one inline row: name | level | years | delete */
+.editor-row {
+  display: grid; align-items: center; gap: 10px;
+  grid-template-columns: 1fr 180px 120px 36px;
+  background: #fff; border: 1px solid #eef2f7; border-radius: 10px; padding: 8px;
+}
+@media (max-width: 680px){
+  .editor-row { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; }
+  .editor-row .row-actions { grid-column: 2 / 3; justify-self: end; }
+}
+
+.editor-row .input-field { margin: 0; }
+.editor-row input[type="text"],
+.editor-row input[type="number"],
+.editor-row select {
+  height: 40px; border-radius: 8px; padding: 0 10px;
+  border: 1px solid #d1d5db; background: #fff;
+}
+.editor-row .row-actions {
+  display: flex; align-items: center; justify-content: center;
+}
+.icon-btn {
+  width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 8px; background: #ffe4e6; color: #dc2626; border: 1px solid #fecaca;
+  cursor: pointer; transition: filter .15s;
+}
+.icon-btn:hover { filter: brightness(.96); }
+
+/* Add + Save/Cancel controls */
+.editor-actions {
+  display:flex; align-items:center; gap:10px; justify-content:flex-end; margin-top: 10px;
+}
+.btn-ghost {
+  background: #f8fafc; color:#334155; border:1px solid #e2e8f0; border-radius:8px;
+  height: 36px; padding: 0 14px; font-weight:600; cursor: pointer;
+}
+.btn-ghost:hover { background:#f1f5f9; }
+.btn-primary {
+  background:#3b82f6; color:#fff; border:0; height:36px; padding:0 14px; border-radius:8px;
+  font-weight:700; cursor:pointer; transition:filter .15s, transform .02s;
+}
+.btn-primary:hover { filter:brightness(.98); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-add {
+  height: 32px; padding: 0 10px; border-radius:8px;
+  border: 1px solid #c7d2fe; background:#eef2ff; color:#4338ca; font-weight:700;
+}
+.btn-add:hover { filter: brightness(.98); }
+
+/* ============ Two progress list cards (Technical / Design) ============ */
+.skill-lists { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 992px){ .skill-lists { grid-template-columns: 1fr 1fr; } }
+
+.section-card.card { border-radius:12px; }
+.section-card .card-content { padding: 14px 16px; }
+.section-card .section-title { font-weight: 700; color: #111827; display:flex; align-items:center; justify-content:space-between; }
+.section-card .edit-link { color:#64748b; font-size:12px; cursor:pointer; }
+
+.list-lines { margin-top: 10px; }
+.line {
+  padding: 10px 0; border-bottom: 1px solid #f1f5f9; display:flex; flex-direction:column; gap:6px;
+}
+.line:last-child { border-bottom: 0; }
+.line-head { display:flex; align-items:center; gap:10px; }
+.line-head .label { font-weight:600; color:#0f172a; flex:1; }
+.line-head .level { color:#94a3b8; font-size:12px; }
+
+/* progress bar */
+.meter { position: relative; height: 8px; width: 100%; background: #eef2ff; border-radius: 999px; overflow: hidden; }
+.meter span { position: absolute; inset: 0 auto 0 0; width: var(--val, 0%); background: linear-gradient(90deg,#3b82f6,#6366f1); border-radius: inherit; }
+
+/* ============ Soft Skills chips ============ */
+.chips-wrap { margin-top: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips .chip {
+  display:inline-block; background:#f1f5f9; color:#1f2937; border:1px solid #e5e7eb;
+  border-radius: 999px; padding: 5px 10px; font-size: 12px; font-weight:600;
+}
+
+/* ============ Certifications list ============ */
+.cert-list { display: grid; gap: 10px; margin-top: 10px; }
+.cert {
+  display:flex; align-items:center; gap: 10px; background:#fff; border:1px solid #eef2f7;
+  border-radius:10px; padding: 10px 12px;
+}
+.cert .dot { width: 10px; height: 10px; border-radius: 50%; background:#3b82f6; }
+.cert .title { font-weight: 700; color:#0f172a; }
+.cert .sub  { color:#64748b; font-size: 12px; }
+
+/* helper spacing */
+.mb-8{ margin-bottom:8px; } .mb-12{ margin-bottom:12px; } .mb-16{ margin-bottom:16px; }

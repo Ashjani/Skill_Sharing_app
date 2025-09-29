@@ -140,6 +140,16 @@
           padding: 36px 0;
         }
       }
+
+      /* Prevent default Materialize hover styles on outline buttons */
+      .btn-outline:hover,
+      .btn-outline:focus,
+      .btn-outline:active {
+        background: #fff !important; /* keep white background */
+        border: 1px solid #e6eaf0 !important;
+        color: #111827 !important;
+        box-shadow: none !important; /* remove shadow if any */
+      }
     </style>
   </head>
   <body>
@@ -248,7 +258,7 @@
                 <a
                   href="/forgot-password"
                   class="right mini"
-                  style="margin-top: 6px"
+                  style="margin-top: 15px"
                   >Forgot password?</a
                 >
               </div>
@@ -278,8 +288,8 @@
       </div>
     </div>
 
-  <!-- Materialize JS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-  <script src="/js/validation.js"></script>
-</body>
+    <!-- Materialize JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="/js/validation.js"></script>
+  </body>
 </html>
