@@ -3,6 +3,11 @@
   background: #f8f9ff;
   padding: 40px 20px;
   border-bottom: 1px solid #eaeaf1;
+
+  /* ensure dropdowns render above following sections */
+  position: relative;
+  z-index: 10;
+  overflow: visible;
 }
 .services-hero h3 {
   font-weight: 700;
@@ -13,11 +18,11 @@
   margin: 0 auto 20px;
 }
 
-/* Search bar */
+/* ========== Search bar (now includes Add Service button) ========== */
 .search-bar {
   display: flex;
   gap: 10px;
-  max-width: 700px;
+  max-width: 900px;      /* wider to fit + Add Service */
   margin: 0 auto 20px;
 }
 .search-bar input {
@@ -25,6 +30,9 @@
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ddd;
+}
+.search-bar .add-service-btn {
+  white-space: nowrap;
 }
 
 /* ========== Filters (Dropdowns) ========== */
@@ -39,6 +47,7 @@
 
 .dropdown {
   position: relative;
+  z-index: 20;           /* local stacking for each dropdown */
 }
 
 .dropbtn {
@@ -61,7 +70,7 @@
   border: 1px solid #e6e6e6;
   border-radius: 8px;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
-  z-index: 1000;
+  z-index: 9999;         /* ensure overlays above everything */
   max-height: 260px;
   overflow: auto;
 }
@@ -88,6 +97,10 @@
 
 /* Keep the "Sort by" on the right on wider screens */
 @media (min-width: 992px) {
+  .filter-row {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
   .dropdown.sort {
     margin-left: auto;
   }
@@ -149,6 +162,7 @@
   color: #333;
 }
 
+/* Focus/active polish for buttons */
 .dropbtn:focus,
 .dropbtn:active {
   outline: none;
