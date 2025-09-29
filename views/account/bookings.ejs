@@ -1,34 +1,131 @@
 <% /* views/account/bookings.ejs */ %>
 <section class="account-wrap">
- <%- include('../partials/accountSidebar', { active: 'profile', user, stats }) %>
+  <%- include('../partials/accountSidebar', { active: 'bookings', user, stats }) %>
 
   <main class="account-main">
-    <h4 class="no-margin">My Bookings</h4>
-    <p class="muted small">Track requests you made and received</p>
+    <h4 class="no-margin">Bookings</h4>
+    <p class="muted small">Create a new booking or manage your requests.</p>
 
-    <% if ((bookings || []).length === 0) { %>
-      <div class="card">
-        <div class="card-content">
-          <p class="muted">No bookings yet.</p>
-        </div>
-      </div>
+    <% if (typeof flash !== 'undefined' && flash) { %>
+      <div class="card-panel green lighten-4 green-text text-darken-4"><%= flash %></div>
     <% } %>
 
-    <ul class="collection">
-      <% (bookings || []).forEach(function(b){ %>
-        <li class="collection-item avatar">
-          <img src="https://i.pravatar.cc/64?u=<%= b._id %>" alt="" class="circle">
-          <span class="title"><%= b.service?.title || 'Service' %></span>
-          <p class="tiny muted">
-            With <%= (b.provider?.firstName || '') %> <%= (b.provider?.lastName || '') %>
-            &nbsp;•&nbsp; Status: <strong><%= b.status %></strong>
-            <% if (b.date) { %> • Date: <%= new Date(b.date).toDateString() %><% } %>
-          </p>
-          <div class="secondary-content">
-            <a href="/services/<%= b.service?._id %>" class="btn-flat">View</a>
-            <% if (b.status === 'Completed') { %>
-              <a href="/services/<%= b.service?._id %>#rate" class="btn-small indigo">Rate</a>
+    <!-- ===== New Booking ===== -->
+    <div class="card z-depth-1 booking-new" style="margin-bottom:20px;">
+      <div class="card-content">
+        <h5>New Booking</h5>
+        <p class="tiny muted">Choose a service, pick a time, and add notes. The provider will be notified.</p>
+
+        <form method="POST" action="/bookings" style="margin:0;">
+          <div class="booking-form-grid">
+
+            <!-- Service (locked if preselected) -->
+            <% if (typeof selectedService !== 'undefined' && selectedService) { %>
+              <input type="hidden" name="serviceId" value="<%= selectedService._id %>">
+              <div class="input-field">
+                <label class="active">Service</label>
+                <input type="text" value="<%= selectedService.title %>" disabled>
+                <small class="muted">Price: $<%= selectedService.price || 0 %></small>
+              </div>
+            <% } else { %>
+              <div class="input-field">
+                <label class="active" for="serviceId">Service</label>
+                <select id="serviceId" name="serviceId" required>
+                  <option value="" disabled selected>Select a service…</option>
+                  <% (typeof servicesToBook !== 'undefined' ? servicesToBook : []).forEach(function(s){ %>
+                    <option value="<%= s._id %>">
+                      <%= s.title %> <% if (typeof s.price !== 'undefined') { %> — $<%= s.price %><% } %>
+                    </option>
+                  <% }) %>
+                </select>
+              </div>
             <% } %>
+
+            <!-- Date -->
+            <div class="input-field">
+              <label class="active" for="date">Date</label>
+              <input id="date" type="date" name="date" required min="<%= new Date().toISOString().split('T')[0] %>">
+            </div>
+
+            <!-- Time -->
+            <div class="input-field">
+              <label class="active" for="time">Time</label>
+              <input id="time" type="time" name="time" required>
+            </div>
+
+            <!-- Duration -->
+            <div class="input-field">
+              <label class="active" for="durationHours">Duration (hours)</label>
+              <input id="durationHours" type="number" name="durationHours" min="1" max="12" value="1" required>
+            </div>
+          </div>
+
+          <div class="input-field" style="margin-top:12px;">
+            <label class="active" for="notes">Notes to provider (optional)</label>
+            <textarea id="notes" class="materialize-textarea" name="notes" maxlength="2000"
+              placeholder="Briefly describe what you need…"></textarea>
+          </div>
+
+          <div style="margin-top:10px;">
+            <button type="submit" class="btn indigo">SEND BOOKING REQUEST</button>
+            <span class="booking-help">No charge until accepted.</span>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== Existing Bookings ===== -->
+    <h5 class="bookings-section-title">Your Requests</h5>
+
+    <ul class="collection">
+      <% (bookings || []).forEach(function(b){ 
+           var amProvider = String(user._id) === String(b.provider && b.provider._id);
+           var serviceTitle = b.service ? b.service.title : 'Service';
+           var providerName = (b.provider ? ((b.provider.firstName || '') + ' ' + (b.provider.lastName || '')) : '');
+           var requesterName = (b.requester ? ((b.requester.firstName || '') + ' ' + (b.requester.lastName || '')) : '');
+           var statusClass = (b.status === 'Accepted') ? 'status-accepted' 
+                           : (b.status === 'Declined' || b.status === 'Cancelled') ? 'status-declined' 
+                           : 'status-pending';
+      %>
+        <li class="collection-item">
+          <div>
+            <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+              <strong><%= serviceTitle %></strong>
+              <span class="status-badge <%= statusClass %>"><%= b.status %></span>
+            </div>
+
+            <div class="tiny muted" style="margin-top:4px;">
+              <% if (amProvider) { %>
+                Request from <%= requesterName %>
+              <% } else { %>
+                Provider: <%= providerName %>
+              <% } %>
+              <% if (b.start) { %> • <%= new Date(b.start).toLocaleString() %><% } %>
+            </div>
+
+            <% if (b.notes) { %>
+              <div class="booking-note"><em>Note:</em> <%= b.notes %></div>
+            <% } %>
+          </div>
+
+          <div class="booking-actions">
+            <a href="/services/<%= b.service ? b.service._id : '' %>" class="btn-flat">View</a>
+
+            <% if (amProvider && b.status === "Pending") { %>
+              <form method="POST" action="/bookings/<%= b._id %>/accept" style="display:inline">
+                <button class="btn-small green">Accept</button>
+              </form>
+              <form method="POST" action="/bookings/<%= b._id %>/decline" style="display:inline">
+                <button class="btn-small red">Decline</button>
+              </form>
+            <% } %>
+          </div>
+
+          <div class="quick-message">
+            <form method="POST" action="/bookings/<%= b._id %>/message" style="display:flex; gap:10px; width:100%;">
+              <input name="text" placeholder="Send a quick message…">
+              <button class="btn-small">Send</button>
+            </form>
           </div>
         </li>
       <% }) %>

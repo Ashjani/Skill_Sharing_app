@@ -4,11 +4,13 @@ const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
+const session = require("express-session");
 
 // --- Import Route Files ---
 const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
+const bookingRoutes = require("./routes/bookingRoutes");
 const reviewRoutes = require('./routes/reviewRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
@@ -22,6 +24,7 @@ const app = express();
 // --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -30,6 +33,14 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
+
+//session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || "dev-secret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // secure:true only if HTTPS
+}));
 
 // --- Global Variables for Views ---
 app.use((req, res, next) => {
@@ -46,6 +57,7 @@ app.use('/', pageRoutes);
 // API routes (prefixed with /auth)
 app.use('/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
+app.use("/", bookingRoutes);
 
 
 // --- 404 Handler 
