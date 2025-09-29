@@ -10,8 +10,8 @@ const session = require("express-session");
 const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
-const bookingRoutes = require("./routes/bookingRoutes");
 const reviewRoutes = require('./routes/reviewRoutes'); 
+const bookingRoutes = require('./routes/bookingRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
  
@@ -27,6 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
+
 
 // --- View Engine Setup ---
 app.set('view engine', 'ejs');
@@ -49,7 +50,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cookieParser());
+
 
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)
@@ -57,7 +58,11 @@ app.use('/', pageRoutes);
 // API routes (prefixed with /auth)
 app.use('/auth', userRoutes);
 app.use('/api/services', serviceRoutes);
-app.use("/", bookingRoutes);
+app.use('/api/reviews', reviewRoutes);
+
+// booking routes
+app.use('/api/bookings', bookingRoutes);
+
 
 
 // --- 404 Handler 

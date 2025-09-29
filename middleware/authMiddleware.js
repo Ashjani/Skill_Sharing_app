@@ -93,7 +93,7 @@ const checkReviewOwnership = async (req, res, next) => {
   try {
     const review = await Review.findById(req.params.id);
     if (!review) return res.status(404).json({ message: 'Review not found' });
-    if (review.user.toString() !== req.user.id) {
+    if (!req.user || review.user.toString() !== (req.user._id?.toString() || req.user.id?.toString())) {
       return res.status(403).json({ message: 'Forbidden: You do not own this review' });
     }
     next();

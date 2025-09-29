@@ -11,7 +11,7 @@ export const createReview = asyncHandler(async (req, res) => {
     content,
     rating,
     subject,
-    author: req.user.id // this will assign the logged-in user as the author
+    user: req.user.id 
   });
 
   res.status(201).json(review);

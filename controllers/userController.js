@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Service = require('../models/service'); // Added this line to fetch services
 const bcrypt = require('bcryptjs');
 const tokenUtils = require('../utils/generateToken'); // <-- Import the new function
 
@@ -8,7 +9,7 @@ const tokenUtils = require('../utils/generateToken'); // <-- Import the new func
  * @access  Public
  */
 // helper to set the cookie and decide response type
-function sendAuthSuccess(res, user, redirectTo = '/dashboard') {
+function sendAuthSuccess(res, user, { statusCode = 200, redirectTo = '/dashboard' } = {}) {
   const token = tokenUtils.generateToken(user._id);
 
   // Set httpOnly cookie (1 week)
@@ -24,7 +25,7 @@ function sendAuthSuccess(res, user, redirectTo = '/dashboard') {
   const wantsHTML = res.req.headers.accept?.includes('text/html');
   if (wantsHTML) return res.redirect(redirectTo);
 
-  return res.json({
+  return res.status(statusCode).json({
     _id: user._id,
     username: user.username,
     email: user.email,
@@ -86,7 +87,7 @@ const registerUser = async (req, res) => {
 
     const user = await User.create({ username, email, password: hashedPassword });
 
-    return sendAuthSuccess(res, user);  // <-- sets cookie & redirects/JSON
+    return sendAuthSuccess(res, user, { statusCode: 201 });  // sets cookie & redirects/JSON
   } catch (error) {
     return res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -128,13 +129,45 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    return sendAuthSuccess(res, user);  // <-- sets cookie & redirects/JSON
+    return sendAuthSuccess(res, user);  //sets cookie & redirects/JSON
   } catch (error) {
     return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
+// --- ADDED THIS NEW FUNCTION ---
+const getPublicProfile = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const [user, servicesOffered] = await Promise.all([
+            User.findById(userId).select('-password -email').lean(),
+            Service.find({ user: userId }).lean()
+        ]);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            profile: user,
+            servicesOffered: servicesOffered
+        });
+
+    } catch (error) {
+        console.error('Error fetching public profile:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// module.exports = {
+//   registerUser,
+//   loginUser,
+// };
+
+// --- UPDATED THE EXPORTS TO INCLUDE THE NEW FUNCTION ---
 module.exports = {
   registerUser,
   loginUser,
+  getPublicProfile,
 };

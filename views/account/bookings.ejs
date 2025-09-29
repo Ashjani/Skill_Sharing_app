@@ -16,10 +16,9 @@
         <h5>New Booking</h5>
         <p class="tiny muted">Choose a service, pick a time, and add notes. The provider will be notified.</p>
 
-        <form method="POST" action="/bookings" style="margin:0;">
+        <!-- handled by public/js/bookings.js -->
+        <form id="new-booking-form" style="margin:0;">
           <div class="booking-form-grid">
-
-            <!-- Service (locked if preselected) -->
             <% if (typeof selectedService !== 'undefined' && selectedService) { %>
               <input type="hidden" name="serviceId" value="<%= selectedService._id %>">
               <div class="input-field">
@@ -41,19 +40,16 @@
               </div>
             <% } %>
 
-            <!-- Date -->
             <div class="input-field">
               <label class="active" for="date">Date</label>
               <input id="date" type="date" name="date" required min="<%= new Date().toISOString().split('T')[0] %>">
             </div>
 
-            <!-- Time -->
             <div class="input-field">
               <label class="active" for="time">Time</label>
               <input id="time" type="time" name="time" required>
             </div>
 
-            <!-- Duration -->
             <div class="input-field">
               <label class="active" for="durationHours">Duration (hours)</label>
               <input id="durationHours" type="number" name="durationHours" min="1" max="12" value="1" required>
@@ -112,19 +108,15 @@
             <a href="/services/<%= b.service ? b.service._id : '' %>" class="btn-flat">View</a>
 
             <% if (amProvider && b.status === "Pending") { %>
-              <form method="POST" action="/bookings/<%= b._id %>/accept" style="display:inline">
-                <button class="btn-small green">Accept</button>
-              </form>
-              <form method="POST" action="/bookings/<%= b._id %>/decline" style="display:inline">
-                <button class="btn-small red">Decline</button>
-              </form>
+              <button type="button" class="btn-small green js-accept" data-id="<%= b._id %>">Accept</button>
+              <button type="button" class="btn-small red js-decline" data-id="<%= b._id %>">Decline</button>
             <% } %>
           </div>
 
           <div class="quick-message">
-            <form method="POST" action="/bookings/<%= b._id %>/message" style="display:flex; gap:10px; width:100%;">
+            <form class="js-quick-message" data-id="<%= b._id %>" style="display:flex; gap:10px; width:100%;">
               <input name="text" placeholder="Send a quick message…">
-              <button class="btn-small">Send</button>
+              <button type="submit" class="btn-small">Send</button>
             </form>
           </div>
         </li>
@@ -132,3 +124,6 @@
     </ul>
   </main>
 </section>
+
+<!-- attach booking handlers -->
+<script defer src="/js/bookings.js"></script>

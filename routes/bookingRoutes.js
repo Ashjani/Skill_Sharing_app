@@ -1,23 +1,26 @@
+// routes/bookingRoutes.js
 const express = require("express");
 const router = express.Router();
 const { protect } = require("../middleware/authMiddleware");
 const bookingCtrl = require("../controllers/bookingController");
 
+// CREATE a pending booking request
+// POST /api/bookings/request/:serviceId
+router.post("/request/:serviceId", protect, bookingCtrl.createBooking);
 
-// service details + booking form
-router.get("/services/:id", bookingCtrl.getServiceDetails);
+// LIST current user's bookings
+// GET /api/bookings
+router.get("/", protect, bookingCtrl.listBookings);
 
-// create booking
-router.post("/bookings", protect, bookingCtrl.createBooking);
+// PROVIDER actions
+// POST /api/bookings/:id/accept
+router.post("/:id/accept", protect, bookingCtrl.acceptBooking);
 
-// list bookings
-router.get("/bookings", protect, bookingCtrl.listBookings);
+// POST /api/bookings/:id/decline
+router.post("/:id/decline", protect, bookingCtrl.declineBooking);
 
-// provider actions
-router.post("/bookings/:id/accept", protect, bookingCtrl.acceptBooking);
-router.post("/bookings/:id/decline", protect, bookingCtrl.declineBooking);
-
-// messages
-router.post("/bookings/:id/message", protect, bookingCtrl.postMessage);
+// MESSAGES
+// POST /api/bookings/:id/message
+router.post("/:id/message", protect, bookingCtrl.postMessage);
 
 module.exports = router;

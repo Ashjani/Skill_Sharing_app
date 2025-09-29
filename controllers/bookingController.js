@@ -1,205 +1,215 @@
 const Booking = require("../models/booking");
 const Service = require("../models/service");
+const User = require("../models/user");
 const MessageThread = require("../models/messageThread");
 
-// GET /services/:id  (service details + booking form)
-exports.getServiceDetails = async (req, res) => {
-  try {
-    const service = await Service.findById(req.params.id).populate("user");
-    if (!service)
-      return res.status(404).render("error", { message: "Service not found" });
-    res.render("serviceDetails", {
-      title: service.title,
-      service,
-      user: req.user || null,
-    });
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Failed to load service" });
-  }
-};
-
-// POST /bookings  (requester creates booking)
+/**
+ * @desc    Request to book a service (creates a "Pending" booking)
+ * @route   POST /api/bookings/request/:serviceId
+ */
 exports.createBooking = async (req, res) => {
+  const serviceId = req.params.serviceId; // <-- updated to match route
+  const requesterId = req.user._id;
+
   try {
-    if (!req.user) return res.redirect("/login");
-    const { serviceId, date, time, durationHours = 1, notes } = req.body;
+    const service = await Service.findById(serviceId);
+    if (!service) return res.status(404).json({ message: "Service not found" });
 
-    const service = await Service.findById(serviceId).populate("user");
-    if (!service)
-      return res.status(404).render("error", { message: "Service not found" });
-    if (String(service.user._id) === String(req.user._id))
-      return res
-        .status(400)
-        .render("error", { message: "You cannot book your own service" });
-
-    const start = date && time ? new Date(`${date}T${time}:00.000Z`) : null;
-    const end = start
-      ? new Date(start.getTime() + Number(durationHours) * 3600 * 1000)
-      : null;
-
-    const booking = await Booking.create({
-      service: service._id,
-      requester: req.user._id,
-      provider: service.user._id,
-      start,
-      end,
-      notes,
-      status: "Pending",
-    });
-
-    await MessageThread.create({
-      booking: booking._id,
-      participants: [req.user._id, service.user._id],
-      messages: [
-        {
-          body: "Booking requested. Awaiting provider confirmation.",
-          system: true,
-        },
-        ...(notes ? [{ sender: req.user._id, body: notes }] : []),
-      ],
-    });
-
-    req.session.success = "Booking sent. Awaiting confirmation.";
-    res.redirect("/bookings");
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Could not create booking" });
-  }
-};
-
-// GET /bookings (both roles)
-exports.listBookings = async (req, res) => {
-  try {
-    if (!req.user) return res.redirect("/login");
-
-    const bookings = await Booking.find({
-      $or: [{ requester: req.user._id }, { provider: req.user._id }]
-    })
-      .populate("service requester provider")
-      .sort("-createdAt")
-      .lean();
-
-    // Services you can book
-    const servicesToBook = await Service.find({ user: { $ne: req.user._id } })
-      .select("_id title price")
-      .lean();
-
-    // Pre-selected service if query exists
-    let selectedService = null;
-    if (req.query.service) {
-      selectedService = await Service.findById(req.query.service)
-        .select("_id title price")
-        .lean();
+    if (String(service.user) === String(requesterId)) {
+      return res.status(400).json({ message: "You cannot book your own service." });
     }
 
-    res.render("account/bookings", {
-      title: "Bookings • SkillLink",
-      user: req.user,
-      stats: { completed: 0, credits: 0, memberSince: "" },
-      bookings,
-      servicesToBook,
-      selectedService,  // always defined
-      flash: req.session.success || null
+    if (typeof req.user.credits === "number" &&
+        typeof service.credits === "number" &&
+        req.user.credits < service.credits) {
+      return res.status(400).json({ message: "You do not have enough credits for this service." });
+    }
+
+    const newBooking = await Booking.create({
+      service: serviceId,
+      requester: requesterId,
+      provider: service.user,
+      status: "Pending"
     });
 
-    req.session.success = null;
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Could not load bookings" });
+    return res.status(201).json({
+      message: "Booking request sent successfully!",
+      booking: newBooking,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
+/**
+ * @desc    List current user's bookings (as requester or provider)
+ * @route   GET /api/bookings
+ */
+exports.listBookings = async (req, res) => {
+  try {
+    const uid = req.user._id;
+    const bookings = await Booking.find({
+      $or: [{ requester: uid }, { provider: uid }],
+    })
+      .populate("service")
+      .populate("requester")
+      .populate("provider")
+      .sort({ createdAt: -1 });
 
-// POST /bookings/:id/accept  (provider only)
+    return res.status(200).json({ bookings });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
+
+/**
+ * @desc    Provider accepts a booking
+ * @route   POST /api/bookings/:id/accept
+ */
 exports.acceptBooking = async (req, res) => {
   try {
-    const b = await Booking.findById(req.params.id);
-    if (!b)
-      return res.status(404).render("error", { message: "Booking not found" });
-    if (String(b.provider) !== String(req.user._id))
-      return res.status(403).render("error", { message: "Not authorized" });
-    if (b.status !== "Pending")
-      return res
-        .status(400)
-        .render("error", { message: "Cannot accept this booking" });
+    const booking = await Booking.findById(req.params.id)
+      .populate("requester")
+      .populate("provider")
+      .populate("service");
 
-    b.status = "Accepted";
-    await b.save();
-    await MessageThread.findOneAndUpdate(
-      { booking: b._id },
-      {
-        $push: {
-          messages: {
-            body: "Provider accepted your request. Project is in progress.",
-            system: true,
-          },
-        },
-      }
-    );
-    req.session.success = "Booking accepted.";
-    res.redirect("/bookings");
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Failed to accept booking" });
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    if (String(booking.provider._id) !== String(req.user._id)) {
+      return res.status(403).json({ message: "Forbidden: not the provider" });
+    }
+
+    // Update status
+    booking.status = "Accepted";
+
+    // Deduct credits from requester (if you use credits)
+    if (typeof booking.requester.credits === "number" &&
+        typeof booking.service.credits === "number") {
+      booking.requester.credits -= booking.service.credits;
+      await booking.requester.save();
+    }
+
+    // Create a message thread
+    await MessageThread.create({
+      participants: [booking.requester._id, booking.provider._id],
+      messages: [{
+        sender: booking.provider._id,
+        body: `Hi! I've accepted your request for "${booking.service.title}". Let's arrange a time.`,
+      }],
+    });
+
+    await booking.save();
+    return res.status(200).json({ message: "Booking accepted", booking });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
-// POST /bookings/:id/decline  (provider only)
+/**
+ * @desc    Provider declines a booking
+ * @route   POST /api/bookings/:id/decline
+ */
 exports.declineBooking = async (req, res) => {
   try {
-    const b = await Booking.findById(req.params.id);
-    if (!b)
-      return res.status(404).render("error", { message: "Booking not found" });
-    if (String(b.provider) !== String(req.user._id))
-      return res.status(403).render("error", { message: "Not authorized" });
-    if (b.status !== "Pending")
-      return res
-        .status(400)
-        .render("error", { message: "Cannot decline this booking" });
+    const booking = await Booking.findById(req.params.id).populate("provider");
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    if (String(booking.provider._id) !== String(req.user._id)) {
+      return res.status(403).json({ message: "Forbidden: not the provider" });
+    }
 
-    b.status = "Declined";
-    await b.save();
-    await MessageThread.findOneAndUpdate(
-      { booking: b._id },
-      {
-        $push: {
-          messages: { body: "Provider declined the request.", system: true },
-        },
-      }
-    );
-    req.session.success = "Booking declined.";
-    res.redirect("/bookings");
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Failed to decline booking" });
+    booking.status = "Declined";
+    await booking.save();
+    return res.status(200).json({ message: "Booking declined", booking });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
-// POST /bookings/:id/message  (participants)
+/**
+ * @desc    Post a quick message in a booking's thread (simple stub)
+ * @route   POST /api/bookings/:id/message
+ */
 exports.postMessage = async (req, res) => {
   try {
-    const b = await Booking.findById(req.params.id);
-    if (!b)
-      return res.status(404).render("error", { message: "Booking not found" });
+    const booking = await Booking.findById(req.params.id)
+      .populate("requester")
+      .populate("provider");
 
-    const isParticipant = [String(b.requester), String(b.provider)].includes(
-      String(req.user._id)
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+
+    const isParticipant =
+      String(req.user._id) === String(booking.requester._id) ||
+      String(req.user._id) === String(booking.provider._id);
+
+    if (!isParticipant) {
+      return res.status(403).json({ message: "Forbidden: not a participant" });
+    }
+
+    const text = (req.body && req.body.text || "").trim();
+    if (!text) return res.status(400).json({ message: "Message text required" });
+
+    // Upsert/find a thread and append message (simplified)
+    const thread = await MessageThread.findOneAndUpdate(
+      { participants: { $all: [booking.requester._id, booking.provider._id] } },
+      { $push: { messages: { sender: req.user._id, body: text } } },
+      { upsert: true, new: true }
     );
-    if (!isParticipant)
-      return res.status(403).render("error", { message: "Not authorized" });
 
-    const text = (req.body.text || "").trim();
-    if (!text) return res.redirect("/bookings");
+    return res.status(201).json({ message: "Message sent", threadId: thread._id });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server Error" });
+  }
+};
 
-    await MessageThread.findOneAndUpdate(
-      { booking: b._id },
-      { $push: { messages: { sender: req.user._id, body: text } } }
-    );
+/**
+ * (Optional) If you still need it elsewhere
+ * @desc    Update a booking status generically
+ * @route   PATCH /api/bookings/:id
+ */
+exports.updateBookingStatus = async (req, res) => {
+  const { status } = req.body;
+  const bookingId = req.params.id;
 
-    res.redirect("/bookings");
-  } catch (e) {
-    console.error(e);
-    res.status(500).render("error", { message: "Failed to send message" });
+  try {
+    const booking = await Booking.findById(bookingId)
+      .populate("requester provider service");
+
+    if (!booking) return res.status(404).json({ message: "Booking not found" });
+    if (String(booking.provider._id) !== String(req.user._id)) {
+      return res.status(403).json({ message: "Forbidden: You are not the provider" });
+    }
+
+    booking.status = status;
+
+    if (status === "Accepted") {
+      if (typeof booking.requester.credits === "number" &&
+          typeof booking.service.credits === "number") {
+        booking.requester.credits -= booking.service.credits;
+        await booking.requester.save();
+      }
+      await MessageThread.create({
+        participants: [booking.requester._id, booking.provider._id],
+        messages: [{
+          sender: booking.provider._id,
+          body: `Hi! I've accepted your request for "${booking.service.title}". Let's arrange a time.`,
+        }],
+      });
+    } else if (status === "Completed") {
+      if (typeof booking.provider.credits === "number" &&
+          typeof booking.service.credits === "number") {
+        booking.provider.credits += booking.service.credits;
+        await booking.provider.save();
+      }
+    }
+
+    await booking.save();
+    return res.status(200).json({ message: `Booking updated to ${status}`, booking });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server Error" });
   }
 };
