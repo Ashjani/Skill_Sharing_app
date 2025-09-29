@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
 const cookieParser = require('cookie-parser');
+const session = require("express-session");
 
 // --- Import Route Files ---
 const pageRoutes = require('./routes/pageRoutes');
@@ -23,6 +24,7 @@ const app = express();
 // --- Middleware ---
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -33,6 +35,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(expressLayouts);
 app.set('layout', 'layouts/main');
 
+//session middleware
+app.use(session({
+  secret: process.env.SESSION_SECRET || "dev-secret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // secure:true only if HTTPS
+}));
+
 // --- Global Variables for Views ---
 app.use((req, res, next) => {
   res.locals.user = req.user || null;
@@ -40,7 +50,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cookieParser());
+
 
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)

@@ -75,25 +75,28 @@
   <p class="tiny muted">Showing results for all categories</p>
 
   <div class="services-grid">
-    <% (services || []).forEach(function (s) { %>
+  <% (services || []).forEach(function (s) { %>
     <div class="service-card">
-      <img src="<%= s.img %>" alt="<%= s.title %>" class="service-img" />
+      <!-- ✅ Fallback to Pravatar or Unsplash if no s.img -->
+      <img
+          src="<%= s.img || ('https://placehold.co/600x400?text=' + encodeURIComponent(s.title)) %>"
+          alt="<%= s.title %>"
+          class="service-img"
+        />
+
+
       <div class="service-body">
         <h6 class="service-title"><%= s.title %></h6>
         <p class="muted tiny">By <%= s.name %> – <%= s.role %></p>
         <div class="service-footer">
           <span class="price">From <%= s.price %></span>
-          <a
-            href="/services/<%= s.title.replace(' ', '-') %>"
-
-            class="btn-small indigo"
-            >View Details</a
-          >
+          <a href="/services/<%= s._id %>" class="btn indigo">VIEW DETAILS</a>
         </div>
       </div>
     </div>
-    <% }); %>
-  </div>
+  <% }); %>
+</div>
+
 </section>
 
 <script>
