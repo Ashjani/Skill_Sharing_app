@@ -3,14 +3,17 @@ const express = require('express');
 const dotenv = require('dotenv');
 const expressLayouts = require('express-ejs-layouts');
 const connectDB = require('./config/db');
+const cookieParser = require('cookie-parser');
 
 // --- Import Route Files ---
 const pageRoutes = require('./routes/pageRoutes');
 const userRoutes = require('./routes/userRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const reviewRoutes = require('./routes/reviewRoutes'); 
+const bookingRoutes = require('./routes/bookingRoutes'); 
 const Service = require('./models/service');
 const methodOverride = require('method-override');
+ 
 
 // --- Core Setup ---
 dotenv.config();
@@ -22,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, "public")));
+
 
 // --- View Engine Setup ---
 app.set('view engine', 'ejs');
@@ -35,6 +39,8 @@ app.use((req, res, next) => {
   res.locals.title = 'SkillLink';
   next();
 });
+
+app.use(cookieParser());
 
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)

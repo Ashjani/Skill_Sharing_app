@@ -1,35 +1,142 @@
 <% /* views/account/profile.ejs */ %>
 <section class="account-wrap">
-  <%- include('../partials/accountSidebar', { active: 'profile' }) %>
+  <%- include('../partials/accountSidebar', { active: 'profile', user, stats }) %>
 
   <main class="account-main">
-    <h4 class="no-margin">My Profile</h4>
-    <p class="muted small">Update your personal details and bio</p>
 
-    <form action="/profile" method="POST" class="card">
-      <div class="card-content">
-        <div class="row">
-          <div class="input-field col s12 m6">
-            <input id="firstName" name="firstName" type="text" value="<%= user?.firstName || '' %>" required>
-            <label for="firstName" class="active">First Name</label>
-          </div>
-          <div class="input-field col s12 m6">
-            <input id="lastName" name="lastName" type="text" value="<%= user?.lastName || '' %>" required>
-            <label for="lastName" class="active">Last Name</label>
-          </div>
-          <div class="input-field col s12 m6">
-            <input id="email" name="email" type="email" value="<%= user?.email || '' %>" disabled>
-            <label for="email" class="active">Email</label>
-          </div>
-          <div class="input-field col s12">
-            <textarea id="bio" name="bio" class="materialize-textarea" rows="4"><%= user?.bio || '' %></textarea>
-            <label for="bio" class="active">Bio</label>
+    <!-- Page heading -->
+    <div class="account-top">
+      <h5 class="no-margin">User Profile</h5>
+      <p class="muted small">Manage your profile information</p>
+    </div>
+
+    <!-- Profile Header -->
+<div class="card profile-header">
+  <div class="profile-info">
+    <img
+        src="https://i.pravatar.cc/120?img=24"
+        alt="User"
+        class="circle avatar"
+      />
+    <div class="profile-text">
+      <h6 class="profile-name"><%= user?.firstName %> <%= user?.lastName %></h6>
+      <p class="muted"><%= user?.title || 'Graphic Designer & Yoga Instructor' %></p>
+      <p class="muted small"><%= user?.location || 'San Francisco, CA' %></p>
+    </div>
+  </div>
+</div>
+
+
+    <div class="row">
+      <!-- Personal Details (left) -->
+      <div class="col s12 l8">
+        <div class="card z-depth-0 profile-card">
+          <div class="card-content">
+            <div class="profile-card-title">Personal Details</div>
+
+            <form action="/profile" method="POST" class="profile-form">
+              <div class="grid-2">
+                <div class="input-field">
+                  <input id="firstName" name="firstName" type="text" value="<%= user?.firstName || '' %>" required>
+                  <label for="firstName" class="active">First Name</label>
+                </div>
+
+                <div class="input-field">
+                  <input id="lastName" name="lastName" type="text" value="<%= user?.lastName || '' %>" required>
+                  <label for="lastName" class="active">Last Name</label>
+                </div>
+
+                <div class="input-field">
+                  <input id="email" name="email" type="email" value="<%= user?.email || '' %>" disabled>
+                  <label for="email" class="active">Email</label>
+                </div>
+
+                <div class="input-field">
+                  <input id="phone" name="phone" type="text" value="<%= user?.phone || '' %>">
+                  <label for="phone" class="active">Phone</label>
+                </div>
+
+                <div class="input-field">
+                  <input id="dob" name="dob" type="text" value="<%= user?.dob || '' %>">
+                  <label for="dob" class="active">Date of Birth</label>
+                </div>
+
+                <div class="input-field">
+                  <input id="languages" name="languages" type="text" value="<%= user?.languages || '' %>">
+                  <label for="languages" class="active">Languages</label>
+                </div>
+                 <div class="input-field">
+                  <input id="title" name="title" type="text" value="<%= user.title || '' %>">
+                  <label for="title" class="<%= user.title ? 'active' : '' %>">Professional Title</label>
+                </div>
+
+                <div class="input-field grid-span-2">
+                  <textarea id="bio" name="bio" class="materialize-textarea" rows="3"><%= user?.bio || '' %></textarea>
+                  <label for="bio" class="active">Bio</label>
+                </div>
+              </div>
+
+              <div class="right-align form-actions">
+                <button type="submit" class="btn indigo waves-effect waves-light">Save Changes</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <div class="card-action right-align">
-        <button type="submit" class="btn indigo waves-effect waves-light">Save Changes</button>
+
+      <!-- Credits & Points (right) -->
+      <div class="col s12 l4">
+        <div class="card z-depth-0 profile-card">
+          <div class="card-content">
+            <div class="profile-card-title">Credits & Points</div>
+
+            <div class="points-bar">
+              <div class="points-number"><%= user?.points || 2847 %></div>
+              <div class="points-caption tiny">Total Points Earned</div>
+            </div>
+
+            <div class="mini-stats">
+              <div class="mini">
+                <div class="mini-num green-text"><%= user?.servicesGiven || 156 %></div>
+                <div class="mini-cap tiny muted">Services Given</div>
+              </div>
+              <div class="mini">
+                <div class="mini-num blue-text"><%= user?.servicesReceived || 89 %></div>
+                <div class="mini-cap tiny muted">Services Received</div>
+              </div>
+            </div>
+
+            <ul class="kv">
+              <li><span>Available Credits</span><strong><%= user?.availableCredits || 45 %></strong></li>
+              <li><span>Credits Used</span><strong><%= user?.creditsUsed || 23 %></strong></li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </form>
+    </div>
+
+    <!-- Contact & Address -->
+    <div class="card z-depth-0 profile-card">
+      <div class="card-content">
+        <div class="profile-card-title">Contact & Address Information</div>
+        <div class="grid-2 gap-18">
+          <div>
+            <div class="kv-row"><span class="kv-key">Primary Email</span><span class="kv-val"><%= user?.email || 'sarah.johnson@email.com' %></span></div>
+            <div class="kv-row"><span class="kv-key">Secondary Email</span><span class="kv-val"><%= user?.secondaryEmail || 's.johnson.work@gmail.com' %></span></div>
+            <div class="kv-row"><span class="kv-key">Mobile Phone</span><span class="kv-val"><%= user?.phone || '+1 (555) 123-4567' %></span></div>
+            <div class="kv-row"><span class="kv-key">LinkedIn</span><span class="kv-val">linkedin.com/in/sarah-johnson-ux</span></div>
+          </div>
+
+          <div>
+            <div class="kv-row"><span class="kv-key">Street Address</span><span class="kv-val">1234 Design Avenue, Suite 567</span></div>
+            <div class="kv-row"><span class="kv-key">City</span><span class="kv-val">San Francisco</span></div>
+            <div class="kv-row"><span class="kv-key">State</span><span class="kv-val">California</span></div>
+            <div class="kv-row"><span class="kv-key">ZIP Code</span><span class="kv-val">94102</span></div>
+            <div class="kv-row"><span class="kv-key">Country</span><span class="kv-val">United States</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </section>

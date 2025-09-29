@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Service = require('../models/service'); // Added this line to fetch services
 const bcrypt = require('bcryptjs');
 const tokenUtils = require('../utils/generateToken'); // <-- Import the new function
 
@@ -7,43 +8,88 @@ const tokenUtils = require('../utils/generateToken'); // <-- Import the new func
  * @route   POST /api/users/register
  * @access  Public
  */
+// helper to set the cookie and decide response type
+function sendAuthSuccess(res, user, { statusCode = 200, redirectTo = '/dashboard' } = {}) {
+  const token = tokenUtils.generateToken(user._id);
+
+  // Set httpOnly cookie (1 week)
+  res.cookie('token', token, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  // If this is a browser form submission, redirect to dashboard.
+  // If it’s a fetch/AJAX client, return JSON.
+  const wantsHTML = res.req.headers.accept?.includes('text/html');
+  if (wantsHTML) return res.redirect(redirectTo);
+
+  return res.status(statusCode).json({
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    token,
+  });
+}
+
+
+// const registerUser = async (req, res) => {
+//   try {
+//     // 1. Get firstName, lastName, email, and password from the request body
+//     const { firstName, lastName, email, password } = req.body;
+
+//     const userExists = await User.findOne({ email });
+//     if (userExists) {
+//       return res.status(400).json({ message: 'User with this email already exists' });
+//     }
+
+//     // 2. Create a username by combining the first and last name
+//     const username = `${firstName} ${lastName}`;
+
+//     const salt = await bcrypt.genSalt(10);
+//     const hashedPassword = await bcrypt.hash(password, salt);
+
+//     // 3. Save the combined username to the database
+//     const user = new User({
+//       username, // Use the combined username
+//       email,
+//       password: hashedPassword,
+//     });
+//     await user.save();
+
+//     // If user was created successfully, generate a token
+//     if (user) {
+//       res.status(201).json({
+//         _id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         token: tokenUtils.generateToken(user._id), // Generate and send token
+//       });
+//     } else {
+//       res.status(400).json({ message: 'Invalid user data' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error', error: error.message });
+//   }
+// };
+
 const registerUser = async (req, res) => {
   try {
-    // 1. Get firstName, lastName, email, and password from the request body
     const { firstName, lastName, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res.status(400).json({ message: 'User with this email already exists' });
-    }
+    if (userExists) return res.status(400).json({ message: 'User with this email already exists' });
 
-    // 2. Create a username by combining the first and last name
     const username = `${firstName} ${lastName}`;
-
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 3. Save the combined username to the database
-    const user = new User({
-      username, // Use the combined username
-      email,
-      password: hashedPassword,
-    });
-    await user.save();
+    const user = await User.create({ username, email, password: hashedPassword });
 
-    // If user was created successfully, generate a token
-    if (user) {
-      res.status(201).json({
-        _id: user._id,
-        username: user.username,
-        email: user.email,
-        token: tokenUtils.generateToken(user._id), // Generate and send token
-      });
-    } else {
-      res.status(400).json({ message: 'Invalid user data' });
-    }
+    return sendAuthSuccess(res, user, { statusCode: 201 });  // sets cookie & redirects/JSON
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 // //cookie based login
@@ -79,12 +125,38 @@ const registerUser = async (req, res) => {
  * @route   POST /api/users/login
  * @access  Public
  */
+// const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const user = await User.findOne({ email });
+
+//     // Check if user exists AND if passwords match
+//     if (user && (await bcrypt.compare(password, user.password))) {
+//       res.json({
+//         _id: user._id,
+//         username: user.username,
+//         email: user.email,
+//         token: tokenUtils.generateToken(user._id), //Generate and send token
+//       });
+//     } else {
+//       res.status(401).json({ message: 'Invalid credentials' }); // Use 401 for unauthorized
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: 'Server error', error: error.message });
+//   }
+// };
+
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
 
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    return sendAuthSuccess(res, user);  //sets cookie & redirects/JSON
     //Check if user exists AND if passwords match
     if (user && (await bcrypt.compare(password, user.password))) {
        res.json({          
@@ -97,11 +169,43 @@ const loginUser = async (req, res) => {
       res.status(401).json({ message: 'Invalid credentials' }); // Use 401 for unauthorized
     }
   } catch (error) {
-    res.status(500).json({ message: 'Server error', error: error.message });
+    return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
 
+// --- ADDED THIS NEW FUNCTION ---
+const getPublicProfile = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const [user, servicesOffered] = await Promise.all([
+            User.findById(userId).select('-password -email').lean(),
+            Service.find({ user: userId }).lean()
+        ]);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).json({
+            profile: user,
+            servicesOffered: servicesOffered
+        });
+
+    } catch (error) {
+        console.error('Error fetching public profile:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+};
+
+// module.exports = {
+//   registerUser,
+//   loginUser,
+// };
+
+// --- UPDATED THE EXPORTS TO INCLUDE THE NEW FUNCTION ---
 module.exports = {
   registerUser,
   loginUser,
+  getPublicProfile,
 };
