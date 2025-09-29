@@ -2,7 +2,6 @@ const request = require('supertest');
 const { expect } = require('chai');
 const sinon = require('sinon');
 const mongoose = require('mongoose');
-
 const { app, server } = require('../server');
 const User = require('../models/user');
 const tokenUtils = require('../utils/generateToken');
@@ -21,8 +20,14 @@ describe('Authentication Controller (Mocha/Chai)', () => {
     it('should register a new user successfully and return a token', async () => {
       const mockUserData = { firstName: 'test', lastName: 'user', email: 'test@example.com', password: 'password123' };
 
+      const mockSavedUser = {
+        _id: 'mock_user_id_123',
+        ...mockUserData
+      };
+
       sinon.stub(User, 'findOne').resolves(null);
-      sinon.stub(User.prototype, 'save').resolves();
+      // This is the corrected line: we now stub User.create directly.
+      sinon.stub(User, 'create').resolves(mockSavedUser);
       sinon.stub(tokenUtils, 'generateToken').returns('mock_jwt_token');
 
       const response = await request(app)
@@ -36,7 +41,6 @@ describe('Authentication Controller (Mocha/Chai)', () => {
 
     it('should return a 400 error if the user already exists', async () => {
       const mockUserData = { firstName: 'test', lastName: 'user', email: 'test@example.com', password: 'password123' };
-
       sinon.stub(User, 'findOne').resolves({ email: 'test@example.com' });
 
       const response = await request(app)
