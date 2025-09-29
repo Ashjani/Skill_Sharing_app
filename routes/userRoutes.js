@@ -3,7 +3,7 @@ const router = express.Router();
 const Service = require("../models/service");
 const Booking = require("../models/booking");
 const MessageThread = require("../models/messageThread");
-const { registerUser, loginUser } = require("../controllers/userController");
+const { registerUser, loginUser, getPublicProfile } = require("../controllers/userController");
 const { protect } = require("../middleware/authMiddleware"); // Middleware to protect routes
 
 // @desc    Render the registration page
@@ -47,38 +47,42 @@ router.post("/profile", protect, async (req, res) => {
   }
 });
 
+// ADD THIS NEW ROUTE for public profiles
+router.get("/:id/profile", getPublicProfile);
+
+
 // // --- LOGOUT (works whether you use cookies or localStorage) ---
 // router.get("/logout", (req, res) => {
-//   // if you ever switch to cookie-based auth, this clears it:
-//   res.clearCookie("token"); // harmless if you don't use cookies
-//   res.set("Cache-Control", "no-store");
+//   // if you ever switch to cookie-based auth, this clears it:
+//   res.clearCookie("token"); // harmless if you don't use cookies
+//   res.set("Cache-Control", "no-store");
 
-//   // send a tiny page that clears storage and bounces home
-//   res.send(`<!doctype html>
+//   // send a tiny page that clears storage and bounces home
+//   res.send(`<!doctype html>
 // <html><head><meta charset="utf-8"></head>
 // <body>
 // <script>
-//   try {
-//     localStorage.removeItem('token');
-//     sessionStorage.removeItem('token');
-//   } catch(e) {}
-//   // also nuke any stray cookie named "token"
-//   document.cookie = 'token=; Max-Age=0; path=/';
-//   window.location.href = '/';
+//   try {
+//     localStorage.removeItem('token');
+//     sessionStorage.removeItem('token');
+//   } catch(e) {}
+//   // also nuke any stray cookie named "token"
+//   document.cookie = 'token=; Max-Age=0; path=/';
+//   window.location.href = '/';
 // </script>
 // </body></html>`);
 // });
 
 // Logout → clear cookie then redirect home
 // router.get('/logout', (req, res) => {
-//   res.clearCookie('token'); // clear JWT cookie
-//   res.redirect('/');        // send user back home
+//   res.clearCookie('token'); // clear JWT cookie
+//   res.redirect('/');        // send user back home
 // });
 
 // // Logout → clear cookie then redirect home
 // router.get('/logout', (req, res) => {
-//   res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
-//   res.redirect('/');
+//   res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
+//   res.redirect('/');
 // });
 
 // Skills
