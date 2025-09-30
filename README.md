@@ -259,7 +259,7 @@ We follow a standard format for commit messages:
 
 * **Problem:** You run `mongod` and get a "command not recognized" error.
 * **Reason:** MongoDB is installed, but its `bin` directory is not in your system’s PATH variable.
-* **Solution:** Locate your MongoDB `bin` directory (e.g., `C:\Program Files\MongoDB\Server\7.0\bin`) and add it to your system’s environment variables.
+* **Solution:** Locate your MongoDB `bin` directory (like: `C:\Program Files\MongoDB\Server\7.0\bin`) and add it to your system’s environment variables.
 
 ### `git pull` Fails with "no tracking information"
 
