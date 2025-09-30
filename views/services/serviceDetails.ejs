@@ -1,0 +1,99 @@
+<section class="container service-details">
+  <div class="sd-hero card z-depth-0">
+    <div class="sd-hero-main">
+      <div>
+        <h3 class="sd-title"><%= service.title %></h3>
+        <% if (service.category) { %>
+          <div class="sd-chips">
+            <span class="chip"><%= service.category %></span>
+            <span class="chip light">Service</span>
+          </div>
+        <% } %>
+      </div>
+      <div class="sd-price-pill">
+        <div class="sd-price-label">From</div>
+        <div class="sd-price-amount">$<%= service.price || 0 %></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row sd-grid">
+    <div class="col s12 m7 l8">
+      <!-- <div class="card z-depth-1 sd-cover">
+        <img
+          src="<%= service.imageUrl || ('https://source.unsplash.com/960x540/?' + encodeURIComponent(service.category || service.title || 'workspace,tools,abstract')) %>"
+          alt="<%= service.title %>">
+      </div> -->
+
+      <div class="card z-depth-1">
+        <div class="card-content">
+          <h6 class="section-label">What you’ll get</h6>
+          <ul class="sd-list">
+            <li><i class="material-icons">check_circle</i> Tailored help for your needs</li>
+            <li><i class="material-icons">check_circle</i> Clear deliverables & timeline</li>
+            <li><i class="material-icons">check_circle</i> One round of revisions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card z-depth-1">
+        <div class="card-content">
+          <h6 class="section-label">About this service</h6>
+          <p><%= service.description || 'The provider has not added a full description yet.' %></p>
+        </div>
+      </div>
+
+      <div class="card z-depth-1">
+        <div class="card-content sd-provider">
+          <div class="sd-provider-left">
+            <img class="circle avatar"
+                 src="<%= (service.user && service.user.avatar) ? service.user.avatar : ('https://i.pravatar.cc/120?u=' + (service.user ? service.user._id : 'provider')) %>"
+                 alt="Provider">
+            <div>
+              <div class="name">
+                <%= service.user ? ((service.user.firstName || '') + ' ' + (service.user.lastName || '')) : 'Provider' %>
+              </div>
+              <div class="muted"><%= (service.user && service.user.title) ? service.user.title : 'Skill Provider' %></div>
+              <div class="tiny muted"><%= (service.user && service.user.email) ? service.user.email : '' %></div>
+            </div>
+          </div>
+          <div class="sd-provider-right">
+            <a href="/messages" class="btn-flat">Message</a>
+          </div>
+        </div>
+      </div>
+
+      <ul class="collapsible sd-faq">
+        <li>
+          <div class="collapsible-header"><i class="material-icons">help_outline</i>How does booking work?</div>
+          <div class="collapsible-body"><span>Request a booking with your preferred date/time. The provider can accept, decline, or message you to adjust details.</span></div>
+        </li>
+        <li>
+          <div class="collapsible-header"><i class="material-icons">schedule</i>Can I reschedule?</div>
+          <div class="collapsible-body"><span>Yes—use the message box after booking to discuss a new time.</span></div>
+        </li>
+      </ul>
+    </div>
+
+<div class="col s12 m5 l4">
+  <div class="card z-depth-1 sd-sticky">
+    <div class="card-content">
+      <h5>Request a Booking</h5>
+
+      <!-- Direct link to bookings -->
+      <a href="/bookings" class="btn indigo btn-block">Go to Bookings</a>
+      <p class="tiny muted sd-safe">Manage your bookings and requests.</p>
+    </div>
+  </div>
+
+  <div class="card z-depth-1">
+    <div class="card-content sd-facts">
+      <div><i class="material-icons">verified_user</i> Secure requests</div>
+      <div><i class="material-icons">event_available</i> Flexible scheduling</div>
+      <div><i class="material-icons">chat_bubble_outline</i> Built-in messaging</div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</section>

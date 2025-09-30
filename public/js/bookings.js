@@ -1,100 +1,124 @@
-// public/js/bookings.js
 (function () {
+  function toast(html, ms = 2000) {
+    if (window.M && M.toast) M.toast({ html, displayLength: ms });
+    else alert(html);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    if (window.M && M.FormSelect) {
+      const elems = document.querySelectorAll("select");
+      M.FormSelect.init(elems);
+    }
+  });
+
   function token() {
-    return localStorage.getItem('token');
+    return localStorage.getItem("token");
   }
   function authHeaders() {
-    return {
-      'Authorization': `Bearer ${token()}`,
-      'Content-Type': 'application/json'
-    };
+    const h = { "Content-Type": "application/json" };
+    const t = token();
+    if (t) h["Authorization"] = `Bearer ${t}`; // optional, cookie will still work
+    return h;
   }
   function requireLogin() {
-    M && M.toast ? M.toast({ html: 'Please log in to continue', displayLength: 2500 }) : alert('Please log in to continue');
-    window.location.href = '/login?next=' + encodeURIComponent(window.location.pathname);
+    toast("Please log in to continue", 2500);
+    window.location.href =
+      "/login?next=" + encodeURIComponent(window.location.pathname);
   }
-  function ok(res) {
-    if (res.status === 401) requireLogin();
-    if (!res.ok) throw new Error('Request failed');
-    return res.json().catch(() => ({}));
+  async function ok(res) {
+    if (res.status === 401) {
+      requireLogin();
+      throw new Error("Unauthorized");
+    }
+    if (!res.ok) throw new Error("Request failed");
+    try {
+      return await res.json();
+    } catch {
+      return {};
+    }
   }
 
   // New booking form -> POST /api/bookings/request/:serviceId
-  const newForm = document.getElementById('new-booking-form');
+  const newForm = document.getElementById("new-booking-form");
   if (newForm) {
-    newForm.addEventListener('submit', async (e) => {
+    newForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const t = token(); if (!t) return requireLogin();
 
-      // serviceId can come from hidden input OR select
       const sel = newForm.querySelector('[name="serviceId"]');
       const serviceId = sel && sel.value ? sel.value : null;
-      if (!serviceId) return M.toast({ html: 'Please select a service', displayLength: 2500 });
+      if (!serviceId) return toast("Please select a service", 2500);
 
       try {
-        const res = await fetch(`/api/bookings/request/${serviceId}`, {
-          method: 'POST',
-          headers: authHeaders()
-          // body not required by your API; date/time/notes are currently cosmetic
+        await fetch(`/api/bookings/request/${serviceId}`, {
+          method: "POST",
+          headers: authHeaders(), // sends Bearer if present
+          credentials: "same-origin", // send httpOnly cookie
+          // body not required by your API yet
         }).then(ok);
 
-        M.toast({ html: 'Booking request sent!', displayLength: 2000 });
-        // Reload or navigate to bookings list
+        toast("Booking request sent!", 2000);
         window.location.reload();
       } catch (err) {
-        M.toast({ html: 'Booking failed', displayLength: 3000 });
         console.error(err);
+        toast("Booking failed", 3000);
       }
     });
   }
 
   // Accept / Decline buttons
-  document.querySelectorAll('.js-accept').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const t = token(); if (!t) return requireLogin();
+  document.querySelectorAll(".js-accept").forEach((btn) => {
+    btn.addEventListener("click", async () => {
       const id = btn.dataset.id;
       try {
-        await fetch(`/api/bookings/${id}/accept`, { method: 'POST', headers: authHeaders() }).then(ok);
-        M.toast({ html: 'Accepted', displayLength: 1500 });
+        await fetch(`/api/bookings/${id}/accept`, {
+          method: "POST",
+          headers: authHeaders(),
+          credentials: "same-origin",
+        }).then(ok);
+        toast("Accepted", 1500);
         window.location.reload();
-      } catch (e) {
-        M.toast({ html: 'Failed to accept', displayLength: 2500 });
+      } catch {
+        toast("Failed to accept", 2500);
       }
     });
   });
 
-  document.querySelectorAll('.js-decline').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const t = token(); if (!t) return requireLogin();
+  document.querySelectorAll(".js-decline").forEach((btn) => {
+    btn.addEventListener("click", async () => {
       const id = btn.dataset.id;
       try {
-        await fetch(`/api/bookings/${id}/decline`, { method: 'POST', headers: authHeaders() }).then(ok);
-        M.toast({ html: 'Declined', displayLength: 1500 });
+        await fetch(`/api/bookings/${id}/decline`, {
+          method: "POST",
+          headers: authHeaders(),
+          credentials: "same-origin",
+        }).then(ok);
+        toast("Declined", 1500);
         window.location.reload();
-      } catch (e) {
-        M.toast({ html: 'Failed to decline', displayLength: 2500 });
+      } catch {
+        toast("Failed to decline", 2500);
       }
     });
   });
 
   // Quick message form -> POST /api/bookings/:id/message
-  document.querySelectorAll('.js-quick-message').forEach(form => {
-    form.addEventListener('submit', async (e) => {
+  document.querySelectorAll(".js-quick-message").forEach((form) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const t = token(); if (!t) return requireLogin();
       const id = form.dataset.id;
-      const text = (new FormData(form).get('text') || '').trim();
+      const text = (new FormData(form).get("text") || "").trim();
       if (!text) return;
+
       try {
         await fetch(`/api/bookings/${id}/message`, {
-          method: 'POST',
+          method: "POST",
           headers: authHeaders(),
-          body: JSON.stringify({ text })
+          credentials: "same-origin",
+          body: JSON.stringify({ text }),
         }).then(ok);
-        M.toast({ html: 'Message sent', displayLength: 1500 });
+        toast("Message sent", 1500);
         form.reset();
-      } catch (e2) {
-        M.toast({ html: 'Failed to send message', displayLength: 2500 });
+      } catch {
+        toast("Failed to send message", 2500);
       }
     });
   });
