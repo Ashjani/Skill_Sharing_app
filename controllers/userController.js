@@ -92,6 +92,33 @@ const registerUser = async (req, res) => {
     return res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
+// //cookie based login
+// const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const user = await User.findOne({ email });
+
+//     // Check if user exists and password matches
+//     if (user && (await bcrypt.compare(password, user.password))) {
+//       const token = tokenUtils.generateToken(user._id);
+
+//       // Save JWT in an HttpOnly cookie
+//       res.cookie("token", token, {
+//         httpOnly: true,        // not accessible to JS
+//         secure: false,         // set to true in production with HTTPS
+//         maxAge: 24 * 60 * 60 * 1000 // 1 day
+//       });
+
+//       // Redirect user to My Services page
+//       res.redirect("/my-services");
+//     } else {
+//       res.status(401).json({ message: "Invalid credentials" });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
 
 /**
  * @desc    Authenticate a user & get token
@@ -130,6 +157,17 @@ const loginUser = async (req, res) => {
     }
 
     return sendAuthSuccess(res, user);  //sets cookie & redirects/JSON
+    //Check if user exists AND if passwords match
+    if (user && (await bcrypt.compare(password, user.password))) {
+       res.json({          
+        _id: user._id,
+        username: user.username,
+        email: user.email,
+        token: tokenUtils.generateToken(user._id), //Generate and send token
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid credentials' }); // Use 401 for unauthorized
+    }
   } catch (error) {
     return res.status(500).json({ message: 'Server error', error: error.message });
   }
