@@ -134,7 +134,7 @@ Our application's data is organized into several interconnected Mongoose models.
 ### ERD (Entity-Relationship Diagram)
 
 ![ERD Placeholder](assets/ERD.png)
-
+![ERD Placeholder2](assets/servicesarchituecture.png)
 
 ### User Collection
 
