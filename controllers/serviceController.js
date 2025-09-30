@@ -7,11 +7,15 @@ exports.createService = async (req, res) => {
   try {
     const service = new Service({
       ...req.body,
+
       user: req.user?.id, // tolerate unauth in dev
+
     });
     await service.save();
+
     // minimal UX: go to details
     return res.redirect(`/services/${service._id}`);
+
   } catch (err) {
     console.error(err);
     return res.status(400).render("errors/404", { message: err.message });
@@ -21,6 +25,7 @@ exports.createService = async (req, res) => {
 // List (render page to match your index.ejs)
 exports.getServices = async (req, res) => {
   try {
+
     const services = await Service.find()
       .populate("user", "firstName lastName")
       .lean();
@@ -85,6 +90,7 @@ exports.updateService = async (req, res) => {
     return res.json(updated);
   } catch (err) {
     return res.status(400).json({ error: err.message });
+
   }
 };
 
@@ -108,6 +114,8 @@ exports.deleteService = async (req, res) => {
 };
 
 // (You can keep your ratings methods as they were.)
+
+
 
 // Get ratings for a service (with rater details)
 exports.getRatingsForService = async (req, res) => {

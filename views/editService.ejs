@@ -2,30 +2,33 @@
 <html>
 <head>
   <title>Edit Service</title>
+  <link rel="stylesheet" href="/css/service-form.css">
 </head>
 <body>
-  <h1>Edit Service</h1>
-  <form action="/services/<%= service._id %>?_method=PUT" method="POST">
-    <label>Title:</label>
-    <input type="text" name="title" value="<%= service.title %>" required /><br/>
+  <div class="create-service-wrap">
+    <h1>Edit Service</h1>
 
-    <label>Description:</label>
-    <textarea name="description" required><%= service.description %></textarea><br/>
+    <form action="/services/<%= service._id %>" method="POST">
+      
+      <label>Title:</label>
+      <input type="text" name="title" value="<%= service.title %>" required />
 
-    <label>Category:</label>
-    <input type="text" name="category" value="<%= service.category %>" /><br/>
+      <label>Description:</label>
+      <textarea name="description" required><%= service.description %></textarea>
 
-    <label>Credits per session:</label><br> 
-    <input type="number" name="credits" value="<%= service.credits %>" min="1" /><br/>
+      <label>Category:</label>
+      <input type="text" name="category" value="<%= service.category %>" required />
 
-    <label>Status:</label>
-    <select name="status">
-      <option value="available" <%= service.status === 'available' ? 'selected' : '' %>>Available</option>
-      <option value="in_progress" <%= service.status === 'in_progress' ? 'selected' : '' %>>In Progress</option>
-      <option value="completed" <%= service.status === 'completed' ? 'selected' : '' %>>Completed</option>
-    </select><br/>
+      <label>Status:</label>
+      <select name="status">
+        <option value="available" <%= service.status === 'available' ? 'selected' : '' %>>Available</option>
+        <option value="in_progress" <%= service.status === 'in_progress' ? 'selected' : '' %>>In Progress</option>
+        <option value="completed" <%= service.status === 'completed' ? 'selected' : '' %>>Completed</option>
+      </select>
 
-    <button type="submit">Update Service</button>
-  </form>
+      <button type="submit">Update Service</button>
+    </form>
+  </div>
 </body>
 </html>
+

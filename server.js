@@ -68,10 +68,17 @@ app.use("/api/bookings", bookingRoutes);
 app.get("/services/:id", serviceController.getServiceById);
 app.use("/services", serviceRoutes);
 
-// 3. Page routes (catch-all last)
-app.use("/", pageRoutes);
 
-// --- 404 Handler (LAST) ---
+// --- ROUTES ---
+// Page-rendering routes (handled by pageRoutes.js)
+app.use('/', pageRoutes);
+// API routes (prefixed with /auth)
+app.use('/auth', userRoutes);
+app.use('/services', serviceRoutes);
+//app.use('/api/services', serviceRoutes);
+
+// --- 404 Handler 
+
 app.use((_req, res) => {
   res.status(404).send("Error 404: Page Not Found");
 });
