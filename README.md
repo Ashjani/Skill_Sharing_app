@@ -127,6 +127,43 @@ This summary outlines the step-by-step process of how data moves through the app
 
 ---
 
+## 📖 Booking System (New Feature)
+
+We’ve added full support for **Accepting / Declining booking requests** for service providers.
+
+### 🔹 How It Works
+- **Requesters** can create a booking by selecting a service and submitting the booking form.
+- **Providers** will now see **Accept** and **Decline** buttons next to pending bookings on the **Bookings** page.
+- Once a provider takes action:
+  - The booking status is updated in the database (`Accepted` or `Declined`).
+  - The UI updates with a status badge.
+  - Toast notifications confirm the action.
+
+### 🔹 Frontend Changes
+- Updated `views/account/bookings.ejs` to render **Accept** / **Decline** buttons when:
+  - The logged-in user is the provider, and
+  - The booking is still `Pending`.
+
+- Added client-side logic in `public/js/bookings.js` to:
+  - Handle button clicks.
+  - Send POST requests to `/api/bookings/:id/accept` or `/api/bookings/:id/decline`.
+  - Show toast notifications and refresh the booking list.
+
+### 🔹 Backend Changes
+- Added new routes to handle booking acceptance/decline:
+  - `POST /api/bookings/:id/accept`
+  - `POST /api/bookings/:id/decline`
+
+- Only the **provider** of a booking can update its status.
+
+### 🔹 Example Workflow
+1. **Requester** books a service → Status: `Pending`.
+2. **Provider** logs in and sees request.
+3. Provider clicks:
+   - ✅ **Accept** → Booking moves to `Accepted`.
+   - ❌ **Decline** → Booking moves to `Declined`.
+
+
 ## Database Schema
 
 Our application's data is organized into several interconnected Mongoose models.
