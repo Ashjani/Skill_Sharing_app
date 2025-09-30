@@ -1,9 +1,8 @@
 <% /* views/account/dashboard.ejs */ %>
 <section class="account-wrap">
+  <!-- Sidebar links + quick stats -->
+  <%- include('../partials/accountSidebar', { active: 'dashboard', stats }) %>
 
-    <!-- Sidebar links + quick stats -->
-    <%- include('../partials/accountSidebar', { active: 'dashboard', stats }) %>
-  
   <main class="account-main">
     <!-- Top bar -->
     <div class="account-top row">
@@ -53,114 +52,114 @@
     </div>
 
     <!-- My Skills -->
-  <div class="row eq">
-    <div class="row">
-      <div class="col s12 m6">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">My Skills</span>
-            <ul class="collection">
-              <li class="collection-item">
-                <span
-                  class="badge new"
-                  data-badge-caption="12 requests this month"
-                ></span>
-                <strong>Graphic Design</strong>
-                <span class="chip">Creative</span>
-                <div class="tiny grey-text">
-                  Branding, digital illustrations for businesses
-                </div>
-                <div class="right-align">
-                  <a href="/skills" class="tiny">Edit</a>
-                </div>
-              </li>
-              <li class="collection-item">
-                <span
-                  class="badge"
-                  data-badge-caption="8 requests this month"
-                ></span>
-                <strong>Yoga Instruction</strong>
-                <span class="chip">Wellness</span>
-                <div class="tiny grey-text">
-                  Beginner to advanced sessions, meditation, mindfulness
-                </div>
-                <div class="right-align">
-                  <a href="/skills" class="tiny">Edit</a>
-                </div>
-              </li>
-            </ul>
+    <div class="row eq">
+      <div class="row">
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">My Skills</span>
+              <ul class="collection">
+                <li class="collection-item">
+                  <span
+                    class="badge new"
+                    data-badge-caption="12 requests this month"
+                  ></span>
+                  <strong>Graphic Design</strong>
+                  <span class="chip">Creative</span>
+                  <div class="tiny grey-text">
+                    Branding, digital illustrations for businesses
+                  </div>
+                  <div class="right-align">
+                    <a href="/skills" class="tiny">Edit</a>
+                  </div>
+                </li>
+                <li class="collection-item">
+                  <span
+                    class="badge"
+                    data-badge-caption="8 requests this month"
+                  ></span>
+                  <strong>Yoga Instruction</strong>
+                  <span class="chip">Wellness</span>
+                  <div class="tiny grey-text">
+                    Beginner to advanced sessions, meditation, mindfulness
+                  </div>
+                  <div class="right-align">
+                    <a href="/skills" class="tiny">Edit</a>
+                  </div>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Recent Activity (+ rating widget) -->
-      <div class="col s12 m6">
-        <div class="card">
-          <div class="card-content">
-            <span class="card-title">Recent Activity</span>
+        <!-- Recent Activity (+ rating widget) -->
+        <div class="col s12 m6">
+          <div class="card">
+            <div class="card-content">
+              <span class="card-title">Recent Activity</span>
 
-            <!-- Activity item with rating -->
-            <div class="activity-item">
-              <i class="material-icons green-text">check_circle</i>
-              <div class="activity-body">
-                <div class="title">Service completed with John Smith</div>
-                <div class="caption">
-                  Yoga session • <strong>+2 credits</strong> earned • 2 hours
-                  ago
-                </div>
+              <!-- Activity item with rating -->
+              <div class="activity-item">
+                <i class="material-icons green-text">check_circle</i>
+                <div class="activity-body">
+                  <div class="title">Service completed with John Smith</div>
+                  <div class="caption">
+                    Yoga session • <strong>+2 credits</strong> earned • 2 hours
+                    ago
+                  </div>
 
-                <!-- Rating widget -->
-                <form class="rating-form" action="/ratings" method="POST">
-                  <input type="hidden" name="bookingId" value="bk_123_demo" />
-                  <div class="stars" data-stars>
-                    <% for (let i=1;i<=5;i++){ %>
-                    <i class="material-icons" data-star="<%= i %>"
-                      >star_border</i
+                  <!-- Rating widget -->
+                  <form class="rating-form" action="/ratings" method="POST">
+                    <input type="hidden" name="bookingId" value="bk_123_demo" />
+                    <div class="stars" data-stars>
+                      <% for (let i=1;i<=5;i++){ %>
+                      <i class="material-icons" data-star="<%= i %>"
+                        >star_border</i
+                      >
+                      <% } %>
+                    </div>
+                    <div class="input-field">
+                      <textarea
+                        name="comment"
+                        id="ratingComment"
+                        class="materialize-textarea"
+                        placeholder="Leave a short review (optional)"
+                      ></textarea>
+                      <label for="ratingComment">Review</label>
+                    </div>
+                    <button
+                      type="submit"
+                      class="btn-small indigo waves-effect waves-light"
                     >
-                    <% } %>
-                  </div>
-                  <div class="input-field">
-                    <textarea
-                      name="comment"
-                      id="ratingComment"
-                      class="materialize-textarea"
-                      placeholder="Leave a short review (optional)"
-                    ></textarea>
-                    <label for="ratingComment">Review</label>
-                  </div>
-                  <button
-                    type="submit"
-                    class="btn-small indigo waves-effect waves-light"
-                  >
-                    Submit rating
-                  </button>
-                </form>
-              </div>
-            </div>
-
-            <div class="activity-item">
-              <i class="material-icons blue-text">mark_email_unread</i>
-              <div class="activity-body">
-                <div class="title">New service request received</div>
-                <div class="caption">
-                  Logo design from Emma Wilson • 5 hours ago
+                      Submit rating
+                    </button>
+                  </form>
                 </div>
               </div>
-            </div>
 
-            <div class="activity-item">
-              <i class="material-icons amber-text">star</i>
-              <div class="activity-body">
-                <div class="title">New 5-star review received</div>
-                <div class="caption">
-                  From Michael Brown for graphic design • 1 day ago
+              <div class="activity-item">
+                <i class="material-icons blue-text">mark_email_unread</i>
+                <div class="activity-body">
+                  <div class="title">New service request received</div>
+                  <div class="caption">
+                    Logo design from Emma Wilson • 5 hours ago
+                  </div>
+                </div>
+              </div>
+
+              <div class="activity-item">
+                <i class="material-icons amber-text">star</i>
+                <div class="activity-body">
+                  <div class="title">New 5-star review received</div>
+                  <div class="caption">
+                    From Michael Brown for graphic design • 1 day ago
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
 
     <!-- Pending Requests (actionable) -->

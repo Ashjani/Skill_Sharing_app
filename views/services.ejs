@@ -77,7 +77,7 @@
   <div class="services-grid">
   <% (services || []).forEach(function (s) { %>
     <div class="service-card">
-      <!-- ✅ Fallback to Pravatar or Unsplash if no s.img -->
+      <!--  Fallback to Pravatar or Unsplash if no s.img -->
       <img
           src="<%= s.img || ('https://placehold.co/600x400?text=' + encodeURIComponent(s.title)) %>"
           alt="<%= s.title %>"

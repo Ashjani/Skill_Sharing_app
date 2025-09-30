@@ -101,6 +101,75 @@
       }
     </style>
   </head>
+  <script>
+    (function () {
+      function toast(msg) {
+        if (window.M && M.toast) M.toast({ html: msg, displayLength: 2500 });
+        else alert(msg);
+      }
+
+      const form = document.getElementById("registerForm");
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const fd = new FormData(form);
+        const body = {
+          firstName: fd.get("firstName"),
+          lastName: fd.get("lastName"),
+          email: fd.get("email"),
+          password: fd.get("password"),
+          accept: !!fd.get("accept"),
+        };
+
+        // Allow redirect to ?next=... after signup; default to /dashboard
+        const next =
+          new URLSearchParams(location.search).get("next") || "/dashboard";
+
+        try {
+          const res = await fetch(form.action || "/auth/register", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            credentials: "same-origin",
+            body: JSON.stringify(body),
+          });
+
+          const ct = res.headers.get("content-type") || "";
+          if (!ct.includes("application/json")) {
+            // Server is likely doing a standard redirect or rendering — preserve original flow
+            form.removeEventListener("submit", arguments.callee);
+            form.submit();
+            return;
+          }
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            toast(data.message || "Registration failed");
+            return;
+          }
+
+          // If controller returns a token, save it; otherwise rely on cookie the server set.
+          if (data.token) {
+            try {
+              localStorage.setItem("token", data.token);
+            } catch (e) {}
+          }
+
+          location.href = data.next || next;
+        } catch (err) {
+          // Fallback to normal submit on errors
+          form.removeEventListener("submit", arguments.callee);
+          form.submit();
+        }
+      });
+    })();
+  </script>
+
   <body>
     <div class="row" style="margin: 0">
       <!-- Left: light panel + form -->

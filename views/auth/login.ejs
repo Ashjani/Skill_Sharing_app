@@ -152,6 +152,74 @@
       }
     </style>
   </head>
+  <script>
+    (function () {
+      function toast(msg) {
+        if (window.M && M.toast) M.toast({ html: msg, displayLength: 2500 });
+        else alert(msg);
+      }
+
+      const form = document.getElementById("loginForm");
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        // Progressive enhancement: try AJAX first; fall back if not JSON.
+        e.preventDefault();
+
+        const fd = new FormData(form);
+        const body = {
+          email: fd.get("email"),
+          password: fd.get("password"),
+          remember: !!fd.get("remember"),
+        };
+
+        // next comes from URL (?next=/bookings) or defaults to /dashboard
+        const next =
+          new URLSearchParams(location.search).get("next") || "/dashboard";
+
+        try {
+          const res = await fetch(form.action || "/auth/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            credentials: "same-origin",
+            body: JSON.stringify(body),
+          });
+
+          const ct = res.headers.get("content-type") || "";
+          // If server didn't return JSON (e.g., rendered HTML/redirect), fall back to normal submit.
+          if (!ct.includes("application/json")) {
+            form.removeEventListener("submit", arguments.callee);
+            form.submit();
+            return;
+          }
+
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            toast(data.message || "Login failed");
+            return;
+          }
+
+          // If server gives us a token, store it for API calls (Bearer flow)
+          if (data.token) {
+            try {
+              localStorage.setItem("token", data.token);
+            } catch (e) {}
+          }
+          // If server set an httpOnly cookie, we won’t see it here — but redirect still works.
+          location.href = data.next || next;
+        } catch (err) {
+          // Network/CORS/etc → fall back to standard submit so existing flow works
+          form.removeEventListener("submit", arguments.callee);
+          form.submit();
+        }
+      });
+    })();
+  </script>
+
   <body>
     <div class="row" style="margin: 0">
       <!-- LEFT: gradient panel (content pushed down) -->
