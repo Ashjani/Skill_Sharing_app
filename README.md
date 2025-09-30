@@ -12,7 +12,7 @@ Follow these steps to get a local copy of the project running on your machine.
 Navigate to your desired directory in your terminal and clone the repository from GitHub.
 
 ```bash
-git clone [paste-the-repository-url-here]
+git clone https://github.com/Ashjani/Skill_Sharing_app.git
 cd Skill_Sharing_app
 ````
 
