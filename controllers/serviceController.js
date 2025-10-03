@@ -113,10 +113,6 @@ exports.deleteService = async (req, res) => {
   }
 };
 
-// (You can keep your ratings methods as they were.)
-
-
-
 // Get ratings for a service (with rater details)
 exports.getRatingsForService = async (req, res) => {
   try {
