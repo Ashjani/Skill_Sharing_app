@@ -5,7 +5,7 @@ const serviceController = require("../controllers/serviceController");
 const { protect } = require("../middleware/authMiddleware");
 const Service = require("../models/service");
 
-// 🔎 quick ping to prove this router is mounted
+// quick ping to prove this router is mounted
 router.get("/__ping", (_req, res) => res.send("services router OK"));
 
 // List (renders page)
@@ -13,6 +13,11 @@ router.get("/", serviceController.getServices);
 
 // Create (API from form submit; protect if needed)
 router.post("/", protect, serviceController.createService);
+
+router.get("/new", protect, (_req, res) => {
+  // your form file is currently at views/createService.ejs
+  return res.render("createService");
+});
 
 // Edit form
 router.get("/:id/edit", protect, async (req, res) => {
@@ -23,7 +28,8 @@ router.get("/:id/edit", protect, async (req, res) => {
     const service = await Service.findById(req.params.id).lean();
 
     if (!service) return res.status(404).send("Service not found");
-    return res.render("services/edit", {
+    return res.render("editService", {
+    // return res.render("services/edit", {
       service,
       title: `Edit: ${service.title}`,
     });

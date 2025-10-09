@@ -7,9 +7,8 @@ exports.createService = async (req, res) => {
   try {
     const service = new Service({
       ...req.body,
-
-      user: req.user?.id, // tolerate unauth in dev
-
+      user: req.user.id,
+      // user: req.user?.id, // tolerate unauth in dev
     });
     await service.save();
 
@@ -43,22 +42,29 @@ exports.getServiceById = async (req, res) => {
   try {
     const { id } = req.params;
     if (!mongoose.isValidObjectId(id)) {
-      return res
-        .status(404)
-        .render("errors/404", { message: "Invalid service id" });
-    }
+    return res.status(404).send("Invalid service ID");
+  }
+    //   return res
+    //     .status(404)
+    //     .render("errors/404", { message: "Invalid service id" });
+    // }
     const service = await Service.findById(id)
       .populate("user", "firstName lastName")
       .lean();
 
     if (!service) {
-      return res
-        .status(404)
-        .render("errors/404", { message: "Service not found" });
-    }
+    return res
+    .status(404)
+    .render("errors/404", { message: "Service not found" });
+  } 
+    //   return res
+    //     .status(404)
+    //     .render("errors/404", { message: "Service not found" });
+    // }
 
     // IMPORTANT: render path is relative to /views, do not prefix with "views/"
-    return res.render("services/serviceDetails", {
+    return res.render("serviceDetails", {
+    // return res.render("services/serviceDetails", {
       service,
       title: service.title,
       user: req.user || null,
@@ -68,6 +74,20 @@ exports.getServiceById = async (req, res) => {
     return res
       .status(500)
       .render("errors/404", { message: "Something went wrong" });
+  }
+};
+// List only the services created by the logged-in user
+exports.getMyServices = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.redirect("/auth/login");
+    }
+
+    const services = await Service.find({ user: req.user.id }).lean();
+    return res.render("myServices", { services, title: "My Services" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).render("errors/404", { message: "Failed to load your services" });
   }
 };
 
@@ -114,8 +134,6 @@ exports.deleteService = async (req, res) => {
 };
 
 // (You can keep your ratings methods as they were.)
-
-
 
 // Get ratings for a service (with rater details)
 exports.getRatingsForService = async (req, res) => {

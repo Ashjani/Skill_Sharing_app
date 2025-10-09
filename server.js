@@ -9,6 +9,7 @@ const methodOverride = require("method-override");
 
 // --- Controllers ---
 const serviceController = require("./controllers/serviceController");
+const { protect } = require("./middleware/authMiddleware");
 
 // --- Import Route Files ---
 const pageRoutes = require("./routes/pageRoutes");
@@ -65,16 +66,16 @@ app.use("/api/reviews", reviewRoutes);
 app.use("/api/bookings", bookingRoutes);
 
 // 2. Services — include shim for details
-app.get("/services/:id", serviceController.getServiceById);
+// app.get("/services/:id", serviceController.getServiceById);
 app.use("/services", serviceRoutes);
-
+app.get("/my-services", protect, serviceController.getMyServices);
 
 // --- ROUTES ---
 // Page-rendering routes (handled by pageRoutes.js)
 app.use('/', pageRoutes);
 // API routes (prefixed with /auth)
-app.use('/auth', userRoutes);
-app.use('/services', serviceRoutes);
+// app.use('/auth', userRoutes);
+// app.use('/services', serviceRoutes);
 //app.use('/api/services', serviceRoutes);
 
 // --- 404 Handler 
